@@ -1,0 +1,11 @@
+{
+  "name": "Confetti Genie",
+  "id": "1044658409805883306",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma",
+    "figjam"
+  ],
+  "ui": "ui.html"
+}

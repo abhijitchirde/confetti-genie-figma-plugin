@@ -1,0 +1,103 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<div>
+  <!-- One div for the error block -->
+  <div id="error" style="align-content: center; text-align: center;margin-top: 95px; color: red; font-family: Arial, Helvetica, sans-serif;"></div>
+
+  <!-- one div for the main UI body of plugin -->
+  <div id="main" style="align-content: center; text-align: center; margin-top: 30px;">
+
+      <div style="margin: 3% 0 2%;">
+        <p style="text-align: center; color:darkcyan;" >How much confetti do you want?</p>
+        <div style="background-color: #fafafa; padding: 3% 0 3%; margin: 2% 0 2%;">
+          <input type="range" id="slider" class="form-range" style="width: 60%; margin: 2% 0 3%;" min="20" max="120" value="50">
+        <p id="sliderLabel" style="font-family: Arial, Helvetica, sans-serif; color: #0000FF; font-size: x-large; text-align: center; margin: 2% 0 2%; font-weight: 700;">Medium</p>
+        </div>
+      </div>
+      <button id="draw" class="btn btn-outline-primary btn-large" style="margin: 4% 0 0;">Draw Confetti</button>
+  </div>
+</div>
+
+
+<script>
+
+  //Initially defining the div areas for error and UI
+  const errorArea = document.getElementById("error");
+  const uiMain = document.getElementById("main");
+
+  //displaying slider input to as label below slider
+  const sliderInput = document.getElementById("slider");
+  const label = document.getElementById("sliderLabel");
+
+  //Event function on change in the slider value
+  sliderInput.oninput = function (){
+
+    //Define the count value from slider. Var is used in place of const as we want to reassign it to this.value and also access it outside the function in postMessage for drawing confetti
+    var count = parseInt(sliderInput.value, 10);
+
+    //call function to display label according to the value
+    displayConfettiLabel(count);
+
+    //update count label to the current value contained in the event object
+    count = parseInt(this.value, 10);
+  }
+
+  //Define a function to display label according to changing value of the slider input
+  function displayConfettiLabel(count){
+    if(count >= 20 && count <= 40){
+        label.innerHTML = "Minimal";
+        label.style.color = "#2F4F4F";
+        // count = parseInt(this.value, 10);
+    }else if(count > 40 && count <= 60){
+        label.innerHTML = "Medium";
+        label.style.color = "#0000FF";
+        // count = parseInt(this.value, 10);
+    }else if(count > 60 && count <= 80){
+        label.innerHTML = "Party";
+        label.style.color = "#9400D3";
+        // count = parseInt(this.value, 10);
+    }else if(count > 80 && count <= 100){
+        label.innerHTML = "Bash";
+        label.style.color = "#C71585";
+        // count = parseInt(this.value, 10);
+    }else if(count > 100 && count <= 120){
+        label.innerHTML = "Blast!";
+        label.style.color = "#FF00FF";
+        // count = parseInt(this.value, 10);
+    }
+
+  }
+
+  //On receiving message from codeJS about layer-type error
+  onmessage = (event) => {
+        errorArea.innerHTML = event.data.pluginMessage.content.errorMessage;
+
+        //Depending on error or all-clear message, we will toggle the error or mainUI divs
+        if(event.data.pluginMessage.error === "no-frame"){
+            showError();
+        }else if(event.data.pluginMessage.error === "all-clear"){
+            showUI();
+        }
+    }
+
+    //defining function to show error
+    function showError(){
+        errorArea.style.display = "block";
+        uiMain.style.display = "none";
+    }
+
+    //defining function to show UI
+    function showUI(){
+        errorArea.style.display = "none";
+        uiMain.style.display = "block";
+    }
+
+    //Onclick of button, sending a message with content to codeJS
+  document.getElementById('draw').onclick = () => {
+    const input = parseInt(sliderInput.value, 10);
+
+    parent.postMessage({pluginMessage: { type: 'create-confetti', data: {input}}},'*' );
+  };
+
+ 
+</script>
