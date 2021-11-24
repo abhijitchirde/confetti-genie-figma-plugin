@@ -2,19 +2,19 @@
 
 <div>
   <!-- One div for the error block -->
-  <div id="error" style="align-content: center; text-align: center;margin-top: 95px; color: red; font-family: Arial, Helvetica, sans-serif;"></div>
+  <div id="error" style="align-content: center; text-align: center;margin-top: 105px; color: #DC143C; font-family: Arial, Helvetica, sans-serif; font-size: large;"></div>
 
   <!-- one div for the main UI body of plugin -->
   <div id="main" style="align-content: center; text-align: center; margin-top: 30px;">
 
-      <div style="margin: 3% 0 2%;">
-        <p style="text-align: center; color:darkcyan;" >How much confetti do you want?</p>
+      <div style="margin: 3% 0 4%;">
+        <p style="text-align: center; color:darkcyan; margin-bottom: 5%;" >How much confetti do you want?</p>
         <div style="background-color: #fafafa; padding: 3% 0 3%; margin: 2% 0 2%;">
-          <input type="range" id="slider" class="form-range" style="width: 60%; margin: 2% 0 3%;" min="20" max="120" value="50">
-        <p id="sliderLabel" style="font-family: Arial, Helvetica, sans-serif; color: #0000FF; font-size: x-large; text-align: center; margin: 2% 0 2%; font-weight: 700;">Medium</p>
+          <input type="range" id="slider" class="form-range" style="width: 60%; margin: 2% 0 3%; " min="30" max="160" value="41">
+        <p id="sliderLabel" style="font-family: Arial, Helvetica, sans-serif; color: #0000CD; font-size: x-large; text-align: center; margin: 2% 0 2%; font-weight: 500;">celebration</p>
         </div>
       </div>
-      <button id="draw" class="btn btn-outline-primary btn-large" style="margin: 4% 0 0;">Draw Confetti</button>
+      <button id="draw" class="btn btn-outline-info btn-medium" style="margin: 4% 0 0;">Generate</button>
   </div>
 </div>
 
@@ -44,24 +44,24 @@
 
   //Define a function to display label according to changing value of the slider input
   function displayConfettiLabel(count){
-    if(count >= 20 && count <= 40){
-        label.innerHTML = "Minimal";
+    if(count >= 30 && count <= 50){
+        label.innerHTML = "minimal";
         label.style.color = "#2F4F4F";
         // count = parseInt(this.value, 10);
-    }else if(count > 40 && count <= 60){
-        label.innerHTML = "Medium";
-        label.style.color = "#0000FF";
+    }else if(count > 50 && count <= 80){
+        label.innerHTML = "celebration";
+        label.style.color = "#0000CD";
         // count = parseInt(this.value, 10);
-    }else if(count > 60 && count <= 80){
-        label.innerHTML = "Party";
+    }else if(count > 80 && count <= 110){
+        label.innerHTML = "party";
         label.style.color = "#9400D3";
         // count = parseInt(this.value, 10);
-    }else if(count > 80 && count <= 100){
-        label.innerHTML = "Bash";
+    }else if(count > 110 && count <= 130){
+        label.innerHTML = "bash";
         label.style.color = "#C71585";
         // count = parseInt(this.value, 10);
-    }else if(count > 100 && count <= 120){
-        label.innerHTML = "Blast!";
+    }else if(count > 130 && count <= 160){
+        label.innerHTML = "blast";
         label.style.color = "#FF00FF";
         // count = parseInt(this.value, 10);
     }
