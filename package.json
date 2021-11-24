@@ -1,7 +1,7 @@
 {
   "name": "Confetti-Genie",
   "version": "1.0.0",
-  "description": "Your Figma plugin",
+  "description": "Generate confetti shower pattern on selected frame/s",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json"
