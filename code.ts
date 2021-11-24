@@ -146,7 +146,7 @@ function drawConfetti(currentNode, count){
     //create a star
     const star = figma.createStar();
 
-    star.pointCount = randomRange(4,6);
+    star.pointCount = randomRange(4,5);
 
     //Assign a random width and height to rectangle
     const w = randomRange(width * 0.01, width * 0.02);
@@ -170,24 +170,24 @@ function drawConfetti(currentNode, count){
 
   }
 
-  //add triangles
+  //add triangles/polygons
   for(let i = 0; i < count/3; i++){
     //create a star
-    const tri= figma.createPolygon();
+    const poly= figma.createPolygon();
 
-    tri.pointCount = 5;
+    poly.pointCount = randomRange(3,5);
 
     //Assign a random width and height to rectangle
     const w = randomRange(width * 0.005, width * 0.01);
     const h = w;  //keeping width and heights same to have circles
-    tri.resize(w,h);
+    poly.resize(w,h);
 
     //randomly position rectangle within the frame
-    tri.x = randomRange(0, width);
-    tri.y = randomRange(0, height);
+    poly.x = randomRange(0, width);
+    poly.y = randomRange(0, height);
 
     //set a random color
-    tri.fills = [
+    poly.fills = [
       {
         type: 'SOLID',
         color: randomColor(),
@@ -195,7 +195,7 @@ function drawConfetti(currentNode, count){
       },
     ];
 
-    currentNode.appendChild(tri);
+    currentNode.appendChild(poly);
 
   }
 
