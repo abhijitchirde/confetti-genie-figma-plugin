@@ -10,8 +10,8 @@
       <div style="margin: 3% 0 4%;">
         <p style="text-align: center; color:darkcyan; margin-bottom: 5%;" >How much confetti do you want?</p>
         <div style="background-color: #fafafa; padding: 3% 0 3%; margin: 2% 0 2%;">
-          <input type="range" id="slider" class="form-range" style="width: 60%; margin: 2% 0 3%; " min="30" max="160" value="81">
-        <p id="sliderLabel" style="font-family: Arial, Helvetica, sans-serif; color: #0000CD; font-size: x-large; text-align: center; margin: 2% 0 2%; font-weight: 500;">party</p>
+          <input type="range" id="slider" class="form-range" style="width: 60%; margin: 2% 0 3%; " min="30" max="200" value="91">
+        <p id="sliderLabel" style="font-family: Arial, Helvetica, sans-serif; color: #9400D3; font-size: x-large; text-align: center; margin: 2% 0 2%; font-weight: 500;">party</p>
         </div>
       </div>
       <button id="draw" class="btn btn-outline-info btn-medium" style="margin: 4% 0 0;">Generate</button>
@@ -44,26 +44,21 @@
 
   //Define a function to display label according to changing value of the slider input
   function displayConfettiLabel(count){
-    if(count >= 30 && count <= 50){
+    if(count >= 30 && count <= 60){
         label.innerHTML = "minimal";
         label.style.color = "#2F4F4F";
-        // count = parseInt(this.value, 10);
-    }else if(count > 50 && count <= 80){
+    }else if(count > 60 && count <= 90){
         label.innerHTML = "festive";
         label.style.color = "#0000CD";
-        // count = parseInt(this.value, 10);
-    }else if(count > 80 && count <= 110){
+    }else if(count > 90 && count <= 120){
         label.innerHTML = "party";
         label.style.color = "#9400D3";
-        // count = parseInt(this.value, 10);
-    }else if(count > 110 && count <= 130){
+    }else if(count > 120 && count <= 150){
         label.innerHTML = "bash";
         label.style.color = "#C71585";
-        // count = parseInt(this.value, 10);
-    }else if(count > 130 && count <= 160){
+    }else if(count > 150 && count <= 200){
         label.innerHTML = "blast";
         label.style.color = "#FF00FF";
-        // count = parseInt(this.value, 10);
     }
 
   }
