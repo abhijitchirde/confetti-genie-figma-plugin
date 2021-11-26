@@ -91,7 +91,7 @@
   document.getElementById('draw').onclick = () => {
     const input = parseInt(sliderInput.value, 10);
 
-    parent.postMessage({pluginMessage: { type: 'create-confetti', data: {input}}},'*' );
+    parent.postMessage({pluginMessage: { type: 'generate-confetti', data: {input}}},'*' );
   };
 
  

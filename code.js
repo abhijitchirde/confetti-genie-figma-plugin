@@ -2,7 +2,7 @@ figma.showUI(__html__, { width: 320, height: 270 });
 //Defining the error messages on top globally. As we are using different functions to check error and the main code block for messaging.
 const errorMessage = "Please select a frame";
 const noError = "All clear";
-// create a colors array for drawing        //For using random colors in the function, need to comment this array as it will not be used
+// create a colors array for drawing   
 const colors = [
     { r: 0.01, g: 0.64, b: 0.96 },
     { r: 0.605, g: 0.96, b: 0.99 },
@@ -19,7 +19,7 @@ const colors = [
     { r: 1, g: 0.93, b: 0.21 },
     { r: 0.730, g: 0.242, b: 0.011 },
 ];
-//Crate array containing opacity values. This can also be achieved by using a randomg 0-1 number generator. Having distinct values will create less variation
+//Crate array containing opacity values. Having distinct values will create less variation
 const opacity = [0.25, 0.4, 0.5, 0.6, 0.75, 0.8, 0.9, 1];
 //Calling the function to run plugin
 runPlugin();
@@ -33,7 +33,7 @@ function runPlugin() {
         //Using a for loop on figma.currentpage instead of a single value to make sure all the selected frames get the output
         for (const node of figma.currentPage.selection) {
             //If message is create-confetti
-            if (msg.type === 'create-confetti') {
+            if (msg.type === 'generate-confetti') {
                 //calling confetti function
                 generateConfetti(node, number);
             }
@@ -61,16 +61,13 @@ function checkLayerStatus() {
 function generateConfetti(currentNode, count) {
     const width = currentNode.width;
     const height = currentNode.height;
-    //creating numBetween and setColor functions. These can be defined globally using normal definition too
-    // const numBetween = (low, high) => Math.floor(Math.random() * high) + low;
-    // const setColor = () => colors[Math.floor(Math.random() * colors.length)];
     //add rectangles
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count / 2; i++) {
         //create a rectangle
         const rect = figma.createRectangle();
         //Assign a random width and height to rectangle
-        const w = numBetween(width * 0.005, width * 0.03);
-        const h = numBetween(height * 0.005, height * 0.03);
+        const w = numBetween(width * 0.01, width * 0.02);
+        const h = numBetween(height * 0.01, height * 0.02);
         rect.resize(w, h);
         //randomly position rectangle within the frame
         rect.x = numBetween(0, width);
@@ -90,7 +87,7 @@ function generateConfetti(currentNode, count) {
         //create a rectangle
         const ell = figma.createEllipse();
         //Assign a random width and height to rectangle
-        const w = numBetween(width * 0.005, width * 0.01);
+        const w = numBetween(width * 0.005, width * 0.015);
         const h = w; //keeping width and heights same to have circles
         ell.resize(w, h);
         //randomly position rectangle within the frame
@@ -134,7 +131,7 @@ function generateConfetti(currentNode, count) {
         const poly = figma.createPolygon();
         poly.pointCount = numBetween(3, 7);
         //Assign a random width and height to rectangle
-        const w = numBetween(width * 0.005, width * 0.01);
+        const w = numBetween(width * 0.01, width * 0.02);
         const h = w; //keeping width and heights same to have circles
         poly.resize(w, h);
         //randomly position rectangle within the frame
@@ -155,25 +152,13 @@ function generateConfetti(currentNode, count) {
 function numBetween(low, high) {
     return Math.floor(Math.random() * (high - low)) + low;
 }
-//define a function to select a random color    //Made function to return random combinations rather than previous values from array
+//define a function to select a random color    
 function setColor() {
-    //getting from this array makes bright colors. Better to use for confetti
+    //getting from colors array make random bright colored shapes.
     return colors[Math.floor(Math.random() * colors.length)];
-    //getting from this random values tend to make all the dark and bright colors. Little dull to use
-    // return {
-    //   r : Math.random(),
-    //   g : Math.random() ,
-    //   b : Math.random(),  
-    // }
 }
-//define a function to select a random color    //Made function to return random combinations rather than previous values from array
+//define a function to select a random color    
 function setOpacity() {
-    //getting from this array makes bright colors. Better to use for confetti
+    //Few specified opacity steps in this array
     return opacity[Math.floor(Math.random() * opacity.length)];
-    //getting from this random values tend to make all the dark and bright colors. Little dull to use
-    // return {
-    //   r : Math.random(),
-    //   g : Math.random() ,
-    //   b : Math.random(),  
-    // }
 }
