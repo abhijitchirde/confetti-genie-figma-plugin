@@ -80,6 +80,7 @@ function generateConfetti(currentNode, count) {
                 opacity: setOpacity(),
             },
         ];
+        rect.rotation = numBetween(-180, 180);
         currentNode.appendChild(rect);
     }
     //add ellipses
@@ -123,6 +124,7 @@ function generateConfetti(currentNode, count) {
                 opacity: setOpacity(),
             },
         ];
+        star.rotation = numBetween(-180, 180);
         currentNode.appendChild(star);
     }
     //add polygons
@@ -145,6 +147,7 @@ function generateConfetti(currentNode, count) {
                 opacity: setOpacity(),
             },
         ];
+        poly.rotation = numBetween(-180, 180);
         currentNode.appendChild(poly);
     }
 }

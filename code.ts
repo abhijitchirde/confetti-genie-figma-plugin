@@ -102,6 +102,8 @@ function generateConfetti(currentNode, count){
       },
     ];
 
+    rect.rotation = numBetween(-180, 180);
+
     currentNode.appendChild(rect);
 
   }
@@ -159,6 +161,8 @@ function generateConfetti(currentNode, count){
       },
     ];
 
+    star.rotation = numBetween(-180, 180);
+
     currentNode.appendChild(star);
 
   }
@@ -187,6 +191,8 @@ function generateConfetti(currentNode, count){
         opacity: setOpacity(),
       },
     ];
+
+    poly.rotation = numBetween(-180, 180);
 
     currentNode.appendChild(poly);
 
