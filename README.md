@@ -1,4 +1,4 @@
-**Generate random confetti pattern in your frame. **
+**Generate random confetti pattern in your frame**
 It works with frame layers.
 ---
 **Shapes included**
