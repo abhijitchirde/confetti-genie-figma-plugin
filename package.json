@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "author": "Abhijit Chirde",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@figma/plugin-typings": "^1.39.1"
   }
