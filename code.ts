@@ -1,4 +1,4 @@
-figma.showUI(__html__,{width: 320, height: 270});
+figma.showUI(__html__,{width: 330, height: 270});
 
 //Defining the error messages on top globally. As we are using different functions to check error and the main code block for messaging.
 const errorMessage = "Please select a frame";
@@ -111,15 +111,15 @@ function generateConfetti(currentNode, count){
 
   //add ellipses
   for(let i = 0; i < count/2; i++){
-    //create a rectangle
+    //create ellipse
     const ell = figma.createEllipse();
 
-    //Assign a random width and height to rectangle
+    //Assign a random width to ellipse
     const w = numBetween(width * 0.005, width * 0.015);
     const h = w;  //keeping width and heights same to have circles
     ell.resize(w,h);
 
-    //randomly position rectangle within the frame
+    //randomly position within the frame
     ell.x = numBetween(0, width);
     ell.y = numBetween(0, height);
 
@@ -141,14 +141,14 @@ function generateConfetti(currentNode, count){
     //create a star
     const star = figma.createStar();
 
-    star.pointCount = numBetween(4,7);
+    star.pointCount = numBetween(4,6);
 
-    //Assign a random width and height to rectangle
+    //Assign a random width and height
     const w = numBetween(width * 0.01, width * 0.02);
-    const h = w;  //keeping width and heights same to have circles
+    const h = w;  //keeping width and heights same
     star.resize(w,h);
 
-    //randomly position rectangle within the frame
+    //randomly position within the frame
     star.x = numBetween(0, width);
     star.y = numBetween(0, height);
 
@@ -172,14 +172,14 @@ function generateConfetti(currentNode, count){
     //create a star
     const poly= figma.createPolygon();
 
-    poly.pointCount = numBetween(3,7);
+    poly.pointCount = numBetween(3,6);
 
-    //Assign a random width and height to rectangle
+    //Assign a random width and height
     const w = numBetween(width * 0.01, width * 0.02);
-    const h = w;  //keeping width and heights same to have circles
+    const h = w;  //keeping width and heights same
     poly.resize(w,h);
 
-    //randomly position rectangle within the frame
+    //randomly position within the frame
     poly.x = numBetween(0, width);
     poly.y = numBetween(0, height);
 
@@ -202,7 +202,7 @@ function generateConfetti(currentNode, count){
 
 //define function for getting a number between a random range
 function numBetween(low, high){
-  return Math.floor(Math.random() * (high-low)) + low;
+  return Math.floor(Math.random() * (high-low+1)) + low;
 }
 
 //define a function to select a random color    
