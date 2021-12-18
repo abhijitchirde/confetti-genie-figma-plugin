@@ -1,3 +1,8 @@
+**Figma plugin link:** 
+https://www.figma.com/community/plugin/1044658409805883306/Confetti-Genie
+
+--
+
 **Generate random confetti pattern in your frame**
 
 It works with frame layers.
