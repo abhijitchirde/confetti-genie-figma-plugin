@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 330, height: 270 });
+figma.showUI(__html__, { width: 330, height: 240 });
 //Defining the error messages on top globally. As we are using different functions to check error and the main code block for messaging.
 const errorMessage = "Please select a frame";
 const noError = "All clear";
