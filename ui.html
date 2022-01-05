@@ -7,17 +7,23 @@
   .error-text {
     align-content: center; 
     text-align: center;
-    margin-top: 105px; 
-    color: #c23854; 
+    margin-top: 32%; 
+    color: #df405f; 
     font-family: Arial, Helvetica, sans-serif; 
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
-.small-button {
-    font-size: 0.9rem;
-    margin: 10px 4px 8px;
-    padding: 8px 3px 8px;
-    width: 150px;
+  .main-div{
+    align-content: center;
+    text-align: center; 
+    margin-top: 30px;
+  }
+
+  .button {
+    font-size: 0.8rem;
+    margin: 3% 0%;
+    padding: 2% 1%;
+    width: 35%;
     display: inline;
     border: 1px solid #516BEB;
     background-color: #fff;
@@ -26,17 +32,24 @@
     cursor: pointer;
   }
 
-  .small-button:hover, .btn-active {
+  .button:hover {
     background-color: #516BEB;
     color: #fff;
+    transition-duration: 0.2s;
+  }
+
+  .button:active {
+    background-color: #3c54cc;
+    color: #fff;
+    transition-duration: 0.2s;
   }
 
   .slider-input {
     -webkit-appearance: none;
     width: 60%;
-    height: 8px;
+    height: 2.5%;
     border-radius: 5px;  
-    margin: 2% 0 2%;
+    margin: 3% 0;
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
@@ -47,8 +60,8 @@
   .slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%; 
   background: darkcyan;
   cursor: pointer;
@@ -57,25 +70,25 @@
   .confetti-question {
     text-align: center; 
     color:#344CB7; 
-    margin-bottom: 10%;
+    margin: 3% 0% 4%;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .slider-div {
     background-color: #fff; 
-    padding: 6% 0 6%; 
-    margin: 3% 0 3%;
+    padding: 6% 0; 
+    margin: 2% 2%;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(230, 230, 230, 25);
+    box-shadow: 0 2px 8px rgba(236, 236, 236, 0.65);
   }
 
   .slider-label {
     font-family: Arial, Helvetica, sans-serif; 
     color: #9400D3; 
-    font-size: x-large; 
+    font-size: 1.3rem; 
     text-align: center; 
-    margin: 3% 0 3%; 
+    margin: 2% 0; 
     font-weight: 400;
   }
 
@@ -88,7 +101,67 @@
   }
 
   .button-div {
-    margin-top: 15px;
+    margin-top: 3%;
+  }
+
+    /* Footer styling */
+
+  .bottomContainer {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 3.49%;
+    position: fixed;
+    width: 100%;
+    display: block;
+    padding-left: 1%;
+  }
+
+  .bottomItem {
+    height: 7%;
+    margin: auto;
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+  }
+
+  .blank-space-in-footer {
+    display: inline-block;
+    width: 70%;
+  }
+
+  .bottom-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.7rem;
+    color: rgb(158, 171, 196);
+    margin: 0.7% 0 0;
+    text-align: left;
+    display: inline-block;
+    padding-left: 2%;
+    opacity: 0.45;
+    vertical-align: top;
+  }
+
+  .heart {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.95rem;
+    color: rgb(158, 171, 196);
+    margin: 0;
+    text-align: center;
+    display: inline-block;
+    padding-left: 0;
+  }
+
+  a:link,
+  a:visited {
+    color: rgb(158, 171, 196);
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0.45;
+  }
+
+  a:hover {
+    color: rgb(221, 41, 41);
+    opacity: 0.8;
+    transition-duration: 0.3s;
   }
 
 </style>
@@ -99,23 +172,34 @@
   <div id="error" class="error-text"></div>
 
   <!-- one div for the main UI body of plugin -->
-  <div id="main" style="align-content: center; text-align: center; margin-top: 30px;">
+  <div id="main" class="main-div">
 
       <!-- Elements asking about density of confetti -->
       <div>
         <p class="confetti-question">How much confetti do you want?</p>
         <div class="slider-div">
           <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
-        <p id="sliderLabel" class="slider-label">party</p>
+          <p id="sliderLabel" class="slider-label">party</p>
         </div>
       </div>
       
       <div class="center button-div">
-        <button id="draw" class="small-button">Generate</button>
+        <button id="draw" class="button">Generate</button>
+      </div>
+
+      <!-- Created a container at bottom to hold two elements at fixed position and at center. Added class in style for handling it -->
+      <div class="bottomContainer">
+        <footer class="bottomItem">
+          <p class="bottom-text">Have fun!</p>
+          <div class="blank-space-in-footer"></div>
+          <p class="heart"><a href="https://twitter.com/abhichirde" target="_blank">♥️</a></p>
+        </footer>
       </div>
       
   </div>
 </div>
+
+
 
 
 <script>
