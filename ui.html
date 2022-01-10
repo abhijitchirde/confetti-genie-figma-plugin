@@ -2,8 +2,10 @@
 
   body {
     background-color: #FFF;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
+  /* Error display box */
   .error-text {
     align-content: center; 
     text-align: center;
@@ -13,41 +15,87 @@
     font-size: 0.9rem;
   }
 
+  /* Main div with elements */
+
   .main-div{
     align-content: center;
     text-align: center; 
-    margin-top: 30px;
+    margin-top: 2%;
   }
 
-  .button {
+  /* Color selection */
+  .input-colors-section{
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .select-colors{
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 3% 0;
+  }
+
+  .color-picker{
+    display: inline-block;
+    padding-right: 7%;
+    text-align: left;
+
+  }
+
+  .selected-colors-display{
+    display: block;
+    border: 1px solid darkgray;
+    margin: 1% 3%;
+    padding: 1% 2%;
+    width: auto;
+    height: 40%;
+    overflow: auto;
+  }
+
+  .display-area-title{
+    color: darkgray;
+    font-weight: 400;
+    font-size: 0.7rem;
+    margin: 0;
+    padding-bottom: 1% ;
+  }
+
+  .display-color-text{
+    color: rgb(189, 106, 106);
+    font-weight: 500;
     font-size: 0.8rem;
-    margin: 3% 0%;
-    padding: 2% 1%;
-    width: 35%;
-    display: inline;
-    border: 1px solid #516BEB;
-    background-color: #fff;
-    border-radius: 4px;
-    color: #516BEB;
-    cursor: pointer;
+    margin: 0;
+    padding-bottom: 1%;
   }
 
-  .button:hover {
-    background-color: #516BEB;
-    color: #fff;
-    transition-duration: 0.2s;
+  /* Slider styling */
+
+  .slider-div {
+    background-color: #fff; 
+    padding-top: 4%;
+    padding-bottom: 0.3%; 
+    margin: 2% 2%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(236, 236, 236, 0.65);
   }
 
-  .button:active {
-    background-color: #3c54cc;
-    color: #fff;
-    transition-duration: 0.2s;
+  .confetti-question {
+    text-align: center; 
+    color:#344CB7; 
+    margin: 3% 0% 4%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8rem;
   }
+
 
   .slider-input {
     -webkit-appearance: none;
     width: 60%;
-    height: 2.5%;
+    height: 1.5%;
     border-radius: 5px;  
     margin: 3% 0;
     background: #d3d3d3;
@@ -60,40 +108,20 @@
   .slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%; 
   background: darkcyan;
   cursor: pointer;
 }
 
-  .confetti-question {
-    text-align: center; 
-    color:#344CB7; 
-    margin: 3% 0% 4%;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.8rem;
-  }
-
-  .slider-div {
-    background-color: #fff; 
-    padding: 6% 0; 
-    margin: 2% 2%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(236, 236, 236, 0.65);
-  }
-
   .slider-label {
     font-family: Arial, Helvetica, sans-serif; 
     color: #9400D3; 
-    font-size: 1.3rem; 
+    font-size: 1.1rem; 
     text-align: center; 
-    margin: 2% 0; 
+    margin-top: 2%; 
     font-weight: 400;
-  }
-
-  .center {
-    text-align: center;
   }
 
   a:link, a:active {
@@ -102,8 +130,34 @@
 
   .button-div {
     margin-top: 3%;
+    text-align: center;
   }
 
+    /* Button styling */
+    .large-button {
+    font-size: 0.8rem;
+    margin: 3% 0%;
+    padding: 2% 1%;
+    width: 35%;
+    display: inline;
+    border: 1px solid #516BEB;
+    background-color: #fff;
+    border-radius: 4px;
+    color: #516BEB;
+    cursor: pointer;
+  }
+
+  .large-button:hover {
+    background-color: #516BEB;
+    color: #fff;
+    transition-duration: 0.2s;
+  }
+
+  .large-button:active {
+    background-color: #3c54cc;
+    color: #fff;
+    transition-duration: 0.2s;
+  }
     /* Footer styling */
 
   .bottomContainer {
@@ -164,6 +218,7 @@
     transition-duration: 0.3s;
   }
 
+
 </style>
 
 
@@ -174,17 +229,36 @@
   <!-- one div for the main UI body of plugin -->
   <div id="main" class="main-div">
 
+      <!-- Elements to select colors -->
+      <div class="input-colors-section">
+        <div class="select-colors">
+          <div class="color-picker">
+            <label for="color">Select color:</label><input type="color" name="color" id="color" value="#ff0000">
+          </div>
+          <button class="small-button" name="add" id="add">Add</button>
+          &nbsp;&nbsp;
+          <button class="small-button" name="reset" id="reset">Reset all</button>
+        </div>
+        
+        <div class="selected-colors-display">
+          <p class="display-area-title">Colors you added</p><br>
+          <p class="display-color-text" id="display-color">No colors added</p>
+        </div>
+
+      </div>
+
       <!-- Elements asking about density of confetti -->
       <div>
-        <p class="confetti-question">How much confetti do you want?</p>
+        
         <div class="slider-div">
+          <p class="confetti-question">How much confetti do you want?</p>
           <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
           <p id="sliderLabel" class="slider-label">party</p>
         </div>
       </div>
       
-      <div class="center button-div">
-        <button id="draw" class="button">Generate</button>
+      <div class="button-div">
+        <button id="draw" class="large-button">Generate</button>
       </div>
 
       <!-- Created a container at bottom to hold two elements at fixed position and at center. Added class in style for handling it -->
@@ -208,6 +282,30 @@
   const errorArea = document.getElementById("error");
   const uiMain = document.getElementById("main");
 
+  // Displaying added colors and pushing these colors to submission array
+  var inputColors = [];
+
+  document.getElementById('add').onclick = () => {
+    const color = document.getElementById("color");
+    const colorValue = `${color.value}`.toUpperCase();
+    inputColors.push(colorValue);
+    const display = document.getElementById("display-color");
+    if(display.innerHTML === "No colors added"){
+      display.innerHTML = "";
+      display.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+    }else{
+      // display.innerHTML += colorValue+"<br>";
+      display.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+    }
+    console.log(inputColors);
+  };
+
+  document.getElementById('reset').onclick = () => {
+    inputColors = [];
+    document.getElementById("display-color").innerHTML = "No colors added";
+    console.log(inputColors);
+  };
+
   //displaying slider input to as label below slider
   const sliderInput = document.getElementById("slider");
   const label = document.getElementById("sliderLabel");
@@ -217,37 +315,14 @@
 
     //Define the count value from slider. Var is used in place of const as we want to reassign it to this.value and also access it outside the function in postMessage for drawing confetti
     var count = parseInt(sliderInput.value, 10);
-
     //call function to display label according to the value
     displayConfettiLabel(count);
-
     //update count label to the current value contained in the event object
     count = parseInt(this.value, 10);
   }
 
-  //Define a function to display label according to changing value of the slider input
-  function displayConfettiLabel(count){
-    if(count >= 30 && count <= 60){
-        label.innerHTML = "minimal";
-        label.style.color = "#2F4F4F";
-    }else if(count > 60 && count <= 90){
-        label.innerHTML = "festive";
-        label.style.color = "#0000CD";
-    }else if(count > 90 && count <= 120){
-        label.innerHTML = "party";
-        label.style.color = "#9400D3";
-    }else if(count > 120 && count <= 150){
-        label.innerHTML = "bash";
-        label.style.color = "#C71585";
-    }else if(count > 150 && count <= 200){
-        label.innerHTML = "blast";
-        label.style.color = "#FF00FF";
-    }
-
-  }
-
-  //On receiving message from codeJS about layer-type error
-  onmessage = (event) => {
+    //On receiving message from codeJS about layer-type error
+    onmessage = (event) => {
         errorArea.innerHTML = event.data.pluginMessage.content.errorMessage;
 
         //Depending on error or all-clear message, we will toggle the error or mainUI divs
@@ -269,6 +344,28 @@
         errorArea.style.display = "none";
         uiMain.style.display = "block";
     }
+
+
+  //Define a function to display label according to changing value of the slider input
+  function displayConfettiLabel(count){
+    if(count >= 30 && count <= 60){
+        label.innerHTML = "minimal";
+        label.style.color = "#2F4F4F";
+    }else if(count > 60 && count <= 90){
+        label.innerHTML = "festive";
+        label.style.color = "#0000CD";
+    }else if(count > 90 && count <= 120){
+        label.innerHTML = "party";
+        label.style.color = "#9400D3";
+    }else if(count > 120 && count <= 150){
+        label.innerHTML = "bash";
+        label.style.color = "#C71585";
+    }else if(count > 150 && count <= 200){
+        label.innerHTML = "blast";
+        label.style.color = "#FF00FF";
+    }
+
+  }
 
     //Onclick of button, sending a message with content to codeJS
   document.getElementById('draw').onclick = () => {
