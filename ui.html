@@ -5,15 +5,76 @@
     font-family: Arial, Helvetica, sans-serif;
   }
 
-  /* Error display box */
-  .error-text {
-    align-content: center; 
+     /* tabs related styling */
+.tab {
+    overflow: hidden;
+    background-color: #fdfdfd;
+    width: 100%;
     text-align: center;
-    margin-top: 32%; 
-    color: #df405f; 
-    font-family: Arial, Helvetica, sans-serif; 
-    font-size: 0.9rem;
-  }
+    margin-bottom: 1.5%;
+    /* box-shadow: 0 1px 2px rgba(230, 230, 230, 60); */
+}
+
+.tab button {
+    border-bottom: 2px solid #fdfdfd;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    outline: none;
+    cursor: pointer;
+    padding: 1% 5%;
+    margin: 0%;
+    background-color: #fdfdfd;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: rgb(158, 171, 196);
+    display: inline-block;
+    text-align: center;
+}
+
+.tab button:hover {
+    background-color: #fdfdfd;
+}
+
+.tab button.active {
+    background-color: #fdfdfd;
+    border-bottom: 2px solid rgba(137, 190, 255, 40);
+    /* border-radius: 1px solid #fcf7f9; */
+    color: rgb(79, 84, 107);
+    transition-duration: 0.4s;
+    font-weight: 300;
+}
+
+.tabcontent {
+    display: none;
+    border-top: none;
+    align-items: center;
+    background-color: #fdfdfd;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 1.87%;
+    margin-bottom: 2%;
+}
+
+/* content card styling */
+
+.tab1-container {
+    padding: 1% 0%;
+    margin-left: 1%;
+    margin-right: 1%;
+    background-color: #fdfdfd;
+    text-align: center;
+}
+
+.tab2-container {
+    padding: 1% 0%;
+    margin-left: 1%;
+    margin-right: 1%;
+    background-color: #fdfdfd;
+    text-align: center;
+}
 
   /* Main div with elements */
 
@@ -32,45 +93,100 @@
     padding: 0;
   }
 
-  .select-colors{
+  .color-picker{
     display: block;
     text-align: center;
     margin: 0;
-    padding: 3% 0;
-  }
-
-  .color-picker{
-    display: inline-block;
-    padding-right: 7%;
-    text-align: left;
-
-  }
-
-  .selected-colors-display{
-    display: block;
-    border: 1px solid darkgray;
-    margin: 1% 3%;
-    padding: 1% 2%;
+    padding-bottom: 6%;
     width: auto;
-    height: 40%;
-    overflow: auto;
   }
 
-  .display-area-title{
-    color: darkgray;
+  .picker-label{
+    display: inline-block;
+    color: rgb(119, 119, 119);
     font-weight: 400;
-    font-size: 0.7rem;
-    margin: 0;
-    padding-bottom: 1% ;
-  }
-
-  .display-color-text{
-    color: rgb(189, 106, 106);
-    font-weight: 500;
     font-size: 0.8rem;
     margin: 0;
-    padding-bottom: 1%;
+    vertical-align: middle;
+    height: 5%;
+    width: auto;
+    padding-top: 3.5%;
   }
+
+  .input-picker{
+    display: inline-block;
+    height: 5.5%;
+    width: 15%;
+    vertical-align: middle;
+    margin: 0 2%;
+    padding: 0;
+    border: 1px solid white;
+    border-radius: 4px;
+  }
+
+  .hex-input{
+    display: inline-block;
+    width: 28%;
+    font-weight: 400;
+    color: rgb(119, 119, 119);
+    height: 4%;
+    vertical-align: middle;
+    font-size: 0.75rem;
+  }
+
+  .display-color-div{
+      display: block;
+      border: 1px solid darkgray;
+      border-radius: 5px;
+      margin: 10% 2%;
+      padding: 2% 5%;
+      width: auto;
+      height: 25%;
+      overflow: auto;
+      scroll-behavior: smooth;
+      text-align: left;
+    }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgb(170, 170, 170); 
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgb(139, 139, 139); 
+    }
+
+  .display-color-text1{
+    display: inline-block;
+    color: rgb(182, 182, 182);
+    font-weight: 400;
+    font-size: 0.9rem;
+    margin: 0;
+    padding-bottom: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .display-color-text2{
+    display: inline-block;
+    color: rgb(182, 182, 182);
+    font-weight: 400;
+    font-size: 0.9rem;
+    margin: 0;
+    padding-bottom: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: left;
+    vertical-align: top;
+  }
+  
 
   /* Slider styling */
 
@@ -133,8 +249,8 @@
     text-align: center;
   }
 
-    /* Button styling */
-    .large-button {
+  /* Button styling */
+  .large-button {
     font-size: 0.8rem;
     margin: 3% 0%;
     padding: 2% 1%;
@@ -222,31 +338,37 @@
 </style>
 
 
-<div>
-  <!-- One div for the error block -->
-  <div id="error" class="error-text"></div>
-
   <!-- one div for the main UI body of plugin -->
   <div id="main" class="main-div">
 
-      <!-- Elements to select colors -->
-      <div class="input-colors-section">
-        <div class="select-colors">
-          <div class="color-picker">
-            <label for="color">Select color:</label><input type="color" name="color" id="color" value="#ff0000">
-          </div>
-          <button class="small-button" name="add" id="add">Add</button>
-          &nbsp;&nbsp;
-          <button class="small-button" name="reset" id="reset">Reset all</button>
-        </div>
-        
-        <div class="selected-colors-display">
-          <p class="display-area-title">Colors you added</p><br>
-          <p class="display-color-text" id="display-color">No colors added</p>
-        </div>
-
+      <!-- Tab links -->
+      <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'selectColors')" id="defaultOpen">Select colors</button>
+        <button class="tablinks" onclick="openTab(event, 'randomColors')">Random colors</button>
       </div>
 
+      <!-- tab content -->
+      <!-- Tab 1 -->
+      <div id="selectColors" class="tabcontent">
+        <!-- Elements to select colors -->
+        <div class="input-colors-section">
+          <div class="color-picker">
+            <label class="picker-label" for="color" >Select color</label>
+            <input class="input-picker" type="color" name="color" id="color" value="#FF0000">
+            <input class="hex-input" type="text" id="hex" name="hex" value="#FF0000">
+          </div>
+  
+        <div class="small-buttons-section">
+          <button class="small-button" name="add" id="add">+ Add</button>
+          <button class="small-button" name="reset" id="reset">Reset</button>
+        </div>
+        
+        <div class="display-color-div">
+          <p class="display-color-text1" id="display-color1">No colors added</p>
+          <p class="display-color-text2" id="display-color2"></p>
+        </div>
+      </div>
+  
       <!-- Elements asking about density of confetti -->
       <div>
         
@@ -258,25 +380,66 @@
       </div>
       
       <div class="button-div">
-        <button id="draw" class="large-button">Generate</button>
+        <button id="generateSelection" class="large-button">Generate</button>
       </div>
+    </div>
 
-      <!-- Created a container at bottom to hold two elements at fixed position and at center. Added class in style for handling it -->
-      <div class="bottomContainer">
-        <footer class="bottomItem">
-          <!-- <p class="bottom-text">Have fun!</p> -->
-          <div class="blank-space-in-footer"></div>
-          <p class="heart"><a href="https://twitter.com/abhichirde" target="_blank">♥️</a></p>
-        </footer>
+    <!-- Tab 2 -->
+    <div id="randomColors" class="tabcontent">
+      <!-- Elements asking about density of confetti -->
+      <div>
+        <div class="slider-div">
+          <p class="confetti-question">How much confetti do you want?</p>
+          <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
+          <p id="sliderLabel" class="slider-label">party</p>
+        </div>
       </div>
+      <div class="button-div">
+        <button id="generateRandom" class="large-button">Generate</button>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- Created a container at bottom to hold two elements at fixed position and at center. Added class in style for handling it -->
+    <div class="bottomContainer">
+      <footer class="bottomItem">
+        <!-- <p class="bottom-text">Have fun!</p> -->
+        <div class="blank-space-in-footer"></div>
+        <p class="heart"><a href="https://twitter.com/abhichirde" target="_blank">♥️</a></p>
+      </footer>
+    </div>
       
   </div>
-</div>
 
 
 
 
 <script>
+
+  //Tabs handling JS code
+  function openTab(evt, contentDivID) {
+
+  // Get all elements with class="tabcontent" and hide them
+  const tabcontent = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  const tablinks = document.getElementsByClassName("tablinks");
+  for (let i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(contentDivID).style.display = "block";
+  evt.currentTarget.className += " active";
+
+  }
+
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
 
   //Initially defining the div areas for error and UI
   const errorArea = document.getElementById("error");
@@ -284,26 +447,51 @@
 
   // Displaying added colors and pushing these colors to submission array
   var inputColors = [];
+  var counter = 1;
+
+  var hexinput = document.getElementById("hex");
+  var pickerInput = document.getElementById("color");
+
+  pickerInput.oninput = function() {
+    var pickerValue = `${pickerInput.value}`.toUpperCase();
+    hexinput.value = pickerValue;
+    pickerValue = `${this.value}`.toUpperCase();
+  }
 
   document.getElementById('add').onclick = () => {
+
     const color = document.getElementById("color");
     const colorValue = `${color.value}`.toUpperCase();
     inputColors.push(colorValue);
-    const display = document.getElementById("display-color");
-    if(display.innerHTML === "No colors added"){
-      display.innerHTML = "";
-      display.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
-    }else{
+    const display1 = document.getElementById("display-color1");
+    const display2 = document.getElementById("display-color2");
+    const displayDiv = document.getElementById("display-color-div");
+
+    if(counter === 1){
+      if(display1.innerHTML === "No colors added"){
+      display1.innerHTML = "";
+      display1.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+      }else{
       // display.innerHTML += colorValue+"<br>";
-      display.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+      display1.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+      }
+    }else{
+      if(display2.innerHTML === "No colors added"){
+      display2.innerHTML = "";
+      display2.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+      }else{
+      // display.innerHTML += colorValue+"<br>";
+      display2.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+      }
     }
-    console.log(inputColors);
+    counter *= -1;
   };
 
   document.getElementById('reset').onclick = () => {
     inputColors = [];
-    document.getElementById("display-color").innerHTML = "No colors added";
-    console.log(inputColors);
+    document.getElementById("display-color1").innerHTML = "No colors added";
+    document.getElementById("display-color2").innerHTML = "";
+    counter = 1;
   };
 
   //displaying slider input to as label below slider
@@ -312,7 +500,6 @@
 
   //Event function on change in the slider value
   sliderInput.oninput = function (){
-
     //Define the count value from slider. Var is used in place of const as we want to reassign it to this.value and also access it outside the function in postMessage for drawing confetti
     var count = parseInt(sliderInput.value, 10);
     //call function to display label according to the value
@@ -320,31 +507,6 @@
     //update count label to the current value contained in the event object
     count = parseInt(this.value, 10);
   }
-
-    //On receiving message from codeJS about layer-type error
-    onmessage = (event) => {
-        errorArea.innerHTML = event.data.pluginMessage.content.errorMessage;
-
-        //Depending on error or all-clear message, we will toggle the error or mainUI divs
-        if(event.data.pluginMessage.error === "no-frame"){
-            showError();
-        }else if(event.data.pluginMessage.error === "all-clear"){
-            showUI();
-        }
-    }
-
-    //defining function to show error
-    function showError(){
-        errorArea.style.display = "block";
-        uiMain.style.display = "none";
-    }
-
-    //defining function to show UI
-    function showUI(){
-        errorArea.style.display = "none";
-        uiMain.style.display = "block";
-    }
-
 
   //Define a function to display label according to changing value of the slider input
   function displayConfettiLabel(count){
@@ -367,11 +529,16 @@
 
   }
 
-    //Onclick of button, sending a message with content to codeJS
-  document.getElementById('draw').onclick = () => {
-    const input = parseInt(sliderInput.value, 10);
+  var input = parseInt(sliderInput.value, 10);
 
-    parent.postMessage({pluginMessage: { type: 'generate-confetti', data: {input}}},'*' );
+  //Onclick of button, sending a message with content to codeJS
+  document.getElementById('generateSelection').onclick = () => {
+    parent.postMessage({pluginMessage: { type: 'generate-selection', data: {input, inputColors}}},'*' );
+  };
+
+    
+  document.getElementById('generateRandom').onclick = () => {
+    parent.postMessage({pluginMessage: { type: 'generate-random', data: {input}}},'*' );
   };
 
  
