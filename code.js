@@ -1,9 +1,6 @@
-figma.showUI(__html__, { width: 330, height: 240 });
-//Defining the error messages on top globally. As we are using different functions to check error and the main code block for messaging.
-const errorMessage = "Please select a frame";
-const noError = "All clear";
+figma.showUI(__html__, { width: 250, height: 430 });
 // create a colors array for drawing   
-const colors = [
+const randomColors = [
     { r: 0.01, g: 0.64, b: 0.96 },
     { r: 0.605, g: 0.96, b: 0.99 },
     { r: 0.789, g: 0.99, b: 0.746 },
@@ -20,45 +17,71 @@ const colors = [
     { r: 0.730, g: 0.242, b: 0.011 },
 ];
 //Crate array containing opacity values. Having distinct values will create less variation
-const opacity = [0.25, 0.4, 0.5, 0.6, 0.75, 0.8, 0.9, 1];
+const opacity = [0.35, 0.45, 0.6, 0.65, 0.75, 0.85, 0.9, 1];
 //Calling the function to run plugin
 runPlugin();
 //defining the plugin run function
 function runPlugin() {
-    //First step is to check the layer type. Calling the defined function
-    checkLayerStatus();
     //On a message from UI, we do the action as per message content 
     figma.ui.onmessage = msg => {
-        const number = msg.data.input;
-        //Using a for loop on figma.currentpage instead of a single value to make sure all the selected frames get the output
-        for (const node of figma.currentPage.selection) {
-            //If message is create-confetti
-            if (msg.type === 'generate-confetti') {
-                //calling confetti function
-                generateConfetti(node, number);
+        if (msg.type === 'invalid-hex') {
+            figma.notify("Please enter a valid hex color code", { timeout: 1500 });
+        }
+        if (msg.type === 'generate-random') {
+            if (figma.currentPage.selection.length === 0) {
+                figma.notify("Please select a frame to add Confetti", { timeout: 1200 });
+            }
+            else if (figma.currentPage.selection[0].type !== 'FRAME') {
+                figma.notify("Please select a frame to add Confetti", { timeout: 1200 });
+            }
+            else {
+                const number = msg.data.input;
+                for (const node of figma.currentPage.selection) {
+                    if (node.type === 'FRAME') {
+                        //calling confetti function
+                        randomConfetti(node, number, randomColors);
+                    }
+                }
+            }
+        }
+        if (msg.type === 'generate-selection') {
+            if (figma.currentPage.selection.length === 0) {
+                figma.notify("Please select a frame to add Confetti", { timeout: 1200 });
+            }
+            else if (figma.currentPage.selection[0].type !== 'FRAME') {
+                figma.notify("Please select a frame to add Confetti", { timeout: 1200 });
+            }
+            else {
+                const colorArray = msg.data.inputColors;
+                const number = msg.data.input;
+                for (const node of figma.currentPage.selection) {
+                    if (node.type === 'FRAME') {
+                        if (colorArray.length === 0) {
+                            figma.notify("Please add colors to your Confetti", { timeout: 1200 });
+                        }
+                        else {
+                            //calling confetti function
+                            selectionColorsConfetti(node, number, colorArray);
+                        }
+                    }
+                }
             }
         }
     };
-    //On change of layer selection, calling the function again to check layer type (It will keep on checking when there is selection change. No need of recursive funtion)
-    figma.on("selectionchange", () => {
-        checkLayerStatus();
-    });
 }
-//Defining a function to check the layer type
-function checkLayerStatus() {
-    if (figma.currentPage.selection.length === 0) {
-        figma.ui.postMessage({ error: "no-frame", content: { errorMessage } });
+function selectionColorsConfetti(inputNode, number, colors) {
+    const rbgColorArray = [];
+    for (let color of colors) {
+        let rbg = hexToRgbDivBy255(color); //convert hex color to rgb in 0-1 range as used in paints object
+        rbgColorArray.push(rbg);
     }
-    else if (figma.currentPage.selection[0].type !== 'FRAME') {
-        figma.ui.postMessage({ error: "no-frame", content: { errorMessage } });
-    }
-    else if (figma.currentPage.selection[0].type === 'FRAME') {
-        figma.ui.postMessage({ error: "all-clear", content: { noError } });
-    }
+    generateConfetti(inputNode, number, rbgColorArray);
 }
-;
-//defining confetti function
-function generateConfetti(currentNode, count) {
+function randomConfetti(inputNode, count, colors) {
+    generateConfetti(inputNode, count, colors);
+}
+//Confetti generation function
+function generateConfetti(currentNode, count, colors) {
     const width = currentNode.width;
     const height = currentNode.height;
     //add rectangles
@@ -66,7 +89,7 @@ function generateConfetti(currentNode, count) {
         //create a rectangle
         const rect = figma.createRectangle();
         //Assign a random width and height to rectangle
-        const w = numBetween(width * 0.01, width * 0.02);
+        const w = numBetween(width * 0.007, width * 0.04);
         const h = numBetween(height * 0.01, height * 0.02);
         rect.resize(w, h);
         //randomly position rectangle within the frame
@@ -76,7 +99,7 @@ function generateConfetti(currentNode, count) {
         rect.fills = [
             {
                 type: 'SOLID',
-                color: setColor(),
+                color: setColor(colors),
                 opacity: setOpacity(),
             },
         ];
@@ -98,7 +121,7 @@ function generateConfetti(currentNode, count) {
         ell.fills = [
             {
                 type: 'SOLID',
-                color: setColor(),
+                color: setColor(colors),
                 opacity: setOpacity(),
             },
         ];
@@ -120,7 +143,7 @@ function generateConfetti(currentNode, count) {
         star.fills = [
             {
                 type: 'SOLID',
-                color: setColor(),
+                color: setColor(colors),
                 opacity: setOpacity(),
             },
         ];
@@ -143,7 +166,7 @@ function generateConfetti(currentNode, count) {
         poly.fills = [
             {
                 type: 'SOLID',
-                color: setColor(),
+                color: setColor(colors),
                 opacity: setOpacity(),
             },
         ];
@@ -156,12 +179,20 @@ function numBetween(low, high) {
     return Math.floor(Math.random() * (high - low + 1)) + low;
 }
 //define a function to select a random color    
-function setColor() {
+function setColor(collection) {
     //getting from colors array make random bright colored shapes.
-    return colors[Math.floor(Math.random() * colors.length)];
+    return collection[Math.floor(Math.random() * collection.length)];
 }
 //define a function to select a random color    
 function setOpacity() {
     //Few specified opacity steps in this array
     return opacity[Math.floor(Math.random() * opacity.length)];
+}
+function hexToRgbDivBy255(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16) / 255,
+        g: parseInt(result[2], 16) / 255,
+        b: parseInt(result[3], 16) / 255
+    } : null;
 }
