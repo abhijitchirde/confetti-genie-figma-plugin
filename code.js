@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 250, height: 425 });
+figma.showUI(__html__, { width: 250, height: 430 });
 // create a colors array for drawing   
 const randomColors = [
     { r: 0.01, g: 0.64, b: 0.96 },
