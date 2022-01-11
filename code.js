@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 250, height: 450 });
+figma.showUI(__html__, { width: 250, height: 425 });
 // create a colors array for drawing   
 const randomColors = [
     { r: 0.01, g: 0.64, b: 0.96 },
@@ -17,13 +17,16 @@ const randomColors = [
     { r: 0.730, g: 0.242, b: 0.011 },
 ];
 //Crate array containing opacity values. Having distinct values will create less variation
-const opacity = [0.25, 0.4, 0.5, 0.6, 0.75, 0.8, 0.9, 1];
+const opacity = [0.35, 0.45, 0.6, 0.65, 0.75, 0.85, 0.9, 1];
 //Calling the function to run plugin
 runPlugin();
 //defining the plugin run function
 function runPlugin() {
     //On a message from UI, we do the action as per message content 
     figma.ui.onmessage = msg => {
+        if (msg.type === 'invalid-hex') {
+            figma.notify("Please enter a valid hex color code", { timeout: 1500 });
+        }
         if (msg.type === 'generate-random') {
             if (figma.currentPage.selection.length === 0) {
                 figma.notify("Please select a frame to add Confetti", { timeout: 1200 });
@@ -53,8 +56,13 @@ function runPlugin() {
                 const number = msg.data.input;
                 for (const node of figma.currentPage.selection) {
                     if (node.type === 'FRAME') {
-                        //calling confetti function
-                        selectionColorsConfetti(node, number, colorArray);
+                        if (colorArray.length === 0) {
+                            figma.notify("Please add colors to your Confetti", { timeout: 1200 });
+                        }
+                        else {
+                            //calling confetti function
+                            selectionColorsConfetti(node, number, colorArray);
+                        }
                     }
                 }
             }
@@ -81,7 +89,7 @@ function generateConfetti(currentNode, count, colors) {
         //create a rectangle
         const rect = figma.createRectangle();
         //Assign a random width and height to rectangle
-        const w = numBetween(width * 0.01, width * 0.02);
+        const w = numBetween(width * 0.007, width * 0.04);
         const h = numBetween(height * 0.01, height * 0.02);
         rect.resize(w, h);
         //randomly position rectangle within the frame

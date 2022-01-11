@@ -1,80 +1,11 @@
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
 <style>
 
   body {
-    background-color: #FFF;
+    background-color: #FBFDFF;
     font-family: Arial, Helvetica, sans-serif;
   }
-
-     /* tabs related styling */
-.tab {
-    overflow: hidden;
-    background-color: #fdfdfd;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 1.5%;
-    /* box-shadow: 0 1px 2px rgba(230, 230, 230, 60); */
-}
-
-.tab button {
-    border-bottom: 2px solid #fdfdfd;
-    border-top: none;
-    border-right: none;
-    border-left: none;
-    outline: none;
-    cursor: pointer;
-    padding: 1% 5%;
-    margin: 0%;
-    background-color: #fdfdfd;
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: 300;
-    color: rgb(158, 171, 196);
-    display: inline-block;
-    text-align: center;
-}
-
-.tab button:hover {
-    background-color: #fdfdfd;
-}
-
-.tab button.active {
-    background-color: #fdfdfd;
-    border-bottom: 2px solid rgba(137, 190, 255, 40);
-    /* border-radius: 1px solid #fcf7f9; */
-    color: rgb(79, 84, 107);
-    transition-duration: 0.4s;
-    font-weight: 300;
-}
-
-.tabcontent {
-    display: none;
-    border-top: none;
-    align-items: center;
-    background-color: #fdfdfd;
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    padding-bottom: 1.87%;
-    margin-bottom: 2%;
-}
-
-/* content card styling */
-
-.tab1-container {
-    padding: 1% 0%;
-    margin-left: 1%;
-    margin-right: 1%;
-    background-color: #fdfdfd;
-    text-align: center;
-}
-
-.tab2-container {
-    padding: 1% 0%;
-    margin-left: 1%;
-    margin-right: 1%;
-    background-color: #fdfdfd;
-    text-align: center;
-}
 
   /* Main div with elements */
 
@@ -83,6 +14,72 @@
     text-align: center; 
     margin-top: 2%;
   }
+
+    /* Slider styling */
+
+  .slider-div {
+    background-color: #FBFDFF;
+    padding: 0%;
+    margin: 3% 2%;
+    border-radius: 8px;
+    /* box-shadow: 0 2px 8px rgba(236, 236, 236, 0.65); */
+  }
+
+
+  .slider-input {
+    -webkit-appearance: none;
+    width: 80%;
+    height: 0.7%;
+    border-radius: 5px;  
+    margin-top: 4%;
+    margin-bottom: 2%;
+    background: #92A9BD;
+    outline: none;
+    opacity: 0.6;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  .slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%; 
+    background: #0041c4;
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  .slider-label {
+    font-family: Arial, Helvetica, sans-serif; 
+    color: #9400D3; 
+    font-size: 1rem; 
+    text-align: center; 
+    margin-top: 4%; 
+    font-weight: 500;
+  }
+
+  /* Colors selection section */
+  .select-colors {
+    background-color: #fff; 
+    padding: 2% 2%;
+    margin: 3% 1%;
+    /* border: 1px solid darkgray; */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(173, 189, 207, 0.3); 
+  }
+
+
+  /* Confetti type label */
+  .confetti-type-label{
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+    color: rgb(119, 119, 119);
+    margin: 3%;
+  }
+
 
   /* Color selection */
   .input-colors-section{
@@ -93,11 +90,11 @@
     padding: 0;
   }
 
-  .color-picker{
+  .color-picker-div{
     display: block;
     text-align: center;
     margin: 0;
-    padding-bottom: 6%;
+    padding-bottom: 2%;
     width: auto;
   }
 
@@ -113,43 +110,60 @@
     padding-top: 3.5%;
   }
 
-  .input-picker{
-    display: inline-block;
-    height: 5.5%;
-    width: 15%;
-    vertical-align: middle;
-    margin: 0 2%;
+
+  input[type=color]{
+    width: 45%;
+    height: 5%;
+    border: none;
+    border-radius: 5px;
+    background: none;
+    margin: 2% 2%;
     padding: 0;
-    border: 1px solid white;
-    border-radius: 4px;
+    vertical-align: middle;
+    cursor: pointer;
+    }
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  input[type="color"]::-webkit-color-swatch {
+    border: solid 1px rgb(255, 255, 255);
+    border-radius: 5px;
   }
 
   .hex-input{
     display: inline-block;
-    width: 28%;
-    font-weight: 400;
-    color: rgb(119, 119, 119);
-    height: 4%;
+    width: 44%;
+    font-weight: 500;
+    color: #1A374D;
+    height: 4.7%;
     vertical-align: middle;
     font-size: 0.75rem;
+    text-transform:uppercase;
+    border: 1px solid #7C99AC;
+    text-align: center;
+    border-radius: 4px;
+    margin: 2% 2%;
   }
 
+
+  /* Display color area */
   .display-color-div{
-      display: block;
-      border: 1px solid darkgray;
-      border-radius: 5px;
-      margin: 10% 2%;
-      padding: 2% 5%;
-      width: auto;
-      height: 25%;
-      overflow: auto;
-      scroll-behavior: smooth;
-      text-align: left;
-    }
+    display: block;
+    border: 1px solid #7C99AC;
+    background-color: #fdfdfd;
+    border-radius: 5px;
+    margin: 3.5% 2%;
+    padding: 1% 2%;
+    width: auto;
+    height: 15%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    text-align: center;
+  }
 
   /* Scrollbar */
   ::-webkit-scrollbar {
-    width: 4px;
+    width: 2px;
     }
     ::-webkit-scrollbar-track {
       background: #f1f1f1; 
@@ -165,12 +179,13 @@
     display: inline-block;
     color: rgb(182, 182, 182);
     font-weight: 400;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin: 0;
-    padding-bottom: 3%;
+    padding-top: 1%;
+    padding-bottom: 8%;
     padding-left: 5%;
     padding-right: 5%;
-    text-align: left;
+    text-align: center;
     vertical-align: top;
   }
 
@@ -178,99 +193,84 @@
     display: inline-block;
     color: rgb(182, 182, 182);
     font-weight: 400;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin: 0;
-    padding-bottom: 3%;
+    padding-top: 1%;
+    padding-bottom: 6%;
     padding-left: 5%;
     padding-right: 5%;
-    text-align: left;
+    text-align: center;
     vertical-align: top;
   }
   
-
-  /* Slider styling */
-
-  .slider-div {
-    background-color: #fff; 
-    padding-top: 4%;
-    padding-bottom: 0.3%; 
-    margin: 2% 2%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(236, 236, 236, 0.65);
-  }
-
-  .confetti-question {
-    text-align: center; 
-    color:#344CB7; 
-    margin: 3% 0% 4%;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.8rem;
-  }
-
-
-  .slider-input {
-    -webkit-appearance: none;
-    width: 60%;
-    height: 1.5%;
-    border-radius: 5px;  
-    margin: 3% 0;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-  }
-
-  .slider-input::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%; 
-  background: darkcyan;
-  cursor: pointer;
-}
-
-  .slider-label {
-    font-family: Arial, Helvetica, sans-serif; 
-    color: #9400D3; 
-    font-size: 1.1rem; 
-    text-align: center; 
-    margin-top: 2%; 
-    font-weight: 400;
-  }
 
   a:link, a:active {
     text-decoration: none;
   }
 
-  .button-div {
-    margin-top: 3%;
-    text-align: center;
+  /* Random colors genration section */
+  .random-colors {
+    background-color: #fff; 
+    padding: 2% 2%;
+    margin: 4% 1%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(173, 189, 207, 0.3);
   }
 
-  /* Button styling */
-  .large-button {
-    font-size: 0.8rem;
-    margin: 3% 0%;
-    padding: 2% 1%;
-    width: 35%;
+  /* small button styling */
+  .small-button {
+    font-size: 0.7rem;
+    margin: 2% 2%;
+    padding: 2% 2%;
+    width: 44%;
     display: inline;
-    border: 1px solid #516BEB;
+    border: 1px solid #18a0fb;
     background-color: #fff;
     border-radius: 4px;
-    color: #516BEB;
+    color: #18a0fb;
     cursor: pointer;
   }
 
+  .small-button:hover {
+    background-color: #1582cb;
+    border: 1px solid #1582cb;
+
+    color: #fff;
+    transition-duration: 0.2s;
+  }
+
+  .small-button:active {
+    background-color: #13679e;
+    border: 1px solid #13679e;
+    color: #fff;
+    transition-duration: 0.2s;
+  }
+
+  /* large button styling */
+  .large-button {
+    font-size: 0.7rem;
+    margin: 3% 0%;
+    padding: 2.5% 1%;
+    width: 90%;
+    display: inline;
+    border: 1px solid #18a0fb;
+    background-color: #18a0fb;  /*#516BEB;*/
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(236, 236, 236, 0.65);
+  }
+
   .large-button:hover {
-    background-color: #516BEB;
+    background-color: #1582cb;
+    border: 1px solid #1582cb;
     color: #fff;
     transition-duration: 0.2s;
   }
 
   .large-button:active {
-    background-color: #3c54cc;
+    background-color: #13679e;
+    border: 1px solid #13679e;
     color: #fff;
     transition-duration: 0.2s;
   }
@@ -278,7 +278,7 @@
 
   .bottomContainer {
     background: none repeat scroll 0 0 transparent;
-    bottom: 3.49%;
+    bottom: 1%;
     position: fixed;
     width: 100%;
     display: block;
@@ -341,63 +341,47 @@
   <!-- one div for the main UI body of plugin -->
   <div id="main" class="main-div">
 
-      <!-- Tab links -->
-      <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'selectColors')" id="defaultOpen">Select colors</button>
-        <button class="tablinks" onclick="openTab(event, 'randomColors')">Random colors</button>
+      <!-- Elements asking about density of confetti -->
+      <div class="slider-div">
+        <p class="confetti-type-label">Confetti density</p>
+        <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
+        <p id="sliderLabel" class="slider-label">party</p>
       </div>
 
-      <!-- tab content -->
-      <!-- Tab 1 -->
-      <div id="selectColors" class="tabcontent">
+      <div class="select-colors" id="selectColors">
+        <p class="confetti-type-label">Select colors</p>
         <!-- Elements to select colors -->
         <div class="input-colors-section">
-          <div class="color-picker">
-            <label class="picker-label" for="color" >Select color</label>
-            <input class="input-picker" type="color" name="color" id="color" value="#FF0000">
-            <input class="hex-input" type="text" id="hex" name="hex" value="#FF0000">
+          <div class="color-picker-div">
+            <input class="hex-input" type="text" id="hex" name="hex" maxlength="7" value="#FF7272" >
+            <input type="color" class="input-picker" name="color" id="color" value="#FF7272">
           </div>
   
-        <div class="small-buttons-section">
-          <button class="small-button" name="add" id="add">+ Add</button>
-          <button class="small-button" name="reset" id="reset">Reset</button>
-        </div>
+          <div class="small-buttons-section">
+            <button class="small-button" name="add" id="add"><i class="fas fa-palette"></i>&nbsp;&nbsp;Add</button>
+            <button class="small-button" name="reset" id="reset"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;Reset</button>
+          </div>
         
-        <div class="display-color-div">
-          <p class="display-color-text1" id="display-color1">No colors added</p>
-          <p class="display-color-text2" id="display-color2"></p>
+          <div class="display-color-div">
+            <p class="display-color-text1" id="display-color1">No colors added</p>
+            <p class="display-color-text2" id="display-color2"></p>
+          </div>
         </div>
-      </div>
-  
-      <!-- Elements asking about density of confetti -->
-      <div>
-        
-        <div class="slider-div">
-          <p class="confetti-question">How much confetti do you want?</p>
-          <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
-          <p id="sliderLabel" class="slider-label">party</p>
-        </div>
-      </div>
+
       
-      <div class="button-div">
-        <button id="generateSelection" class="large-button">Generate</button>
+        <div class="button-div">
+          <button id="generateSelection" class="large-button">Generate</button>
+        </div>
       </div>
-    </div>
 
     <!-- Tab 2 -->
-    <div id="randomColors" class="tabcontent">
+
       <!-- Elements asking about density of confetti -->
-      <div>
-        <div class="slider-div">
-          <p class="confetti-question">How much confetti do you want?</p>
-          <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
-          <p id="sliderLabel" class="slider-label">party</p>
-        </div>
+
+      <div class="random-colors">
+        <p class="confetti-type-label">Random colors</p>
+        <button id="generateRandom" class="large-button">Generate with random colors</button>
       </div>
-      <div class="button-div">
-        <button id="generateRandom" class="large-button">Generate</button>
-      </div>
-    </div>
 
     </div>
 
@@ -417,45 +401,53 @@
 
 <script>
 
-  //Tabs handling JS code
-  function openTab(evt, contentDivID) {
-
-  // Get all elements with class="tabcontent" and hide them
-  const tabcontent = document.getElementsByClassName("tabcontent");
-  for (let i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-
-  // Get all elements with class="tablinks" and remove the class "active"
-  const tablinks = document.getElementsByClassName("tablinks");
-  for (let i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-
-  // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(contentDivID).style.display = "block";
-  evt.currentTarget.className += " active";
-
-  }
-
-  // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click();
-
-  //Initially defining the div areas for error and UI
-  const errorArea = document.getElementById("error");
-  const uiMain = document.getElementById("main");
-
   // Displaying added colors and pushing these colors to submission array
   var inputColors = [];
   var counter = 1;
 
-  var hexinput = document.getElementById("hex");
+  //Getting inputs from color picker, hex input and density slider
+  var hexInput = document.getElementById("hex");
   var pickerInput = document.getElementById("color");
+  var sliderInput = document.getElementById("slider");
+  var label = document.getElementById("sliderLabel");
 
   pickerInput.oninput = function() {
     var pickerValue = `${pickerInput.value}`.toUpperCase();
-    hexinput.value = pickerValue;
+    hexInput.value = pickerValue;
     pickerValue = `${this.value}`.toUpperCase();
+  }
+
+  hexInput.oninput = function() {
+    var hexValue = `${hexInput.value}`.toUpperCase();
+
+    if(hexValue[0] !== '#' && hexValue.length > 6){ 
+      hexValue = "#"+ hexValue[0] + hexValue[1] + hexValue[2] + hexValue[3] + hexValue[4] + hexValue[5];
+    }else if(hexValue[0] !== '#' && hexValue.length === 6){
+      hexValue = "#"+ hexValue;
+    }else if(hexValue[0] !== '#' && hexValue.length === 1){
+      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[0] + hexValue[0] + hexValue[0] + hexValue[0];
+    }else if(hexValue[0] === '#' && hexValue.length === 2){
+      hexValue += hexValue[1] + hexValue[1] + hexValue[1] + hexValue[1] + hexValue[1];
+    }else if(hexValue[0] !== '#' && hexValue.length === 2){
+      hexValue = "#"+ hexValue[0] + hexValue[1] + hexValue[0] + hexValue[1] + hexValue[0] + hexValue[1];
+    }else if(hexValue[0] === '#' && hexValue.length === 3){
+      hexValue += hexValue[1] + hexValue[2] + hexValue[1] + hexValue[2];
+    }else if(hexValue[0] !== '#' && hexValue.length === 3){
+      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+    }else if(hexValue[0] === '#' && hexValue.length === 4){
+      hexValue = "#"+ hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
+    }else if(hexValue[0] !== '#' && hexValue.length === 4){
+      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+    }else if(hexValue[0] === '#' && hexValue.length === 5){
+      hexValue = "#"+ hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
+    }else if(hexValue[0] !== '#' && hexValue.length === 5){
+      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
+    }else if(hexValue[0] === '#' && hexValue.length === 6){
+      hexValue = "#"+ hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
+    }
+
+    pickerInput.value = hexValue;
+    hexValue = `${this.value}`.toUpperCase();
   }
 
   document.getElementById('add').onclick = () => {
@@ -466,23 +458,18 @@
     const display1 = document.getElementById("display-color1");
     const display2 = document.getElementById("display-color2");
     const displayDiv = document.getElementById("display-color-div");
+    const white = "#FFFFFF";
+    const colorValueHtml = "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
 
     if(counter === 1){
       if(display1.innerHTML === "No colors added"){
-      display1.innerHTML = "";
-      display1.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+        display1.innerHTML = "";
+        display1.innerHTML += colorValueHtml;
       }else{
-      // display.innerHTML += colorValue+"<br>";
-      display1.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
+        display1.innerHTML += colorValueHtml;
       }
     }else{
-      if(display2.innerHTML === "No colors added"){
-      display2.innerHTML = "";
-      display2.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
-      }else{
-      // display.innerHTML += colorValue+"<br>";
-      display2.innerHTML += "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
-      }
+        display2.innerHTML += colorValueHtml; 
     }
     counter *= -1;
   };
@@ -492,11 +479,12 @@
     document.getElementById("display-color1").innerHTML = "No colors added";
     document.getElementById("display-color2").innerHTML = "";
     counter = 1;
+    hexInput.value = "#FF7272";
+    pickerInput.value = "#FF7272";
   };
 
   //displaying slider input to as label below slider
-  const sliderInput = document.getElementById("slider");
-  const label = document.getElementById("sliderLabel");
+
 
   //Event function on change in the slider value
   sliderInput.oninput = function (){
@@ -529,15 +517,19 @@
 
   }
 
-  var input = parseInt(sliderInput.value, 10);
+
 
   //Onclick of button, sending a message with content to codeJS
   document.getElementById('generateSelection').onclick = () => {
+    var input = parseInt(sliderInput.value, 10);
+    console.log(input);
     parent.postMessage({pluginMessage: { type: 'generate-selection', data: {input, inputColors}}},'*' );
   };
 
     
   document.getElementById('generateRandom').onclick = () => {
+    var input = parseInt(sliderInput.value, 10);
+    console.log(input);
     parent.postMessage({pluginMessage: { type: 'generate-random', data: {input}}},'*' );
   };
 
