@@ -39,15 +39,12 @@ function runPlugin(){
       if(msg.data.RecValue === true){
         shapeCounter++;
       }
-
       if(msg.data.EllValue === true){
         shapeCounter++;
       }
-
       if(msg.data.PolyValue === true){
         shapeCounter++;
       }
-
       if(msg.data.StarValue === true){
         shapeCounter++;
       }
@@ -88,7 +85,7 @@ function runPlugin(){
             for(const node of figma.currentPage.selection){
               if(node.type === 'FRAME'){
                   if(colorArray.length === 0){
-                    figma.notify("Please add colors to your Confetti",{timeout: 1200});
+                    figma.notify("Color palette is empty. Please add colors.",{timeout: 1200});
                   }else{
                     //calling confetti function
                     selectionColorsConfetti(node, msgData, colorArray, shapeCounter);
@@ -138,7 +135,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes){
       const rect = figma.createRectangle();
 
       //Assign a random width and height to rectangle
-      const w = numBetween(width * 0.007, width * 0.05);
+      const w = numBetween(width * 0.007, width * 0.04);
       const h = numBetween(height * 0.01, height * 0.02);
       rect.resize(w,h);
 
