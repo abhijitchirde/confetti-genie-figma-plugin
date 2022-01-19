@@ -31,7 +31,7 @@
     width: 80%;
     height: 0.7%;
     border-radius: 5px;  
-    margin-top: 4%;
+    margin-top: 2%;
     margin-bottom: 2%;
     background: #92A9BD;
     outline: none;
@@ -43,8 +43,8 @@
   .slider-input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 15px;
-    height: 15px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%; 
     background: #0041c4;
     cursor: pointer;
@@ -56,7 +56,7 @@
     color: #9400D3; 
     font-size: 1rem; 
     text-align: center; 
-    margin-top: 4%; 
+    margin-top: 2%; 
     font-weight: 500;
   }
 
@@ -73,11 +73,55 @@
 
   /* Confetti type label */
   .confetti-type-label{
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-align: center;
     font-weight: 500;
-    color: rgb(119, 119, 119);
+    color: rgb(59, 81, 102);
     margin: 3%;
+  }
+
+  /* Checkbox styling */
+  .checkboxes {
+    width: 100%;
+    text-align: center;
+    padding-left: 5%;
+    margin: 0%;
+    padding-top: 2%;
+  }
+
+  .checkbox-div {
+    width: 40%;
+    height: 4.5%;
+    display: inline-block;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    padding-right: 0%;
+    padding-left: 2%;
+    text-align: left;
+    vertical-align: middle;
+    /* background-color: #13679e; */
+  }
+
+  .blank-div-in-checkboxes{
+    display: inline-block;
+    width: 7%;
+  }
+
+  .checkbox {
+    margin: 1% 0;
+    margin-right: 3%;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  .checkbox-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin-left: 2%;
+    color: #6f6f70;
+    vertical-align: middle;
+    cursor: pointer;
   }
 
 
@@ -149,13 +193,13 @@
   /* Display color area */
   .display-color-div{
     display: block;
-    border: 1px solid #7C99AC;
+    border: 1px solid #a3b9c7;
     background-color: #fdfdfd;
     border-radius: 5px;
     margin: 3.5% 2%;
     padding: 1% 2%;
     width: auto;
-    height: 15%;
+    height: 11%;
     overflow: auto;
     scroll-behavior: smooth;
     text-align: center;
@@ -179,7 +223,7 @@
     display: inline-block;
     color: rgb(182, 182, 182);
     font-weight: 400;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     margin: 0;
     padding-top: 1%;
     padding-bottom: 8%;
@@ -193,10 +237,10 @@
     display: inline-block;
     color: rgb(182, 182, 182);
     font-weight: 400;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     margin: 0;
     padding-top: 1%;
-    padding-bottom: 6%;
+    padding-bottom: 8%;
     padding-left: 5%;
     padding-right: 5%;
     text-align: center;
@@ -312,7 +356,7 @@
 
   .heart {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: rgb(158, 171, 196);
     margin: 0;
     text-align: center;
@@ -349,7 +393,24 @@
       </div>
 
       <div class="select-colors" id="selectColors">
+        <p class="confetti-type-label">Select confetti elements</p>
+        
+        <!-- Elements to select colors -->
+        
+        <div class="checkboxes">
+          <div class="checkbox-div"><input class="checkbox" type="checkbox" id="RecChk" name="RecChk" value="RecChk" checked><label class="checkbox-label" for="RecChk">Rectangles</label></div>
+          <div class="blank-div-in-checkboxes"></div>
+          <div class="checkbox-div "><input class="checkbox" type="checkbox" id="EllChk" name="EllChk" value="EllChk" checked><label class="checkbox-label" for="EllChk">Ellipses</label></div>
+          <div class="checkbox-div "><input class="checkbox" type="checkbox" id="PolyChk" name="PolyChk" value="PolyChk" checked><label class="checkbox-label" for="PolyChk">Polygons</label></div>   
+          <div class="blank-div-in-checkboxes"></div>
+          <div class="checkbox-div "><input class="checkbox" type="checkbox" id="StarChk" name="StarChk" value="StarChk" checked><label class="checkbox-label" for="StarChk">Stars</label></div>
+        </div>
+
+      </div>
+
+      <div class="select-colors" id="selectColors">
         <p class="confetti-type-label">Select colors</p>
+
         <!-- Elements to select colors -->
         <div class="input-colors-section">
           <div class="color-picker-div">
@@ -370,17 +431,15 @@
 
       
         <div class="button-div">
-          <button id="generateSelection" class="large-button">Generate</button>
+          <button id="generateSelection" class="large-button">Generate with selected colors</button>
         </div>
       </div>
 
-    <!-- Tab 2 -->
-
-      <!-- Elements asking about density of confetti -->
+      <!-- Elements to generate with random colors -->
 
       <div class="random-colors">
-        <p class="confetti-type-label">Random colors</p>
-        <button id="generateRandom" class="large-button">Generate with random colors</button>
+        <!-- <p class="confetti-type-label">Random colors</p> -->
+        <button id="generateRandom" class="large-button"><i class="fas fa-random"></i>&nbsp;&nbsp;Generate with random colors</button>
       </div>
 
     </div>
@@ -517,20 +576,24 @@
 
   }
 
-
-
   //Onclick of button, sending a message with content to codeJS
   document.getElementById('generateSelection').onclick = () => {
+    const RecValue = RecChk.checked;
+    const EllValue = EllChk.checked;
+    const PolyValue = PolyChk.checked;
+    const StarValue = StarChk.checked;
     var input = parseInt(sliderInput.value, 10);
-    console.log(input);
-    parent.postMessage({pluginMessage: { type: 'generate-selection', data: {input, inputColors}}},'*' );
+    parent.postMessage({pluginMessage: { type: 'generate-selection', data: {input, inputColors, RecValue, EllValue, PolyValue, StarValue}}},'*' );
   };
 
     
   document.getElementById('generateRandom').onclick = () => {
+    const RecValue = RecChk.checked;
+    const EllValue = EllChk.checked;
+    const PolyValue = PolyChk.checked;
+    const StarValue = StarChk.checked;
     var input = parseInt(sliderInput.value, 10);
-    console.log(input);
-    parent.postMessage({pluginMessage: { type: 'generate-random', data: {input}}},'*' );
+    parent.postMessage({pluginMessage: { type: 'generate-random', data: {input, RecValue, EllValue, PolyValue, StarValue}}},'*' );
   };
 
  

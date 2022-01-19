@@ -1,4 +1,7 @@
-figma.showUI(__html__,{width: 250, height: 430});
+figma.showUI(__html__,{width: 250, height: 480});
+
+//counting input shapes by user
+var shapeCounter = 0;
 
 // create a colors array for drawing   
 const randomColors = [
@@ -31,9 +34,24 @@ function runPlugin(){
     //On a message from UI, we do the action as per message content 
     figma.ui.onmessage = msg => {
 
-      if(msg.type === 'invalid-hex'){
-        figma.notify("Please enter a valid hex color code", {timeout: 1500});
+      shapeCounter = 0;
+
+      if(msg.data.RecValue === true){
+        shapeCounter++;
       }
+
+      if(msg.data.EllValue === true){
+        shapeCounter++;
+      }
+
+      if(msg.data.PolyValue === true){
+        shapeCounter++;
+      }
+
+      if(msg.data.StarValue === true){
+        shapeCounter++;
+      }
+
 
       if(msg.type === 'generate-random'){
         if(figma.currentPage.selection.length === 0){
@@ -41,14 +59,18 @@ function runPlugin(){
         }else if(figma.currentPage.selection[0].type !== 'FRAME'){
           figma.notify("Please select a frame to add Confetti",{timeout: 1200});
         }else{
-          const number = msg.data.input;
-          for(const node of figma.currentPage.selection){
-            if(node.type === 'FRAME'){
-
-                //calling confetti function
-                randomConfetti(node, number, randomColors);
+          if(shapeCounter === 0){
+            figma.notify("Please select shapes to generate confetti",{timeout: 1200});
+          }else{
+            const msgData = msg.data;
+            for(const node of figma.currentPage.selection){
+              if(node.type === 'FRAME'){
+                  //calling confetti function
+                  randomConfetti(node, msgData, randomColors, shapeCounter);
+              }
             }
           }
+          
         }  
       }
 
@@ -58,25 +80,30 @@ function runPlugin(){
         }else if(figma.currentPage.selection[0].type !== 'FRAME'){
           figma.notify("Please select a frame to add Confetti",{timeout: 1200});
         }else{
-          const colorArray = msg.data.inputColors;
-          const number = msg.data.input;
-          for(const node of figma.currentPage.selection){
-            if(node.type === 'FRAME'){
-                if(colorArray.length === 0){
-                  figma.notify("Please add colors to your Confetti",{timeout: 1200});
-                }else{
-                  //calling confetti function
-                  selectionColorsConfetti(node, number, colorArray);
-                }
-                
+          if(shapeCounter === 0){
+            figma.notify("Please select shapes to generate confetti",{timeout: 1200});
+          }else{
+            const msgData = msg.data;
+            const colorArray = msg.data.inputColors;
+            for(const node of figma.currentPage.selection){
+              if(node.type === 'FRAME'){
+                  if(colorArray.length === 0){
+                    figma.notify("Please add colors to your Confetti",{timeout: 1200});
+                  }else{
+                    //calling confetti function
+                    selectionColorsConfetti(node, msgData, colorArray, shapeCounter);
+                  }
+                  
+              }
             }
           }
+
         }  
       }
     }
 }
 
-function selectionColorsConfetti(inputNode, number, colors){
+function selectionColorsConfetti(inputNode, msgData, colors, noOfShapes){
 
   const rbgColorArray = [];
 
@@ -84,141 +111,145 @@ function selectionColorsConfetti(inputNode, number, colors){
     let rbg = hexToRgbDivBy255(color);      //convert hex color to rgb in 0-1 range as used in paints object
     rbgColorArray.push(rbg);
   }
-  
-  generateConfetti(inputNode,number,rbgColorArray);
-
+  generateConfetti(inputNode,msgData,rbgColorArray, noOfShapes);
 }
 
 
-
-function randomConfetti(inputNode, count, colors){
-  generateConfetti(inputNode, count, colors);
+function randomConfetti(inputNode, msgData, colors,noOfShapes){
+  generateConfetti(inputNode, msgData, colors, noOfShapes);
 }
 
 
 //Confetti generation function
-function generateConfetti(currentNode, count, colors){
+function generateConfetti(currentNode, msgData, colors, noOfShapes){
+
+  const count = msgData.input;
+
 
   const width = currentNode.width;
   const height = currentNode.height;
 
-  //add rectangles
-  for(let i = 0; i < count/2; i++){
-    //create a rectangle
-    const rect = figma.createRectangle();
+  let effectiveCount = count/noOfShapes;
 
-    //Assign a random width and height to rectangle
-    const w = numBetween(width * 0.007, width * 0.04);
-    const h = numBetween(height * 0.01, height * 0.02);
-    rect.resize(w,h);
+  if(msgData.RecValue === true){
+    //add rectangles
+    for(let i = 0; i < effectiveCount; i++){
+      //create a rectangle
+      const rect = figma.createRectangle();
 
-    //randomly position rectangle within the frame
-    rect.x = numBetween(0, width);
-    rect.y = numBetween(0, height);
+      //Assign a random width and height to rectangle
+      const w = numBetween(width * 0.007, width * 0.05);
+      const h = numBetween(height * 0.01, height * 0.02);
+      rect.resize(w,h);
 
-    //set a random color
-    rect.fills = [
-      {
-        type: 'SOLID',
-        color: setColor(colors),
-        opacity: setOpacity(),
-      },
-    ];
+      //randomly position rectangle within the frame
+      rect.x = numBetween(0, width);
+      rect.y = numBetween(0, height);
 
-    rect.rotation = numBetween(-180, 180);
+      //set a random color
+      rect.fills = [
+        {
+          type: 'SOLID',
+          color: setColor(colors),
+          opacity: setOpacity(),
+        },
+      ];
 
-    currentNode.appendChild(rect);
+      rect.rotation = numBetween(-180, 180);
+      currentNode.appendChild(rect);
+    }
+  }
 
+  if(msgData.EllValue === true){
+      //add ellipses
+    for(let i = 0; i < effectiveCount; i++){
+      //create ellipse
+      const ell = figma.createEllipse();
+
+      //Assign a random width to ellipse
+      const w = numBetween(width * 0.005, width * 0.015);
+      const h = w;  //keeping width and heights same to have circles
+      ell.resize(w,h);
+
+      //randomly position within the frame
+      ell.x = numBetween(0, width);
+      ell.y = numBetween(0, height);
+
+      //set a random color
+      ell.fills = [
+        {
+          type: 'SOLID',
+          color: setColor(colors),
+          opacity: setOpacity(),
+        },
+      ];
+
+      currentNode.appendChild(ell);
+    }
   }
 
 
-  //add ellipses
-  for(let i = 0; i < count/2; i++){
-    //create ellipse
-    const ell = figma.createEllipse();
+  if(msgData.PolyValue === true){
+    //add polygons
+    for(let i = 0; i < effectiveCount; i++){
+      //create a star
+      const poly= figma.createPolygon();
 
-    //Assign a random width to ellipse
-    const w = numBetween(width * 0.005, width * 0.015);
-    const h = w;  //keeping width and heights same to have circles
-    ell.resize(w,h);
+      poly.pointCount = numBetween(3,6);
 
-    //randomly position within the frame
-    ell.x = numBetween(0, width);
-    ell.y = numBetween(0, height);
+      //Assign a random width and height
+      const w = numBetween(width * 0.01, width * 0.02);
+      const h = w;  //keeping width and heights same
+      poly.resize(w,h);
 
-    //set a random color
-    ell.fills = [
-      {
-        type: 'SOLID',
-        color: setColor(colors),
-        opacity: setOpacity(),
-      },
-    ];
+      //randomly position within the frame
+      poly.x = numBetween(0, width);
+      poly.y = numBetween(0, height);
 
-    currentNode.appendChild(ell);
+      //set a random color
+      poly.fills = [
+        {
+          type: 'SOLID',
+          color: setColor(colors),
+          opacity: setOpacity(),
+        },
+      ];
 
+      poly.rotation = numBetween(-180, 180);
+
+      currentNode.appendChild(poly);
+    }
   }
 
-  //add stars
-  for(let i = 0; i < count/2; i++){
-    //create a star
-    const star = figma.createStar();
+  if(msgData.StarValue === true){
+      //add stars
+    for(let i = 0; i < effectiveCount; i++){
+      //create a star
+      const star = figma.createStar();
 
-    star.pointCount = numBetween(4,6);
+      star.pointCount = numBetween(4,6);
 
-    //Assign a random width and height
-    const w = numBetween(width * 0.01, width * 0.02);
-    const h = w;  //keeping width and heights same
-    star.resize(w,h);
+      //Assign a random width and height
+      const w = numBetween(width * 0.01, width * 0.02);
+      const h = w;  //keeping width and heights same
+      star.resize(w,h);
 
-    //randomly position within the frame
-    star.x = numBetween(0, width);
-    star.y = numBetween(0, height);
+      //randomly position within the frame
+      star.x = numBetween(0, width);
+      star.y = numBetween(0, height);
 
-    //set a random color
-    star.fills = [
-      {
-        type: 'SOLID',
-        color: setColor(colors),
-        opacity: setOpacity(),
-      },
-    ];
+      //set a random color
+      star.fills = [
+        {
+          type: 'SOLID',
+          color: setColor(colors),
+          opacity: setOpacity(),
+        },
+      ];
 
-    star.rotation = numBetween(-180, 180);
-
-    currentNode.appendChild(star);
-
-  }
-
-  //add polygons
-  for(let i = 0; i < count/3; i++){
-    //create a star
-    const poly= figma.createPolygon();
-
-    poly.pointCount = numBetween(3,6);
-
-    //Assign a random width and height
-    const w = numBetween(width * 0.01, width * 0.02);
-    const h = w;  //keeping width and heights same
-    poly.resize(w,h);
-
-    //randomly position within the frame
-    poly.x = numBetween(0, width);
-    poly.y = numBetween(0, height);
-
-    //set a random color
-    poly.fills = [
-      {
-        type: 'SOLID',
-        color: setColor(colors),
-        opacity: setOpacity(),
-      },
-    ];
-
-    poly.rotation = numBetween(-180, 180);
-
-    currentNode.appendChild(poly);
-
+      star.rotation = numBetween(-180, 180);
+      currentNode.appendChild(star);
+    }
   }
 
 }
