@@ -126,6 +126,16 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes){
   const width = currentNode.width;
   const height = currentNode.height;
 
+  let largeSide, smallSide;
+
+  if(width > height){
+    largeSide = width;
+    smallSide = height;
+  }else{
+    largeSide = height;
+    smallSide = width;
+  }
+
   let effectiveCount = count/noOfShapes;
 
   if(msgData.RecValue === true){
@@ -135,8 +145,8 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes){
       const rect = figma.createRectangle();
 
       //Assign a random width and height to rectangle
-      const w = numBetween(width * 0.007, width * 0.04);
-      const h = numBetween(height * 0.01, height * 0.02);
+      const w = numBetween(largeSide * 0.007, largeSide * 0.04);
+      const h = numBetween(smallSide * 0.01, smallSide * 0.02);
       rect.resize(w,h);
 
       //randomly position rectangle within the frame
@@ -164,7 +174,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes){
       const ell = figma.createEllipse();
 
       //Assign a random width to ellipse
-      const w = numBetween(width * 0.005, width * 0.015);
+      const w = numBetween(largeSide * 0.005, largeSide * 0.015);
       const h = w;  //keeping width and heights same to have circles
       ell.resize(w,h);
 
@@ -195,7 +205,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes){
       poly.pointCount = numBetween(3,6);
 
       //Assign a random width and height
-      const w = numBetween(width * 0.01, width * 0.02);
+      const w = numBetween(largeSide * 0.01, largeSide * 0.02);
       const h = w;  //keeping width and heights same
       poly.resize(w,h);
 
@@ -227,7 +237,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes){
       star.pointCount = numBetween(4,6);
 
       //Assign a random width and height
-      const w = numBetween(width * 0.01, width * 0.02);
+      const w = numBetween(largeSide * 0.01, largeSide * 0.02);
       const h = w;  //keeping width and heights same
       star.resize(w,h);
 
