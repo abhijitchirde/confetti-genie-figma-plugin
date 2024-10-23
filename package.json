@@ -9,6 +9,6 @@
   "author": "Abhijit Chirde",
   "license": "MIT",
   "devDependencies": {
-    "@figma/plugin-typings": "^1.39.1"
+    "@figma/plugin-typings": "*"
   }
 }
