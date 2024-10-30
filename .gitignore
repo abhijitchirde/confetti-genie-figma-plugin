@@ -7,6 +7,4 @@ out/
 dist/
 code.js
 
-#Prettier files
-.prettierrc
-.prettierignore
+
