@@ -4,7 +4,8 @@
   "description": "Generate confetti shower pattern on selected frame/s",
   "main": "code.min.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch"
   },
   "author": "Abhijit Chirde",
   "license": "MIT",

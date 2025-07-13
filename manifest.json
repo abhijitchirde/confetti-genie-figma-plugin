@@ -2,11 +2,9 @@
   "name": "Confetti Genie",
   "id": "1044658409805883306",
   "api": "1.0.0",
-  "main": "code.min.js",
-  "editorType": [
-    "figma"
-  ],
+  "main": "code.js",
+  "editorType": ["figma"],
   "ui": "ui.html",
-  "networkAccess":{"allowedDomains":["none"]},
-  "documentAccess":"dynamic-page"
+  "networkAccess": { "allowedDomains": ["none"] },
+  "documentAccess": "dynamic-page"
 }

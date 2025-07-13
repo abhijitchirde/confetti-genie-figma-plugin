@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 250, height: 480 });
+figma.showUI(__html__, { width: 240, height: 560 });
 
 //counting input shapes by user
 var shapeCounter = 0;
@@ -31,8 +31,20 @@ runPlugin();
 function runPlugin() {
   //On a message from UI, we do the action as per message content
   figma.ui.onmessage = (msg) => {
-    shapeCounter = 0;
+    // THEME DETECTION SUPPORT
+    if (msg.type === "get-theme") {
+      figma.ui.postMessage({
+        type: "theme-changed",
+        theme: figma.editorType === "figma" ? "light" : "dark",
+      });
+      return;
+    }
 
+    if (!msg.data) {
+      return;
+    }
+
+    shapeCounter = 0;
     if (msg.data.RecValue === true) {
       shapeCounter++;
     }
