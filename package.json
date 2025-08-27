@@ -2,7 +2,7 @@
   "name": "Confetti-Genie",
   "version": "1.0.0",
   "description": "Generate confetti shower pattern on selected frame/s",
-  "main": "code.min.js",
+  "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -p tsconfig.json --watch"
