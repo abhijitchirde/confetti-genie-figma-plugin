@@ -1,4 +1,11 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), clipboard-write=(), display-capture=()">
+</head>
+<body>
 
 <style>
   /* Figma Design System Tokens */
@@ -146,7 +153,7 @@
   /* Colors selection section */
   .select-colors {
     background-color: var(--figma-color-bg); 
-    padding: 0.2rem;
+    padding:0 0.5rem;
     margin: 0.5rem;
     border: 1px solid var(--figma-color-border);
     border-radius: var(--figma-radius-lg);
@@ -156,10 +163,11 @@
   /* Confetti type label */
   .confetti-type-label {
     font-size: var(--figma-font-size-sm);
-    text-align: center;
     font-weight: 500;
+    text-align: left;
     color: var(--figma-color-text-secondary);
-    /* margin: var(--figma-space-md); */
+    margin: 0;
+    flex-shrink: 0;
   }
 
   /* Checkbox styling */
@@ -229,18 +237,32 @@
     /* width: auto; */
   }
 
+  .color-controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--figma-space-sm);
+    margin: 2% 2%;
+    width: calc(100% - 4%);
+  }
 
+  .icon-buttons-group {
+    display: flex;
+    align-items: center;
+    gap: var(--figma-space-sm);
+    flex-shrink: 0;
+  }
 
   input[type=color] {
-    width: 45%;
-    height: 5%;
+    width: 3rem;
+    height: 1.5rem;
     border: none;
-    border-radius: var(--figma-radius-sm);
+    border-radius: var(--figma-radius-md);
     background: none;
-    margin: 2% 2%;
+    margin: 0;
     padding: 0;
-    vertical-align: middle;
     cursor: pointer;
+    flex-shrink: 0;
   }
 
   input[type="color"]::-webkit-color-swatch-wrapper {
@@ -249,50 +271,38 @@
 
   input[type="color"]::-webkit-color-swatch {
     border: solid 1px var(--figma-color-border);
-    border-radius: var(--figma-radius-sm);
-  }
-
-  .hex-input {
-    /* display: inline-block; */
-    width: 44%;
-    /* font-weight: 500; */
-    color: var(--figma-color-text-secondary);
-    height: 1.5rem;
-    /* vertical-align: middle; */
-    font-size: var(--figma-font-size-xs);
-    text-transform: uppercase;
-    border: 1px solid var(--figma-color-border-strong);
-    text-align: center;
     border-radius: var(--figma-radius-md);
-    margin: 2% 2%;
-    background-color: var(--figma-color-bg);
-    transition: all 0.2s ease;
-  }
-
-  .hex-input:focus {
-    border-color: var(--figma-color-border-focus);
-    outline: none;
   }
 
   #color{
+    width: 3rem;
     height: 1.5rem;
-
+    border: none;
     border-radius: var(--figma-radius-md);
   }
 
   /* Display color area */
   .display-color-div {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--figma-space-xs);
     border: 1px solid var(--figma-color-border);
-    background-color: #ededed !important;
+    /* background-color: #ededed !important; */
     border-radius: var(--figma-radius-lg);
     margin: 3.5% 2%;
-    padding: 1% 2%;
+    padding: 0.35rem;
     width: auto;
-    height: 4rem;
-    overflow: auto;
+    min-height: 4rem;
+    max-height: 8rem;
+    overflow-y: auto;
+    overflow-x: hidden;
     scroll-behavior: smooth;
-    text-align: center;
+    align-items: flex-start;
+    align-content: flex-start;
+  }
+
+  [data-theme="dark"] .display-color-div {
+    background-color: var(--figma-color-bg-secondary) !important;
   }
 
   /* Scrollbar */
@@ -312,32 +322,71 @@
     background: var(--figma-color-text-tertiary); 
   }
 
-  .display-color-text1 {
-    display: inline-block;
-    color: #222;
-    font-weight: 400;
+  /* Color pill capsule styling */
+  .color-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--figma-space-xs);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px; /* Pill shape with rounded corners */
     font-size: var(--figma-font-size-xs);
-    margin: 0;
-    padding-top: 1%;
-    padding-bottom: 8%;
-    padding-left: 5%;
-    padding-right: 5%;
-    text-align: center;
-    vertical-align: top;
+    font-weight: 500;
+    font-family: var(--figma-font-family);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: var(--figma-shadow-small);
+    transition: all 0.2s ease;
+    cursor: default;
+    user-select: none;
   }
 
-  .display-color-text2 {
-    display: inline-block;
-    color: var(--figma-color-text-disabled);
-    font-weight: 400;
-    font-size: var(--figma-font-size-xs);
+  .color-pill:hover {
+    box-shadow: var(--figma-shadow-medium);
+    transform: translateY(-1px);
+  }
+
+  .color-pill-name {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 0.6rem;
+  }
+
+  .color-pill-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: inherit;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 0;
     margin: 0;
-    padding-top: 1%;
-    padding-bottom: 8%;
-    padding-left: 5%;
-    padding-right: 5%;
+    border: none;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .color-pill-remove:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+  }
+
+  .color-pill-remove:active {
+    transform: scale(0.95);
+  }
+
+  .empty-state-text {
+    width: 100%;
     text-align: center;
-    vertical-align: top;
+    color: var(--figma-color-text-tertiary);
+    font-size: var(--figma-font-size-xs);
+    font-weight: 400;
+    font-family: var(--figma-font-family);
+    margin: 0;
+    padding-top: 1.5rem;
   }
 
   a:link, a:active {
@@ -377,6 +426,25 @@
     transition-duration: 0.2s;
   }
 
+  .icon-button {
+    width: auto;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 var(--figma-space-sm);
+    aspect-ratio: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  #reset.icon-button {
+    font-size: 14px;
+  }
+
   /* large button styling */
   .large-button {
     font-size: var(--figma-font-size-sm);
@@ -406,6 +474,24 @@
     border: 1px solid var(--figma-color-bg-brand-pressed);
     color: #fff;
     transition-duration: 0.2s;
+  }
+
+  #generateRandom {
+    background-color: #4a4a4a;
+    border: 1px solid #4a4a4a;
+    color: #fff;
+  }
+
+  #generateRandom:hover {
+    background-color: #3a3a3a;
+    border: 1px solid #3a3a3a;
+    color: #fff;
+  }
+
+  #generateRandom:active {
+    background-color: #2a2a2a;
+    border: 1px solid #2a2a2a;
+    color: #fff;
   }
 
   /* Footer styling */
@@ -463,9 +549,6 @@
     border-color: var(--figma-color-border-strong);
   }
 
-  [data-theme="dark"] .display-color-text2 {
-    color: #fff !important;
-  }
 
 </style>
 
@@ -495,37 +578,36 @@
     </div>
 
     <div class="select-colors" id="selectColors">
-      <p class="confetti-type-label">Select colors</p>
-
       <!-- Elements to select colors -->
       <div class="input-colors-section">
-        <div class="color-picker-div">
-          <input class="hex-input" type="text" id="hex" name="hex" maxlength="7" value="#FF7272" >
+        <div class="color-controls-row">
+          <p class="confetti-type-label">Select colors</p>
           <input type="color" name="color" id="color" value="#FF7272">
-        </div>
-
-        <div class="small-buttons-section">
-          <button class="small-button" name="add" id="add"><i class="fas fa-palette"></i>&nbsp;&nbsp;Add color</button>
-          <button class="small-button" name="reset" id="reset"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;Clean palette</button>
+          <div class="icon-buttons-group">
+            <button class="small-button icon-button" name="add" id="add">+</button>
+            <button class="small-button icon-button" name="reset" id="reset">↺</button>
+          </div>
         </div>
       
-        <div class="display-color-div">
-          <p class="display-color-text1" id="display-color1">No colors added</p>
-          <p class="display-color-text2" id="display-color2"></p>
+        <div class="display-color-div" id="display-color-div">
+          <p class="empty-state-text" id="empty-state">No colors selected</p>
         </div>
       </div>
 
     
-      <div class="button-div">
-        <button id="generateSelection" class="large-button">Generate with selected colors</button>
-      </div>
+
     </div>
 
-    <!-- Elements to generate with random colors -->
+    <!-- Generate with selected colors button -->
 
-    <div class="random-colors">
-      <p class="confetti-type-label">Or</p>
-      <button id="generateRandom" class="large-button"><i class="fas fa-random"></i>&nbsp;&nbsp;Generate with random colors</button>
+    <div class="button-div">
+      <button id="generateSelection" class="large-button">Generate with selected colors</button>
+    </div>
+
+    <!-- Generate with random colors button -->
+
+    <div class="button-div">
+      <button id="generateRandom" class="large-button">Generate with random colors</button>
     </div>
 
   </div>
@@ -539,7 +621,7 @@
       </button>
     </div>
     <div class="rightFooter">
-      <p class="credit"><a href="https://x.com/abhichirde" target="_blank">by Abhijit</a></p>
+      <p class="credit"><a href="https://abhijitchirde.com" target="_blank">by Abhijit Chirde</a></p>
     </div>
   </div>
     
@@ -574,12 +656,20 @@
     const themeIcon = document.getElementById("themeIcon");
     const themeText = document.getElementById("themeText");
     
-    if (theme === "dark") {
-      themeIcon.textContent = "☀️";
-      themeText.textContent = "Switch to Light";
-    } else {
-      themeIcon.textContent = "🌙";
-      themeText.textContent = "Switch to Dark";
+    if (themeIcon) {
+      if (theme === "dark") {
+        themeIcon.textContent = "☀️";
+      } else {
+        themeIcon.textContent = "🌙";
+      }
+    }
+    
+    if (themeText) {
+      if (theme === "dark") {
+        themeText.textContent = "Switch to Light";
+      } else {
+        themeText.textContent = "Switch to Dark";
+      }
     }
   }
 
@@ -605,92 +695,104 @@
   });
 
   // Theme toggle button event listener
-  document.getElementById("themeToggle").addEventListener("click", function() {
-
-    toggleTheme();
-  });
+  const themeToggleButton = document.getElementById("themeToggle");
+  if (themeToggleButton) {
+    themeToggleButton.addEventListener("click", function() {
+      toggleTheme();
+    });
+  }
 
   // Initial theme detection
   detectTheme();
 
   // Displaying added colors and pushing these colors to submission array
   var inputColors = [];
-  var counter = 1;
 
-  //Getting inputs from color picker, hex input and density slider
-  var hexInput = document.getElementById("hex");
+  //Getting inputs from color picker and density slider
   var pickerInput = document.getElementById("color");
   var sliderInput = document.getElementById("slider");
 
-  pickerInput.oninput = function() {
-    var pickerValue = `${pickerInput.value}`.toUpperCase();
-    hexInput.value = pickerValue;
-    pickerValue = `${this.value}`.toUpperCase();
+  // Helper function to determine if color is light or dark
+  function isLightColor(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 128;
   }
 
-  hexInput.oninput = function() {
-    var hexValue = `${hexInput.value}`.toUpperCase();
+  // Function to create a color pill element
+  function createColorPill(colorValue) {
+    const pill = document.createElement('div');
+    pill.className = 'color-pill';
+    pill.style.backgroundColor = colorValue;
+    pill.style.color = isLightColor(colorValue) ? '#000000' : '#FFFFFF';
+    
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'color-pill-name';
+    nameSpan.textContent = colorValue;
+    
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'color-pill-remove';
+    removeBtn.innerHTML = '×';
+    removeBtn.setAttribute('aria-label', 'Remove color');
+    removeBtn.onclick = (e) => {
+      e.stopPropagation();
+      removeColor(colorValue, pill);
+    };
+    
+    pill.appendChild(nameSpan);
+    pill.appendChild(removeBtn);
+    
+    return pill;
+  }
 
-    if(hexValue[0] !== '#' && hexValue.length > 6){ 
-      hexValue = "#"+ hexValue[0] + hexValue[1] + hexValue[2] + hexValue[3] + hexValue[4] + hexValue[5];
-    }else if(hexValue[0] !== '#' && hexValue.length === 6){
-      hexValue = "#"+ hexValue;
-    }else if(hexValue[0] !== '#' && hexValue.length === 1){
-      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[0] + hexValue[0] + hexValue[0] + hexValue[0];
-    }else if(hexValue[0] === '#' && hexValue.length === 2){
-      hexValue += hexValue[1] + hexValue[1] + hexValue[1] + hexValue[1] + hexValue[1];
-    }else if(hexValue[0] !== '#' && hexValue.length === 2){
-      hexValue = "#"+ hexValue[0] + hexValue[1] + hexValue[0] + hexValue[1] + hexValue[0] + hexValue[1];
-    }else if(hexValue[0] === '#' && hexValue.length === 3){
-      hexValue += hexValue[1] + hexValue[2] + hexValue[1] + hexValue[2];
-    }else if(hexValue[0] !== '#' && hexValue.length === 3){
-      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
-    }else if(hexValue[0] === '#' && hexValue.length === 4){
-      hexValue = "#"+ hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
-    }else if(hexValue[0] !== '#' && hexValue.length === 4){
-      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
-    }else if(hexValue[0] === '#' && hexValue.length === 5){
-      hexValue = "#"+ hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
-    }else if(hexValue[0] !== '#' && hexValue.length === 5){
-      hexValue = "#"+ hexValue[0] + hexValue[0] + hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2];
-    }else if(hexValue[0] === '#' && hexValue.length === 6){
-      hexValue = "#"+ hexValue[1] + hexValue[1] + hexValue[2] + hexValue[2] + hexValue[3] + hexValue[3];
+  // Function to remove a color from the list
+  function removeColor(colorValue, pillElement) {
+    const index = inputColors.indexOf(colorValue);
+    if (index > -1) {
+      inputColors.splice(index, 1);
+      pillElement.remove();
+      
+      // Show empty state if no colors left
+      if (inputColors.length === 0) {
+        const displayDiv = document.getElementById("display-color-div");
+        const emptyText = document.createElement('p');
+        emptyText.className = 'empty-state-text';
+        emptyText.id = 'empty-state';
+        emptyText.textContent = 'No colors added';
+        displayDiv.appendChild(emptyText);
+      }
     }
-
-    pickerInput.value = hexValue;
-    hexValue = `${this.value}`.toUpperCase();
   }
 
   document.getElementById('add').onclick = () => {
-
     const color = document.getElementById("color");
     const colorValue = `${color.value}`.toUpperCase();
-    inputColors.push(colorValue);
-    const display1 = document.getElementById("display-color1");
-    const display2 = document.getElementById("display-color2");
-    const displayDiv = document.getElementById("display-color-div");
-    const white = "#FFFFFF";
-    const colorValueHtml = "<span style='color:" + colorValue + "'>" + colorValue + "<span><br>";
-
-    if(counter === 1){
-      if(display1.innerHTML === "No colors added"){
-        display1.innerHTML = "";
-        display1.innerHTML += colorValueHtml;
-      }else{
-        display1.innerHTML += colorValueHtml;
-      }
-    }else{
-        display2.innerHTML += colorValueHtml; 
+    
+    // Check if color already exists
+    if (inputColors.includes(colorValue)) {
+      return; // Don't add duplicate colors
     }
-    counter *= -1;
+    
+    inputColors.push(colorValue);
+    const displayDiv = document.getElementById("display-color-div");
+    const emptyState = document.getElementById("empty-state");
+    
+    // Remove empty state if it exists
+    if (emptyState) {
+      emptyState.remove();
+    }
+    
+    // Create and add the pill
+    const pill = createColorPill(colorValue);
+    displayDiv.appendChild(pill);
   };
 
   document.getElementById('reset').onclick = () => {
     inputColors = [];
-    document.getElementById("display-color1").innerHTML = "No colors added";
-    document.getElementById("display-color2").innerHTML = "";
-    counter = 1;
-    hexInput.value = "#FF7272";
+    const displayDiv = document.getElementById("display-color-div");
+    displayDiv.innerHTML = '<p class="empty-state-text" id="empty-state">No colors added</p>';
     pickerInput.value = "#FF7272";
   };
 
@@ -723,3 +825,5 @@
     parent.postMessage({pluginMessage: { type: 'generate-random', data: {input, RecValue, EllValue, PolyValue, StarValue}}},'*' );
   };
 </script>
+</body>
+</html>
