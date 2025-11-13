@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 240, height: 560 });
+figma.showUI(__html__, { width: 270, height: 540 });
 //counting input shapes by user
 var shapeCounter = 0;
 // create a colors array for drawing
@@ -22,6 +22,34 @@ const randomColors = [
 const opacity = [0.35, 0.45, 0.6, 0.65, 0.75, 0.85, 0.9, 1];
 //Calling the function to run plugin
 runPlugin();
+// Helper function to check if a node can bear children
+function canBearChildren(node) {
+    return "appendChild" in node;
+}
+// Helper function to get all target nodes for confetti generation
+function getTargetNodes() {
+    const selection = figma.currentPage.selection;
+    const targetNodes = [];
+    // If there are selected nodes, find all that can bear children
+    if (selection.length > 0) {
+        for (const node of selection) {
+            if (canBearChildren(node)) {
+                targetNodes.push(node);
+            }
+        }
+    }
+    // If nothing is selected or no selected node can bear children, create a frame
+    if (targetNodes.length === 0) {
+        const frame = figma.createFrame();
+        frame.resize(500, 500);
+        frame.x = 0;
+        frame.y = 0;
+        frame.name = "Confetti Frame";
+        figma.currentPage.appendChild(frame);
+        targetNodes.push(frame);
+    }
+    return targetNodes;
+}
 //defining the plugin run function
 function runPlugin() {
     //On a message from UI, we do the action as per message content
@@ -51,67 +79,32 @@ function runPlugin() {
             shapeCounter++;
         }
         if (msg.type === "generate-random") {
-            if (figma.currentPage.selection.length === 0) {
-                figma.notify("Please select a frame to add Confetti", {
+            if (shapeCounter === 0) {
+                figma.notify("Please select shapes to generate confetti", {
                     timeout: 1200,
                 });
+                return;
             }
-            else if (figma.currentPage.selection[0].type !== "FRAME") {
-                figma.notify("Please select a frame to add Confetti", {
-                    timeout: 1200,
-                });
-            }
-            else {
-                if (shapeCounter === 0) {
-                    figma.notify("Please select shapes to generate confetti", {
-                        timeout: 1200,
-                    });
-                }
-                else {
-                    const msgData = msg.data;
-                    for (const node of figma.currentPage.selection) {
-                        if (node.type === "FRAME") {
-                            //calling confetti function
-                            randomConfetti(node, msgData, randomColors, shapeCounter);
-                        }
-                    }
-                }
+            const targetNodes = getTargetNodes();
+            const msgData = msg.data;
+            // Add confetti to all target nodes
+            for (const targetNode of targetNodes) {
+                randomConfetti(targetNode, msgData, randomColors, shapeCounter);
             }
         }
         if (msg.type === "generate-selection") {
-            if (figma.currentPage.selection.length === 0) {
-                figma.notify("Please select a frame to add Confetti", {
+            if (shapeCounter === 0) {
+                figma.notify("Please select shapes to generate confetti", {
                     timeout: 1200,
                 });
+                return;
             }
-            else if (figma.currentPage.selection[0].type !== "FRAME") {
-                figma.notify("Please select a frame to add Confetti", {
-                    timeout: 1200,
-                });
-            }
-            else {
-                if (shapeCounter === 0) {
-                    figma.notify("Please select shapes to generate confetti", {
-                        timeout: 1200,
-                    });
-                }
-                else {
-                    const msgData = msg.data;
-                    const colorArray = msg.data.inputColors;
-                    for (const node of figma.currentPage.selection) {
-                        if (node.type === "FRAME") {
-                            if (colorArray.length === 0) {
-                                figma.notify("Color palette is empty. Please add colors.", {
-                                    timeout: 1200,
-                                });
-                            }
-                            else {
-                                //calling confetti function
-                                selectionColorsConfetti(node, msgData, colorArray, shapeCounter);
-                            }
-                        }
-                    }
-                }
+            const targetNodes = getTargetNodes();
+            const msgData = msg.data;
+            const colorArray = msg.data.inputColors;
+            // Add confetti to all target nodes
+            for (const targetNode of targetNodes) {
+                selectionColorsConfetti(targetNode, msgData, colorArray, shapeCounter);
             }
         }
     };
@@ -129,22 +122,23 @@ function randomConfetti(inputNode, msgData, colors, noOfShapes) {
 }
 //Confetti generation function
 function generateConfetti(currentNode, msgData, colors, noOfShapes) {
-    const count = msgData.input;
+    const density = msgData.sliderInput; //density is the value from the slider input
+    const sizeFactor = msgData.sizeFactor; //size is the value from the size selection
     const width = currentNode.width;
     const height = currentNode.height;
     let largeSide, smallSide;
     if (width > height) {
-        largeSide = width;
-        smallSide = height;
+        largeSide = width * sizeFactor;
+        smallSide = height * sizeFactor;
     }
     else {
-        largeSide = height;
-        smallSide = width;
+        largeSide = height * sizeFactor;
+        smallSide = width * sizeFactor;
     }
-    let effectiveCount = count / noOfShapes;
+    let effectiveDensity = density / noOfShapes;
     if (msgData.RecValue === true) {
         //add rectangles
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create a rectangle
             const rect = figma.createRectangle();
             //Assign a random width and height to rectangle
@@ -168,7 +162,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes) {
     }
     if (msgData.EllValue === true) {
         //add ellipses
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create ellipse
             const ell = figma.createEllipse();
             //Assign a random width to ellipse
@@ -191,7 +185,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes) {
     }
     if (msgData.PolyValue === true) {
         //add polygons
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create a star
             const poly = figma.createPolygon();
             poly.pointCount = numBetween(3, 6);
@@ -216,7 +210,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes) {
     }
     if (msgData.StarValue === true) {
         //add stars
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create a star
             const star = figma.createStar();
             star.pointCount = numBetween(4, 6);
