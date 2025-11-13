@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 240, height: 560 });
+figma.showUI(__html__, { width: 295, height: 560 });
 //counting input shapes by user
 var shapeCounter = 0;
 // create a colors array for drawing
