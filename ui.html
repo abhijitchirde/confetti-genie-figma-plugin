@@ -549,6 +549,161 @@
     border-color: var(--figma-color-border-strong);
   }
 
+  /* Dropdown styling */
+  .dropdown-container {
+    position: relative;
+    margin: 0.5rem;
+  }
+
+  .dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--figma-space-sm) var(--figma-space-md);
+    background-color: var(--figma-color-bg);
+    border: 1px solid var(--figma-color-border);
+    border-radius: var(--figma-radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--figma-font-family);
+    font-size: var(--figma-font-size-sm);
+    font-weight: 600;
+    color: var(--figma-color-text-secondary);
+    user-select: none;
+  }
+
+  .dropdown-header-left {
+    flex: 0 0 auto;
+  }
+
+  .dropdown-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--figma-space-sm);
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .dropdown-header-icons {
+    display: flex;
+    align-items: center;
+    gap: var(--figma-space-xs);
+    flex-shrink: 0;
+    justify-content: flex-end;
+  }
+
+  .dropdown-header-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropdown-header-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--figma-color-text-brand);
+    stroke: var(--figma-color-text-brand);
+  }
+
+  .dropdown-header:hover {
+    background-color: var(--figma-color-bg-secondary);
+    border-color: var(--figma-color-border-strong);
+  }
+
+  .dropdown-header.active {
+    border-color: var(--figma-color-border-focus);
+  }
+
+  .dropdown-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    color: var(--figma-color-text-tertiary);
+    flex-shrink: 0;
+  }
+
+  .dropdown-chevron svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+  }
+
+  .dropdown-header.active .dropdown-chevron {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--figma-space-xs);
+    background-color: var(--figma-color-bg-secondary);
+    border: 1px solid var(--figma-color-border);
+    border-radius: var(--figma-radius-lg);
+    box-shadow: var(--figma-shadow-medium);
+    z-index: 1000;
+    display: none;
+    padding: var(--figma-space-sm);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .dropdown-panel.open {
+    display: block;
+  }
+
+  .dropdown-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--figma-space-xs);
+  }
+
+  .dropdown-option {
+    display: flex;
+    align-items: center;
+    padding: var(--figma-space-xs) var(--figma-space-sm);
+    border-radius: var(--figma-radius-md);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .dropdown-option:hover {
+    background-color: var(--figma-color-bg-secondary);
+  }
+
+  .dropdown-option .checkbox {
+    margin-right: var(--figma-space-sm);
+  }
+
+  .dropdown-option-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: var(--figma-space-sm);
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dropdown-option-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--figma-color-text-tertiary);
+    stroke: var(--figma-color-text-tertiary);
+  }
+
+  .dropdown-option .checkbox-label {
+    margin: 0;
+    font-size: var(--figma-font-size-md);
+    color: var(--figma-color-text-tertiary);
+    cursor: pointer;
+  }
+
 
 </style>
 
@@ -561,20 +716,60 @@
       <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
     </div>
 
-    <div class="select-colors" id="selectColors">
-      <p class="confetti-type-label">Select confetti elements</p>
-      
-      <!-- Elements to select colors -->
-      
-      <div class="checkboxes">
-        <div class="checkbox-div"><input class="checkbox" type="checkbox" id="RecChk" name="RecChk" value="RecChk" checked><label class="checkbox-label" for="RecChk">Rectangles</label></div>
-        <div class="blank-div-in-checkboxes"></div>
-        <div class="checkbox-div "><input class="checkbox" type="checkbox" id="EllChk" name="EllChk" value="EllChk" checked><label class="checkbox-label" for="EllChk">Ellipses</label></div>
-        <div class="checkbox-div "><input class="checkbox" type="checkbox" id="PolyChk" name="PolyChk" value="PolyChk" checked><label class="checkbox-label" for="PolyChk">Polygons</label></div>   
-        <div class="blank-div-in-checkboxes"></div>
-        <div class="checkbox-div "><input class="checkbox" type="checkbox" id="StarChk" name="StarChk" value="StarChk" checked><label class="checkbox-label" for="StarChk">Stars</label></div>
+    <div class="dropdown-container">
+      <div class="dropdown-header" id="confettiDropdownHeader">
+        <div class="dropdown-header-left">
+          <span>CONFETTI ELEMENTS</span>
+        </div>
+        <div class="dropdown-header-right">
+          <div class="dropdown-header-icons" id="selectedIconsContainer"></div>
+          <span class="dropdown-chevron">
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+              <path d="M 4 6 L 8 10 L 12 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
       </div>
-
+      <div class="dropdown-panel" id="confettiDropdownPanel">
+        <div class="dropdown-options">
+          <div class="dropdown-option">
+            <input class="checkbox" type="checkbox" id="RecChk" name="RecChk" value="RecChk" checked>
+            <span class="dropdown-option-icon">
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="12" height="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <label class="checkbox-label" for="RecChk">Rectangles</label>
+          </div>
+          <div class="dropdown-option">
+            <input class="checkbox" type="checkbox" id="EllChk" name="EllChk" value="EllChk" checked>
+            <span class="dropdown-option-icon">
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="8" cy="8" rx="6" ry="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <label class="checkbox-label" for="EllChk">Ellipses</label>
+          </div>
+          <div class="dropdown-option">
+            <input class="checkbox" type="checkbox" id="PolyChk" name="PolyChk" value="PolyChk" checked>
+            <span class="dropdown-option-icon">
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 8 3 L 12 5.5 L 12 10.5 L 8 13 L 4 10.5 L 4 5.5 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <label class="checkbox-label" for="PolyChk">Polygons</label>
+          </div>
+          <div class="dropdown-option">
+            <input class="checkbox" type="checkbox" id="StarChk" name="StarChk" value="StarChk" checked>
+            <span class="dropdown-option-icon">
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 8 2 L 9.5 6 L 14 6.5 L 10.5 9.5 L 11.5 14 L 8 11.5 L 4.5 14 L 5.5 9.5 L 2 6.5 L 6.5 6 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <label class="checkbox-label" for="StarChk">Stars</label>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="select-colors" id="selectColors">
@@ -704,6 +899,105 @@
 
   // Initial theme detection
   detectTheme();
+
+  // Dropdown functionality
+  const dropdownHeader = document.getElementById('confettiDropdownHeader');
+  const dropdownPanel = document.getElementById('confettiDropdownPanel');
+
+  // Toggle dropdown on header click
+  dropdownHeader.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = dropdownPanel.classList.contains('open');
+    
+    if (isOpen) {
+      dropdownPanel.classList.remove('open');
+      dropdownHeader.classList.remove('active');
+    } else {
+      dropdownPanel.classList.add('open');
+      dropdownHeader.classList.add('active');
+    }
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!dropdownHeader.contains(e.target) && !dropdownPanel.contains(e.target)) {
+      dropdownPanel.classList.remove('open');
+      dropdownHeader.classList.remove('active');
+    }
+  });
+
+  // Prevent dropdown from closing when clicking inside the panel
+  dropdownPanel.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Function to get SVG icon for each confetti type
+  function getIconSVG(type) {
+    // Get the computed brand color from CSS
+    const root = document.documentElement;
+    const brandColor = getComputedStyle(root).getPropertyValue('--figma-color-text-brand').trim() || '#18a0fb';
+    
+    const icons = {
+      rectangle: `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="12" height="8" fill="none" stroke="${brandColor}" stroke-width="1.5"/></svg>`,
+      ellipse: `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><ellipse cx="8" cy="8" rx="6" ry="4" fill="none" stroke="${brandColor}" stroke-width="1.5"/></svg>`,
+      polygon: `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M 8 3 L 12 5.5 L 12 10.5 L 8 13 L 4 10.5 L 4 5.5 Z" fill="none" stroke="${brandColor}" stroke-width="1.5"/></svg>`,
+      star: `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M 8 2 L 9.5 6 L 14 6.5 L 10.5 9.5 L 11.5 14 L 8 11.5 L 4.5 14 L 5.5 9.5 L 2 6.5 L 6.5 6 Z" fill="none" stroke="${brandColor}" stroke-width="1.5"/></svg>`
+    };
+    return icons[type] || '';
+  }
+
+  // Function to update selected icons in the header
+  function updateSelectedIcons() {
+    const container = document.getElementById('selectedIconsContainer');
+    const recChk = document.getElementById('RecChk');
+    const ellChk = document.getElementById('EllChk');
+    const polyChk = document.getElementById('PolyChk');
+    const starChk = document.getElementById('StarChk');
+
+    // Clear existing icons
+    container.innerHTML = '';
+
+    // Add icons for selected checkboxes in order: rectangle, ellipse, polygon, star
+    if (recChk && recChk.checked) {
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'dropdown-header-icon';
+      iconDiv.innerHTML = getIconSVG('rectangle');
+      container.appendChild(iconDiv);
+    }
+
+    if (ellChk && ellChk.checked) {
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'dropdown-header-icon';
+      iconDiv.innerHTML = getIconSVG('ellipse');
+      container.appendChild(iconDiv);
+    }
+
+    if (polyChk && polyChk.checked) {
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'dropdown-header-icon';
+      iconDiv.innerHTML = getIconSVG('polygon');
+      container.appendChild(iconDiv);
+    }
+
+    if (starChk && starChk.checked) {
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'dropdown-header-icon';
+      iconDiv.innerHTML = getIconSVG('star');
+      container.appendChild(iconDiv);
+    }
+  }
+
+  // Add event listeners to checkboxes to update icons
+  const checkboxes = ['RecChk', 'EllChk', 'PolyChk', 'StarChk'];
+  checkboxes.forEach(id => {
+    const checkbox = document.getElementById(id);
+    if (checkbox) {
+      checkbox.addEventListener('change', updateSelectedIcons);
+    }
+  });
+
+  // Initialize selected icons on page load
+  updateSelectedIcons();
 
   // Displaying added colors and pushing these colors to submission array
   var inputColors = [];
