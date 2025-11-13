@@ -116,14 +116,22 @@
 
 
 
+  .density-container {
+    background-color: var(--figma-color-bg);
+    padding:0.5rem 0.5rem;
+    margin: 0.5rem;
+    border: 1px solid var(--figma-color-border);
+    border-radius: var(--figma-radius-lg);
+    box-shadow: var(--figma-shadow-small);
+  }
   .slider-input {
     -webkit-appearance: none;
     appearance: none;
-    width: 80%;
+    width: 90%;
     height: 4px;
     border-radius: var(--figma-radius-sm);  
     padding: 0.2rem;
-    margin: 0.5rem;
+    /* margin: 0.5rem; */
     background: var(--figma-color-border-strong);
     outline: none;
     opacity: 0.6;
@@ -149,6 +157,55 @@
     text-align: center; 
     /* margin-top: var(--figma-space-sm);  */
     font-weight: 500;
+    margin:0;
+    padding-bottom:0.4rem;
+  }
+
+  /* Size label and chips row */
+  .size-label-chips-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--figma-space-sm);
+  }
+
+  /* Choice chips styling */
+  .choice-chips-container {
+    display: flex;
+    gap: var(--figma-space-xs);
+    align-items: center;
+  }
+
+  .choice-chip {
+    padding: var(--figma-space-xs) var(--figma-space-sm);
+    border: 1px solid var(--figma-color-border);
+    background-color: var(--figma-color-bg);
+    border-radius: var(--figma-radius-md);
+    color: var(--figma-color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--figma-font-family);
+    font-size: var(--figma-font-size-xs);
+    font-weight: 500;
+    text-align: center;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .choice-chip:hover {
+    background-color: var(--figma-color-bg-secondary);
+    border-color: var(--figma-color-border-strong);
+  }
+
+  .choice-chip.selected {
+    background-color: var(--figma-color-bg-brand);
+    border-color: var(--figma-color-bg-brand);
+    color: #fff;
+  }
+
+  .choice-chip.selected:hover {
+    background-color: var(--figma-color-bg-brand-hover);
+    border-color: var(--figma-color-bg-brand-hover);
   }
 
   /* Colors selection section */
@@ -464,13 +521,21 @@
     font-size: 14px;
   }
 
+  /* Button container styling */
+  .button-div {
+    width: auto;
+    padding:0 0.5rem;
+    margin: 0.5rem;
+    box-sizing: border-box;
+  }
+
   /* large button styling */
   .large-button {
     font-size: var(--figma-font-size-sm);
-    margin: 0.2rem 0;
+    margin: 0;
     padding: var(--figma-space-sm) var(--figma-space-sm);
-    width: 12.8rem;
-    /* display: inline; */
+    width: 100%;
+    box-sizing: border-box;
     border: 1px solid var(--figma-color-bg-brand);
     background-color: var(--figma-color-bg-brand);
     border-radius: var(--figma-radius-md);
@@ -729,11 +794,25 @@
 <!-- one div for the main UI body of plugin -->
 <div id="main" class="main-div">
 
-    <!-- Elements asking about density of confetti -->
-    <div>
-      <p class="confetti-type-label">Confetti density</p>
-      <input type="range" id="slider" class="slider-input" min="30" max="200" value="91">
+    <!-- Density selection section -->
+    <div class="density-container">
+      <p class="confetti-type-label">DENSITY</p>
+      <p class="slider-label" id="slider-label-density">Party</p>
+      <input type="range" id="slider-density" class="slider-input" min="30" max="300" value="115">
     </div>
+    <!-- Size selection section -->
+    <div class="density-container">
+      <div class="size-label-chips-row">
+        <p class="confetti-type-label">SIZE</p>
+        <div class="choice-chips-container">
+          <div class="choice-chip" id="size-small" data-size="small">Small</div>
+          <div class="choice-chip selected" id="size-medium" data-size="medium">Medium</div>
+          <div class="choice-chip" id="size-large" data-size="large">Large</div>
+        </div>
+      </div>
+    </div>
+
+
 
     <div class="dropdown-container">
       <div class="dropdown-header" id="confettiDropdownHeader">
@@ -795,7 +874,7 @@
       <!-- Elements to select colors -->
       <div class="input-colors-section">
         <div class="color-controls-row">
-          <p class="confetti-type-label">SELECT COLOURS</p>
+          <p class="confetti-type-label">ADD COLORS</p>
           <input type="color" name="color" id="color" value="#FF7272">
           <div class="icon-buttons-group">
             <button class="small-button icon-button" name="add" id="add">+</button>
@@ -1023,7 +1102,16 @@
 
   //Getting inputs from color picker and density slider
   var pickerInput = document.getElementById("color");
-  var sliderInput = document.getElementById("slider");
+  var sliderInput = document.getElementById("slider-density");
+  var sliderLabelDensity = document.getElementById("slider-label-density");
+  
+  // Size selection (choice chips)
+  var selectedSize = "medium"; // Default value
+  var sizeChips = {
+    small: document.getElementById("size-small"),
+    medium: document.getElementById("size-medium"),
+    large: document.getElementById("size-large")
+  };
 
   // Helper function to determine if color is light or dark
   function isLightColor(hex) {
@@ -1113,12 +1201,91 @@
 
   //displaying slider input to as label below slider
 
+
   //Event function on change in the slider value
   sliderInput.oninput = function (){
     //Define the count value from slider. Var is used in place of const as we want to reassign it to this.value and also access it outside the function in postMessage for drawing confetti
     var count = parseInt(sliderInput.value, 10);
     //call function to display label according to the value
+    displayConfettiLabel(count);
+    //update count label to the current value contained in the event object
+    count = parseInt(this.value, 10);
   }
+
+  //Define a function to display label according to changing value of the slider input
+  function displayConfettiLabel(count){
+    if(count >= 30 && count <= 84){
+        sliderLabelDensity.innerHTML = "minimal";
+        sliderLabelDensity.style.color = "#2F4F4F";
+    }else if(count > 84 && count <= 138){
+        sliderLabelDensity.innerHTML = "festive";
+        sliderLabelDensity.style.color = "#0000CD";
+    }else if(count > 138 && count <= 192){
+        sliderLabelDensity.innerHTML = "party";
+        sliderLabelDensity.style.color = "#9400D3";
+    }else if(count > 192 && count <= 246){
+        sliderLabelDensity.innerHTML = "bash";
+        sliderLabelDensity.style.color = "#C71585";
+    }else if(count > 246 && count <= 300){
+        sliderLabelDensity.innerHTML = "blast";
+        sliderLabelDensity.style.color = "#FF00FF";
+    }
+
+  }
+
+  //Initialize density label on page load (center value = 115, which displays "party")
+  displayConfettiLabel(115);
+
+  // Function to handle size chip selection
+  function selectSize(size) {
+    selectedSize = size;
+    
+    // Remove selected class from all chips
+    Object.values(sizeChips).forEach(chip => {
+      chip.classList.remove("selected");
+    });
+    
+    // Add selected class to the clicked chip
+    if (sizeChips[size]) {
+      sizeChips[size].classList.add("selected");
+    }
+  }
+
+  // Add click event listeners to size chips
+  Object.keys(sizeChips).forEach(size => {
+    if (sizeChips[size]) {
+      sizeChips[size].addEventListener("click", () => {
+        selectSize(size);
+      });
+    }
+  });
+
+
+  //Function to get the size factor based on the selected size
+  //Try different values with these to get better results
+  function getSizeFactor(size) {
+    if (size === "small") {
+      return 0.5;
+    } else if (size === "medium") {
+      return 1.4;
+    } else if (size === "large") {
+      return 4.0;
+    }
+  }
+
+
+  //adjust density value based on the size factor
+  //Increasing density for small elements and decreasing it for the large elements so that it doesn't get crowded or too empty in the frame.
+  //also makes sense because large confetti would spread out more than the small ones so not visible too much in a small frame.
+  function adjustDensity(density, sizeFactor) {
+    if (sizeFactor < 1) {
+      return density * 2;
+    } else if (sizeFactor > 3) {
+      return density * 0.7;
+    }
+    return density;
+  }
+
 
   //Onclick of button, sending a message with content to codeJS
   document.getElementById('generateSelection').onclick = () => {
@@ -1142,13 +1309,19 @@
       }
       return; // Don't send message to Figma
     }
+
+
+
+
     
     const RecValue = RecChk.checked;
     const EllValue = EllChk.checked;
     const PolyValue = PolyChk.checked;
     const StarValue = StarChk.checked;
     var input = parseInt(sliderInput.value, 10);
-    parent.postMessage({pluginMessage: { type: 'generate-selection', data: {input, inputColors, RecValue, EllValue, PolyValue, StarValue}}},'*' );
+    var sizeFactor = getSizeFactor(selectedSize);
+    var adjustedInput = adjustDensity(input, sizeFactor);
+    parent.postMessage({pluginMessage: { type: 'generate-selection', data: {sliderInput: adjustedInput, inputColors, RecValue, EllValue, PolyValue, StarValue, sizeFactor}}},'*' );
   };
 
     
@@ -1158,8 +1331,10 @@
     const PolyValue = PolyChk.checked;
     const StarValue = StarChk.checked;
     var input = parseInt(sliderInput.value, 10);
-    parent.postMessage({pluginMessage: { type: 'generate-random', data: {input, RecValue, EllValue, PolyValue, StarValue}}},'*' );
-  };
+    var sizeFactor = getSizeFactor(selectedSize);
+    var adjustedInput = adjustDensity(input, sizeFactor);
+    parent.postMessage({pluginMessage: { type: 'generate-random', data: {sliderInput: adjustedInput, RecValue, EllValue, PolyValue, StarValue, sizeFactor}}},'*' );
+  };  
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 295, height: 560 });
+figma.showUI(__html__, { width: 270, height: 560 });
 //counting input shapes by user
 var shapeCounter = 0;
 // create a colors array for drawing
@@ -100,15 +100,8 @@ function runPlugin() {
                     const colorArray = msg.data.inputColors;
                     for (const node of figma.currentPage.selection) {
                         if (node.type === "FRAME") {
-                            if (colorArray.length === 0) {
-                                figma.notify("Color palette is empty. Please add colors.", {
-                                    timeout: 1200,
-                                });
-                            }
-                            else {
-                                //calling confetti function
-                                selectionColorsConfetti(node, msgData, colorArray, shapeCounter);
-                            }
+                            //calling confetti function
+                            selectionColorsConfetti(node, msgData, colorArray, shapeCounter);
                         }
                     }
                 }
@@ -129,22 +122,23 @@ function randomConfetti(inputNode, msgData, colors, noOfShapes) {
 }
 //Confetti generation function
 function generateConfetti(currentNode, msgData, colors, noOfShapes) {
-    const count = msgData.input;
+    const density = msgData.sliderInput; //density is the value from the slider input
+    const sizeFactor = msgData.sizeFactor; //size is the value from the size selection
     const width = currentNode.width;
     const height = currentNode.height;
     let largeSide, smallSide;
     if (width > height) {
-        largeSide = width;
-        smallSide = height;
+        largeSide = width * sizeFactor;
+        smallSide = height * sizeFactor;
     }
     else {
-        largeSide = height;
-        smallSide = width;
+        largeSide = height * sizeFactor;
+        smallSide = width * sizeFactor;
     }
-    let effectiveCount = count / noOfShapes;
+    let effectiveDensity = density / noOfShapes;
     if (msgData.RecValue === true) {
         //add rectangles
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create a rectangle
             const rect = figma.createRectangle();
             //Assign a random width and height to rectangle
@@ -168,7 +162,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes) {
     }
     if (msgData.EllValue === true) {
         //add ellipses
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create ellipse
             const ell = figma.createEllipse();
             //Assign a random width to ellipse
@@ -191,7 +185,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes) {
     }
     if (msgData.PolyValue === true) {
         //add polygons
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create a star
             const poly = figma.createPolygon();
             poly.pointCount = numBetween(3, 6);
@@ -216,7 +210,7 @@ function generateConfetti(currentNode, msgData, colors, noOfShapes) {
     }
     if (msgData.StarValue === true) {
         //add stars
-        for (let i = 0; i < effectiveCount; i++) {
+        for (let i = 0; i < effectiveDensity; i++) {
             //create a star
             const star = figma.createStar();
             star.pointCount = numBetween(4, 6);
