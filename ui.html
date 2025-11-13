@@ -109,12 +109,13 @@
 
   /* Main div with elements */
   .main-div {
+    display: flex;
+    flex-direction: column;
     align-content: center;
     text-align: center; 
     margin-top: 2%;
+    /* gap: 4px; */
   }
-
-
 
   .density-container {
     background-color: var(--figma-color-bg);
@@ -523,10 +524,10 @@
 
   /* Button container styling */
   .button-div {
-    width: auto;
-    padding:0 0.5rem;
-    margin: 0.5rem;
-    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 1rem;
   }
 
   /* large button styling */
@@ -788,11 +789,20 @@
     cursor: pointer;
   }
 
+  .main-title {
+    font-size: var(--figma-font-size-sm);
+    font-weight: 400;
+    text-align: center;
+    color: var(--figma-color-text-tertiary);
+    margin: 0.5rem 1rem;
+  }
 
 </style>
 
 <!-- one div for the main UI body of plugin -->
 <div id="main" class="main-div">
+
+  <div><p class="main-title">Add confetti to your selected elements or create a new frame with confetti.</p></div>
 
     <!-- Density selection section -->
     <div class="density-container">
@@ -800,6 +810,7 @@
       <p class="slider-label" id="slider-label-density">Party</p>
       <input type="range" id="slider-density" class="slider-input" min="30" max="300" value="115">
     </div>
+
     <!-- Size selection section -->
     <div class="density-container">
       <div class="size-label-chips-row">
@@ -812,8 +823,7 @@
       </div>
     </div>
 
-
-
+<!-- Shapes selection section -->
     <div class="dropdown-container">
       <div class="dropdown-header" id="confettiDropdownHeader">
         <div class="dropdown-header-left">
@@ -870,6 +880,8 @@
       </div>
     </div>
 
+    <!-- Colors selection section -->
+
     <div class="select-colors" id="selectColors">
       <!-- Elements to select colors -->
       <div class="input-colors-section">
@@ -895,12 +907,7 @@
 
     <div class="button-div">
       <button id="generateSelection" class="large-button">Generate with selected colors</button>
-    </div>
-
-    <!-- Generate with random colors button -->
-
-    <div class="button-div">
-      <button id="generateRandom" class="large-button">Generate with random colors</button>
+      <button id="generateRandom" class="large-button">✨ Generate with random colors</button>
     </div>
 
   </div>
@@ -964,6 +971,16 @@
         themeText.textContent = "Switch to Dark";
       }
     }
+    
+    // Update density label color to match new theme
+    // Use setTimeout to ensure CSS variables are updated after theme change
+    setTimeout(() => {
+      const slider = document.getElementById("slider-density");
+      if (slider) {
+        const currentSliderValue = parseInt(slider.value, 10);
+        displayConfettiLabel(currentSliderValue);
+      }
+    }, 0);
   }
 
   // Function to toggle theme
@@ -1214,21 +1231,23 @@
 
   //Define a function to display label according to changing value of the slider input
   function displayConfettiLabel(count){
+    const root = document.documentElement;
+    
     if(count >= 30 && count <= 84){
         sliderLabelDensity.innerHTML = "minimal";
-        sliderLabelDensity.style.color = "#2F4F4F";
+        sliderLabelDensity.style.color = getComputedStyle(root).getPropertyValue('--figma-color-text-tertiary').trim();
     }else if(count > 84 && count <= 138){
         sliderLabelDensity.innerHTML = "festive";
-        sliderLabelDensity.style.color = "#0000CD";
+        sliderLabelDensity.style.color = getComputedStyle(root).getPropertyValue('--figma-color-text-secondary').trim();
     }else if(count > 138 && count <= 192){
         sliderLabelDensity.innerHTML = "party";
-        sliderLabelDensity.style.color = "#9400D3";
+        sliderLabelDensity.style.color = getComputedStyle(root).getPropertyValue('--figma-color-text').trim();
     }else if(count > 192 && count <= 246){
         sliderLabelDensity.innerHTML = "bash";
-        sliderLabelDensity.style.color = "#C71585";
+        sliderLabelDensity.style.color = getComputedStyle(root).getPropertyValue('--figma-color-text').trim();
     }else if(count > 246 && count <= 300){
         sliderLabelDensity.innerHTML = "blast";
-        sliderLabelDensity.style.color = "#FF00FF";
+        sliderLabelDensity.style.color = getComputedStyle(root).getPropertyValue('--figma-color-text').trim();
     }
 
   }
