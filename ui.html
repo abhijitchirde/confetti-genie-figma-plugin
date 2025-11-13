@@ -118,6 +118,7 @@
 
   .slider-input {
     -webkit-appearance: none;
+    appearance: none;
     width: 80%;
     height: 4px;
     border-radius: var(--figma-radius-sm);  
@@ -327,7 +328,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--figma-space-xs);
-    padding: 0.15rem 0.5rem;
+    padding: 0.15rem 0.3rem;
     border-radius: 999px; /* Pill shape with rounded corners */
     font-size: var(--figma-font-size-xs);
     font-weight: 500;
@@ -387,6 +388,24 @@
     font-family: var(--figma-font-family);
     margin: 0;
     padding-top: 1.5rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .empty-state-text.error {
+    color: var(--figma-color-text-danger);
+    animation: scaleUp 0.4s ease;
+  }
+
+  @keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   a:link, a:active {
@@ -719,7 +738,7 @@
     <div class="dropdown-container">
       <div class="dropdown-header" id="confettiDropdownHeader">
         <div class="dropdown-header-left">
-          <span>CONFETTI ELEMENTS</span>
+          <span>SHAPES</span>
         </div>
         <div class="dropdown-header-right">
           <div class="dropdown-header-icons" id="selectedIconsContainer"></div>
@@ -785,7 +804,7 @@
         </div>
       
         <div class="display-color-div" id="display-color-div">
-          <p class="empty-state-text" id="empty-state">No colors selected</p>
+          <p class="empty-state-text" id="empty-state">No colors added</p>
         </div>
       </div>
 
@@ -1103,6 +1122,27 @@
 
   //Onclick of button, sending a message with content to codeJS
   document.getElementById('generateSelection').onclick = () => {
+    // Check if colors array is empty
+    if (inputColors.length === 0) {
+      const emptyState = document.getElementById('empty-state');
+      if (emptyState) {
+        // Remove error class first to allow re-triggering animation
+        emptyState.classList.remove('error');
+        
+        // Force reflow to reset animation
+        void emptyState.offsetWidth;
+        
+        // Add error class to trigger animation
+        emptyState.classList.add('error');
+        
+        // Remove error class after animation completes to allow re-triggering
+        setTimeout(() => {
+          emptyState.classList.remove('error');
+        }, 400);
+      }
+      return; // Don't send message to Figma
+    }
+    
     const RecValue = RecChk.checked;
     const EllValue = EllChk.checked;
     const PolyValue = PolyChk.checked;
