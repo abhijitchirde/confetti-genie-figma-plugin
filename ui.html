@@ -163,7 +163,7 @@
   /* Confetti type label */
   .confetti-type-label {
     font-size: var(--figma-font-size-sm);
-    font-weight: 500;
+    font-weight: 600;
     text-align: left;
     color: var(--figma-color-text-secondary);
     margin: 0;
@@ -581,7 +581,7 @@
       <!-- Elements to select colors -->
       <div class="input-colors-section">
         <div class="color-controls-row">
-          <p class="confetti-type-label">Select colors</p>
+          <p class="confetti-type-label">SELECT COLOURS</p>
           <input type="color" name="color" id="color" value="#FF7272">
           <div class="icon-buttons-group">
             <button class="small-button icon-button" name="add" id="add">+</button>
@@ -749,14 +749,20 @@
 
   // Function to remove a color from the list
   function removeColor(colorValue, pillElement) {
-    const index = inputColors.indexOf(colorValue);
-    if (index > -1) {
-      inputColors.splice(index, 1);
+    const displayDiv = document.getElementById("display-color-div");
+    // Find the index of this pill in the DOM (pills are in same order as array)
+    // Filter out empty state text to get only color pills
+    const pills = Array.from(displayDiv.children).filter(child => 
+      child.classList.contains('color-pill')
+    );
+    const pillIndex = pills.indexOf(pillElement);
+    
+    if (pillIndex > -1 && pillIndex < inputColors.length) {
+      inputColors.splice(pillIndex, 1);
       pillElement.remove();
       
       // Show empty state if no colors left
       if (inputColors.length === 0) {
-        const displayDiv = document.getElementById("display-color-div");
         const emptyText = document.createElement('p');
         emptyText.className = 'empty-state-text';
         emptyText.id = 'empty-state';
@@ -770,11 +776,7 @@
     const color = document.getElementById("color");
     const colorValue = `${color.value}`.toUpperCase();
     
-    // Check if color already exists
-    if (inputColors.includes(colorValue)) {
-      return; // Don't add duplicate colors
-    }
-    
+    // Always add the color, even if it already exists (allows duplicates for dominance)
     inputColors.push(colorValue);
     const displayDiv = document.getElementById("display-color-div");
     const emptyState = document.getElementById("empty-state");
