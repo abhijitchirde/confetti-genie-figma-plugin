@@ -37,7 +37,8 @@
   --figma-shadow-large: 0px 4px 8px rgba(0, 0, 0, 0.15);
 
   /* Typography */
-  --figma-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --figma-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
   --figma-font-size-xs: 11px;
   --figma-font-size-sm: 12px;
   --figma-font-size-md: 14px;
@@ -377,8 +378,7 @@ input[type="color"]::-webkit-color-swatch {
   margin: 3.5% 2%;
   padding: 0.35rem;
   width: auto;
-  min-height: 4rem;
-  max-height: 8rem;
+  height: 5rem;
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -648,8 +648,7 @@ input[type="color"]::-webkit-color-swatch {
 .dropdown-header-icon svg {
   width: 100%;
   height: 100%;
-  fill: var(--figma-color-text-brand);
-  stroke: var(--figma-color-text-brand);
+  color: var(--figma-color-text-brand);
 }
 
 .dropdown-header:hover {
