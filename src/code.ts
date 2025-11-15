@@ -99,11 +99,18 @@ function runPlugin() {
         return;
       }
 
+      // Check if selection is empty before getting target nodes
+      const hadSelection = figma.currentPage.selection.length > 0;
       const targetNodes = getTargetNodes();
       const msgData = msg.data;
       // Add confetti to all target nodes
       for (const targetNode of targetNodes) {
         randomConfetti(targetNode, msgData, randomColors, shapeCounter);
+      }
+
+      // If no selection existed, scroll and zoom to the newly created frame(s)
+      if (!hadSelection && targetNodes.length > 0) {
+        figma.viewport.scrollAndZoomIntoView(targetNodes);
       }
     }
 
@@ -115,12 +122,19 @@ function runPlugin() {
         return;
       }
 
+      // Check if selection is empty before getting target nodes
+      const hadSelection = figma.currentPage.selection.length > 0;
       const targetNodes = getTargetNodes();
       const msgData = msg.data;
       const colorArray = msg.data.inputColors;
       // Add confetti to all target nodes
       for (const targetNode of targetNodes) {
         selectionColorsConfetti(targetNode, msgData, colorArray, shapeCounter);
+      }
+
+      // If no selection existed, scroll and zoom to the newly created frame(s)
+      if (!hadSelection && targetNodes.length > 0) {
+        figma.viewport.scrollAndZoomIntoView(targetNodes);
       }
     }
   };
