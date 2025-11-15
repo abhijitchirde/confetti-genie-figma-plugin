@@ -1,7 +1,17 @@
-# Node
+#Ignoring source files, default Figma readme, and node_modules
+#ADDED ALL THE FILES TO GITHUB# Node
 *.log
 *.log.*
 node_modules
+backup
 
 out/
 dist/
+code.js
+
+#Prettier files
+.prettierrc
+.prettierignore
+
+#claude
+.claude
