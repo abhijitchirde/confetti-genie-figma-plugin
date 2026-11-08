@@ -25,6 +25,9 @@ const OPACITY_STEPS = [0.35, 0.45, 0.6, 0.65, 0.75, 0.85, 0.9, 1];
 
 const NEW_FRAME_SIZE = 500;
 
+// Plugin data key marking frames that hold only confetti made by this plugin
+const CONFETTI_LAYER_KEY = "confettiLayer";
+
 type ContainerNode = SceneNode & ChildrenMixin;
 type ConfettiNode = RectangleNode | EllipseNode | PolygonNode | StarNode;
 
@@ -108,30 +111,55 @@ function generate(data: GenerateData, colors: RGB[]) {
   const targets = selection.filter(canHoldConfetti);
   const skipped = selection.length - targets.length;
 
-  // Nothing usable selected: make a new frame in view and fill that instead
+  let results: FrameNode[];
   let createdFrame: FrameNode | null = null;
-  if (targets.length === 0) {
+  if (targets.length > 0) {
+    results = targets.map((target) => {
+      if (isConfettiLayer(target)) {
+        // Generating again with a confetti layer selected adds more to it,
+        // rather than nesting another layer inside
+        fillWithConfetti(
+          target,
+          target.width,
+          target.height,
+          data,
+          shapes,
+          colors,
+        );
+        return target;
+      }
+      return addConfettiLayer(target, data, shapes, colors);
+    });
+  } else {
+    // Nothing usable selected: make a new frame in view. It only holds
+    // confetti, so the pieces go straight in without an extra layer.
     createdFrame = createConfettiFrame();
-    targets.push(createdFrame);
+    fillWithConfetti(
+      createdFrame,
+      createdFrame.width,
+      createdFrame.height,
+      data,
+      shapes,
+      colors,
+    );
+    results = [createdFrame];
   }
 
-  for (const target of targets) {
-    addConfetti(target, data, shapes, colors);
-  }
-
+  // Select the new confetti so it can be moved or deleted straight away
+  figma.currentPage.selection = results;
   if (createdFrame) {
     figma.viewport.scrollAndZoomIntoView([createdFrame]);
   }
 
   if (createdFrame && selection.length > 0) {
     figma.notify(
-      "The selected layers can't hold confetti, so it was added to a new frame"
+      "The selected layers can't hold confetti, so it was added to a new frame",
     );
   } else if (skipped > 0) {
     figma.notify(
       `Skipped ${skipped} selected ${
         skipped === 1 ? "layer" : "layers"
-      } that can't hold confetti`
+      } that can't hold confetti`,
     );
   }
 }
@@ -156,9 +184,16 @@ function canHoldConfetti(node: SceneNode): node is ContainerNode {
   return true;
 }
 
+function isConfettiLayer(node: SceneNode): node is FrameNode {
+  return (
+    node.type === "FRAME" && node.getPluginData(CONFETTI_LAYER_KEY) === "true"
+  );
+}
+
 function createConfettiFrame(): FrameNode {
   const frame = figma.createFrame();
   frame.name = "Confetti Frame";
+  frame.setPluginData(CONFETTI_LAYER_KEY, "true");
   frame.resize(NEW_FRAME_SIZE, NEW_FRAME_SIZE);
   const center = figma.viewport.center;
   frame.x = Math.round(center.x - NEW_FRAME_SIZE / 2);
@@ -166,26 +201,61 @@ function createConfettiFrame(): FrameNode {
   return frame;
 }
 
-function addConfetti(
+/**
+ * Adds a transparent "Confetti" frame covering the target, filled with
+ * confetti, so all pieces sit in one layer instead of being scattered among
+ * the target's own children.
+ */
+function addConfettiLayer(
   target: ContainerNode,
   data: GenerateData,
   shapes: ShapeSpec[],
-  colors: RGB[]
-) {
+  colors: RGB[],
+): FrameNode {
   const { width, height } = target;
-  const longSide = Math.max(width, height) * data.sizeFactor;
-  const shortSide = Math.min(width, height) * data.sizeFactor;
-  const countPerShape = Math.ceil(data.sliderInput / shapes.length);
 
   // Children of a group are positioned in the group's parent's coordinates,
   // so offset by the group's position. Frames and sections have their own.
   const origin =
     target.type === "GROUP" ? { x: target.x, y: target.y } : { x: 0, y: 0 };
 
-  // In auto layout frames, children must opt out of the layout flow,
-  // otherwise Figma stacks them and ignores x/y.
-  const usesAutoLayout =
-    "layoutMode" in target && target.layoutMode !== "NONE";
+  const layer = figma.createFrame();
+  layer.name = "Confetti";
+  layer.setPluginData(CONFETTI_LAYER_KEY, "true");
+  layer.fills = [];
+  layer.clipsContent = false;
+  layer.resize(clampSize(width), clampSize(height));
+
+  // Fill the layer before inserting it, so an auto layout target only has to
+  // reflow once instead of once per piece.
+  fillWithConfetti(layer, width, height, data, shapes, colors);
+
+  target.appendChild(layer);
+  // In auto layout, opt out of the layout flow, or Figma would place the
+  // layer as the next item and ignore x/y.
+  if ("layoutMode" in target && target.layoutMode !== "NONE") {
+    layer.layoutPositioning = "ABSOLUTE";
+  }
+  layer.x = origin.x;
+  layer.y = origin.y;
+  // Resize along with the target; the pieces scale inside it.
+  layer.constraints = { horizontal: "STRETCH", vertical: "STRETCH" };
+
+  return layer;
+}
+
+/** Scatters confetti over a width × height area of the given frame. */
+function fillWithConfetti(
+  frame: FrameNode,
+  width: number,
+  height: number,
+  data: GenerateData,
+  shapes: ShapeSpec[],
+  colors: RGB[],
+) {
+  const longSide = Math.max(width, height) * data.sizeFactor;
+  const shortSide = Math.min(width, height) * data.sizeFactor;
+  const countPerShape = Math.ceil(data.sliderInput / shapes.length);
 
   for (const shape of shapes) {
     for (let i = 0; i < countPerShape; i++) {
@@ -203,12 +273,11 @@ function addConfetti(
         node.rotation = randFloat(-180, 180);
       }
 
-      target.appendChild(node);
-      if (usesAutoLayout) {
-        node.layoutPositioning = "ABSOLUTE";
-      }
-      node.x = origin.x + randInt(0, width);
-      node.y = origin.y + randInt(0, height);
+      frame.appendChild(node);
+      node.x = randInt(0, width);
+      node.y = randInt(0, height);
+      // Spread out proportionally when the frame is resized
+      node.constraints = { horizontal: "SCALE", vertical: "SCALE" };
     }
   }
 }
