@@ -1,6 +1,6 @@
 import type { GenerateData, UiToPluginMessage } from "./types";
 
-figma.showUI(__html__, { width: 270, height: 540 });
+figma.showUI(__html__, { width: 270, height: 540, themeColors: true });
 
 // Palette used by "Generate with random colors"
 const RANDOM_COLORS: RGB[] = [
@@ -75,14 +75,6 @@ const SHAPES: ShapeSpec[] = [
 ];
 
 figma.ui.onmessage = (msg: UiToPluginMessage) => {
-  if (msg.type === "get-theme") {
-    figma.ui.postMessage({
-      type: "theme-changed",
-      theme: figma.editorType === "figma" ? "light" : "dark",
-    });
-    return;
-  }
-
   try {
     if (msg.type === "generate-random") {
       generate(msg.data, RANDOM_COLORS);

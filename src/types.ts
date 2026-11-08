@@ -24,5 +24,4 @@ export type UiToPluginMessage =
   | {
       type: "generate-selection";
       data: GenerateData & { inputColors: string[] };
-    }
-  | { type: "get-theme" };
+    };

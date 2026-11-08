@@ -6,7 +6,7 @@ interface ThemeToggleProps {
 }
 
 export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
-  const { theme, isDark, toggleTheme } = useFigmaTheme();
+  const { isDark, toggleTheme } = useFigmaTheme();
 
   return (
     <button
@@ -16,10 +16,10 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       style={{
         padding: "4px 8px",
         fontSize: "11px",
-        border: "1px solid var(--figma-color-border)",
+        border: "1px solid var(--cg-color-border)",
         borderRadius: "4px",
-        backgroundColor: "var(--figma-color-bg)",
-        color: "var(--figma-color-text)",
+        backgroundColor: "var(--cg-color-bg)",
+        color: "var(--cg-color-text)",
         cursor: "pointer",
         transition: "all 0.2s ease",
         minWidth: "20px",

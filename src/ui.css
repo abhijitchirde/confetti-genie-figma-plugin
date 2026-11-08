@@ -4,92 +4,92 @@
 
 :root {
   /* Light theme colors */
-  --figma-color-bg: #ffffff;
-  --figma-color-bg-secondary: #f5f5f5;
-  --figma-color-bg-tertiary: #f0f0f0;
-  --figma-color-bg-brand: #18a0fb;
-  --figma-color-bg-brand-hover: #0d8ce0;
-  --figma-color-bg-brand-pressed: #0b7bc7;
-  --figma-color-bg-danger: #ff3b30;
-  --figma-color-bg-danger-hover: #e6352b;
-  --figma-color-bg-danger-pressed: #cc2e26;
-  --figma-color-bg-success: #34c759;
-  --figma-color-bg-warning: #ff9500;
+  --cg-color-bg: #ffffff;
+  --cg-color-bg-secondary: #f5f5f5;
+  --cg-color-bg-tertiary: #f0f0f0;
+  --cg-color-bg-brand: #18a0fb;
+  --cg-color-bg-brand-hover: #0d8ce0;
+  --cg-color-bg-brand-pressed: #0b7bc7;
+  --cg-color-bg-danger: #ff3b30;
+  --cg-color-bg-danger-hover: #e6352b;
+  --cg-color-bg-danger-pressed: #cc2e26;
+  --cg-color-bg-success: #34c759;
+  --cg-color-bg-warning: #ff9500;
 
   /* Light theme text colors */
-  --figma-color-text: #000000;
-  --figma-color-text-secondary: #333333;
-  --figma-color-text-tertiary: #666666;
-  --figma-color-text-disabled: #999999;
-  --figma-color-text-brand: #18a0fb;
-  --figma-color-text-danger: #ff3b30;
-  --figma-color-text-success: #34c759;
+  --cg-color-text: #000000;
+  --cg-color-text-secondary: #333333;
+  --cg-color-text-tertiary: #666666;
+  --cg-color-text-disabled: #999999;
+  --cg-color-text-brand: #18a0fb;
+  --cg-color-text-danger: #ff3b30;
+  --cg-color-text-success: #34c759;
 
   /* Light theme border colors */
-  --figma-color-border: #e5e5e5;
-  --figma-color-border-strong: #cccccc;
-  --figma-color-border-focus: #18a0fb;
-  --figma-color-border-danger: #ff3b30;
+  --cg-color-border: #e5e5e5;
+  --cg-color-border-strong: #cccccc;
+  --cg-color-border-focus: #18a0fb;
+  --cg-color-border-danger: #ff3b30;
 
   /* Light theme shadow */
-  --figma-shadow-small: 0px 1px 2px rgba(0, 0, 0, 0.05);
-  --figma-shadow-medium: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  --figma-shadow-large: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  --cg-shadow-small: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  --cg-shadow-medium: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --cg-shadow-large: 0px 4px 8px rgba(0, 0, 0, 0.15);
 
   /* Typography */
-  --figma-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  --cg-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
-  --figma-font-size-xs: 11px;
-  --figma-font-size-sm: 12px;
-  --figma-font-size-md: 14px;
-  --figma-font-size-lg: 16px;
-  --figma-font-size-xl: 18px;
+  --cg-font-size-xs: 11px;
+  --cg-font-size-sm: 12px;
+  --cg-font-size-md: 14px;
+  --cg-font-size-lg: 16px;
+  --cg-font-size-xl: 18px;
 
   /* Spacing */
-  --figma-space-xs: 4px;
-  --figma-space-sm: 8px;
-  --figma-space-md: 12px;
-  --figma-space-lg: 16px;
-  --figma-space-xl: 24px;
-  --figma-space-xxl: 32px;
+  --cg-space-xs: 4px;
+  --cg-space-sm: 8px;
+  --cg-space-md: 12px;
+  --cg-space-lg: 16px;
+  --cg-space-xl: 24px;
+  --cg-space-xxl: 32px;
 
   /* Border radius */
-  --figma-radius-sm: 2px;
-  --figma-radius-md: 4px;
-  --figma-radius-lg: 6px;
-  --figma-radius-xl: 8px;
+  --cg-radius-sm: 2px;
+  --cg-radius-md: 4px;
+  --cg-radius-lg: 6px;
+  --cg-radius-xl: 8px;
 }
 
 /* Dark theme overrides */
 [data-theme="dark"] {
-  --figma-color-bg: #2c2c2c;
-  --figma-color-bg-secondary: #383838;
-  --figma-color-bg-tertiary: #484848;
-  --figma-color-bg-brand: #18a0fb;
-  --figma-color-bg-brand-hover: #0d8ce0;
-  --figma-color-bg-brand-pressed: #0b7bc7;
-  --figma-color-bg-danger: #ff453a;
-  --figma-color-bg-danger-hover: #ff375f;
-  --figma-color-bg-danger-pressed: #ff2d55;
-  --figma-color-bg-success: #30d158;
-  --figma-color-bg-warning: #ff9f0a;
+  --cg-color-bg: #2c2c2c;
+  --cg-color-bg-secondary: #383838;
+  --cg-color-bg-tertiary: #484848;
+  --cg-color-bg-brand: #18a0fb;
+  --cg-color-bg-brand-hover: #0d8ce0;
+  --cg-color-bg-brand-pressed: #0b7bc7;
+  --cg-color-bg-danger: #ff453a;
+  --cg-color-bg-danger-hover: #ff375f;
+  --cg-color-bg-danger-pressed: #ff2d55;
+  --cg-color-bg-success: #30d158;
+  --cg-color-bg-warning: #ff9f0a;
 
-  --figma-color-text: #ffffff;
-  --figma-color-text-secondary: #e5e5e5;
-  --figma-color-text-tertiary: #b3b3b3;
-  --figma-color-text-disabled: #666666;
-  --figma-color-text-brand: #18a0fb;
-  --figma-color-text-danger: #ff453a;
-  --figma-color-text-success: #30d158;
+  --cg-color-text: #ffffff;
+  --cg-color-text-secondary: #e5e5e5;
+  --cg-color-text-tertiary: #b3b3b3;
+  --cg-color-text-disabled: #666666;
+  --cg-color-text-brand: #18a0fb;
+  --cg-color-text-danger: #ff453a;
+  --cg-color-text-success: #30d158;
 
-  --figma-color-border: #484848;
-  --figma-color-border-strong: #666666;
-  --figma-color-border-focus: #18a0fb;
-  --figma-color-border-danger: #ff453a;
+  --cg-color-border: #484848;
+  --cg-color-border-strong: #666666;
+  --cg-color-border-focus: #18a0fb;
+  --cg-color-border-danger: #ff453a;
 
-  --figma-shadow-small: 0px 1px 2px rgba(0, 0, 0, 0.3);
-  --figma-shadow-medium: 0px 2px 4px rgba(0, 0, 0, 0.4);
-  --figma-shadow-large: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  --cg-shadow-small: 0px 1px 2px rgba(0, 0, 0, 0.3);
+  --cg-shadow-medium: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  --cg-shadow-large: 0px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* ============================================
@@ -97,11 +97,11 @@
    ============================================ */
 
 body {
-  background-color: var(--figma-color-bg);
-  font-family: var(--figma-font-family);
+  background-color: var(--cg-color-bg);
+  font-family: var(--cg-font-family);
   margin: 0;
   padding: 0;
-  color: var(--figma-color-text);
+  color: var(--cg-color-text);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -117,11 +117,11 @@ main {
 a:link,
 a:active {
   text-decoration: none;
-  color: var(--figma-color-text-tertiary);
+  color: var(--cg-color-text-tertiary);
 }
 
 a:visited {
-  color: var(--figma-color-text-tertiary);
+  color: var(--cg-color-text-tertiary);
   cursor: pointer;
   text-decoration: none;
   padding: 0;
@@ -129,7 +129,7 @@ a:visited {
 }
 
 a:hover {
-  color: var(--figma-color-text-secondary);
+  color: var(--cg-color-text-secondary);
   transition-duration: 0.2s;
 }
 
@@ -138,18 +138,18 @@ a:hover {
    ============================================ */
 
 .main-title {
-  font-size: var(--figma-font-size-sm);
+  font-size: var(--cg-font-size-sm);
   font-weight: 400;
   text-align: center;
-  color: var(--figma-color-text-tertiary);
+  color: var(--cg-color-text-tertiary);
   margin: 0.5rem 1rem;
 }
 
 .confetti-type-label {
-  font-size: var(--figma-font-size-sm);
+  font-size: var(--cg-font-size-sm);
   font-weight: 600;
   text-align: left;
-  color: var(--figma-color-text-secondary);
+  color: var(--cg-color-text-secondary);
   margin: 0;
   flex-shrink: 0;
 }
@@ -159,21 +159,21 @@ a:hover {
    ============================================ */
 
 .density-container {
-  background-color: var(--figma-color-bg);
+  background-color: var(--cg-color-bg);
   padding: 0.5rem 0.5rem;
   margin: 0.5rem;
-  border: 1px solid var(--figma-color-border);
-  border-radius: var(--figma-radius-lg);
-  box-shadow: var(--figma-shadow-small);
+  border: 1px solid var(--cg-color-border);
+  border-radius: var(--cg-radius-lg);
+  box-shadow: var(--cg-shadow-small);
 }
 
 .select-colors {
-  background-color: var(--figma-color-bg);
+  background-color: var(--cg-color-bg);
   padding: 0 0.5rem;
   margin: 0.5rem;
-  border: 1px solid var(--figma-color-border);
-  border-radius: var(--figma-radius-lg);
-  box-shadow: var(--figma-shadow-small);
+  border: 1px solid var(--cg-color-border);
+  border-radius: var(--cg-radius-lg);
+  box-shadow: var(--cg-shadow-small);
 }
 
 /* ============================================
@@ -185,9 +185,9 @@ a:hover {
   appearance: none;
   width: 90%;
   height: 4px;
-  border-radius: var(--figma-radius-sm);
+  border-radius: var(--cg-radius-sm);
   padding: 0.2rem;
-  background: var(--figma-color-border-strong);
+  background: var(--cg-color-border-strong);
   outline: none;
   opacity: 0.6;
   -webkit-transition: 0.2s;
@@ -200,15 +200,15 @@ a:hover {
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: var(--figma-color-bg-brand);
+  background: var(--cg-color-bg-brand);
   cursor: pointer;
   opacity: 1;
 }
 
 .slider-label {
-  font-family: var(--figma-font-family);
-  color: var(--figma-color-text-brand);
-  font-size: var(--figma-font-size-md);
+  font-family: var(--cg-font-family);
+  color: var(--cg-color-text-brand);
+  font-size: var(--cg-font-size-md);
   text-align: center;
   font-weight: 500;
   margin: 0;
@@ -223,25 +223,25 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--figma-space-sm);
+  gap: var(--cg-space-sm);
 }
 
 .choice-chips-container {
   display: flex;
-  gap: var(--figma-space-xs);
+  gap: var(--cg-space-xs);
   align-items: center;
 }
 
 .choice-chip {
-  padding: var(--figma-space-xs) var(--figma-space-sm);
-  border: 1px solid var(--figma-color-border);
-  background-color: var(--figma-color-bg);
-  border-radius: var(--figma-radius-md);
-  color: var(--figma-color-text-secondary);
+  padding: var(--cg-space-xs) var(--cg-space-sm);
+  border: 1px solid var(--cg-color-border);
+  background-color: var(--cg-color-bg);
+  border-radius: var(--cg-radius-md);
+  color: var(--cg-color-text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: var(--figma-font-family);
-  font-size: var(--figma-font-size-xs);
+  font-family: var(--cg-font-family);
+  font-size: var(--cg-font-size-xs);
   font-weight: 500;
   text-align: center;
   user-select: none;
@@ -249,19 +249,19 @@ a:hover {
 }
 
 .choice-chip:hover {
-  background-color: var(--figma-color-bg-secondary);
-  border-color: var(--figma-color-border-strong);
+  background-color: var(--cg-color-bg-secondary);
+  border-color: var(--cg-color-border-strong);
 }
 
 .choice-chip.selected {
-  background-color: var(--figma-color-bg-brand);
-  border-color: var(--figma-color-bg-brand);
+  background-color: var(--cg-color-bg-brand);
+  border-color: var(--cg-color-bg-brand);
   color: #fff;
 }
 
 .choice-chip.selected:hover {
-  background-color: var(--figma-color-bg-brand-hover);
-  border-color: var(--figma-color-bg-brand-hover);
+  background-color: var(--cg-color-bg-brand-hover);
+  border-color: var(--cg-color-bg-brand-hover);
 }
 
 /* ============================================
@@ -273,7 +273,7 @@ a:hover {
   text-align: center;
   padding-left: 5%;
   margin: 0%;
-  padding-top: var(--figma-space-sm);
+  padding-top: var(--cg-space-sm);
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -300,10 +300,10 @@ a:hover {
 }
 
 .checkbox-label {
-  font-family: var(--figma-font-family);
-  font-size: var(--figma-font-size-xs);
+  font-family: var(--cg-font-family);
+  font-size: var(--cg-font-size-xs);
   margin-left: 0.3rem;
-  color: var(--figma-color-text-tertiary);
+  color: var(--cg-color-text-tertiary);
   vertical-align: middle;
   cursor: pointer;
 }
@@ -328,7 +328,7 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--figma-space-sm);
+  gap: var(--cg-space-sm);
   margin: 2% 2%;
   width: calc(100% - 4%);
 }
@@ -336,7 +336,7 @@ a:hover {
 .icon-buttons-group {
   display: flex;
   align-items: center;
-  gap: var(--figma-space-sm);
+  gap: var(--cg-space-sm);
   flex-shrink: 0;
 }
 
@@ -344,7 +344,7 @@ input[type="color"] {
   width: 3rem;
   height: 1.5rem;
   border: none;
-  border-radius: var(--figma-radius-md);
+  border-radius: var(--cg-radius-md);
   background: none;
   margin: 0;
   padding: 0;
@@ -357,24 +357,24 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 input[type="color"]::-webkit-color-swatch {
-  border: solid 1px var(--figma-color-border);
-  border-radius: var(--figma-radius-md);
+  border: solid 1px var(--cg-color-border);
+  border-radius: var(--cg-radius-md);
 }
 
 #color {
   width: 3rem;
   height: 1.5rem;
   border: none;
-  border-radius: var(--figma-radius-md);
+  border-radius: var(--cg-radius-md);
 }
 
 /* Display color area */
 .display-color-div {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--figma-space-xs);
-  border: 1px solid var(--figma-color-border);
-  border-radius: var(--figma-radius-lg);
+  gap: var(--cg-space-xs);
+  border: 1px solid var(--cg-color-border);
+  border-radius: var(--cg-radius-lg);
   margin: 3.5% 2%;
   padding: 0.35rem;
   width: auto;
@@ -387,7 +387,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 [data-theme="dark"] .display-color-div {
-  background-color: var(--figma-color-bg-secondary) !important;
+  background-color: var(--cg-color-bg-secondary) !important;
 }
 
 /* Scrollbar */
@@ -396,36 +396,36 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--figma-color-bg-tertiary);
+  background: var(--cg-color-bg-tertiary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--figma-color-border-strong);
+  background: var(--cg-color-border-strong);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--figma-color-text-tertiary);
+  background: var(--cg-color-text-tertiary);
 }
 
 /* Color pill capsule styling */
 .color-pill {
   display: inline-flex;
   align-items: center;
-  gap: var(--figma-space-xs);
+  gap: var(--cg-space-xs);
   padding: 0.15rem 0.3rem;
   border-radius: 999px; /* Pill shape with rounded corners */
-  font-size: var(--figma-font-size-xs);
+  font-size: var(--cg-font-size-xs);
   font-weight: 500;
-  font-family: var(--figma-font-family);
+  font-family: var(--cg-font-family);
   border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: var(--figma-shadow-small);
+  box-shadow: var(--cg-shadow-small);
   transition: all 0.2s ease;
   cursor: default;
   user-select: none;
 }
 
 .color-pill:hover {
-  box-shadow: var(--figma-shadow-medium);
+  box-shadow: var(--cg-shadow-medium);
   transform: translateY(-1px);
 }
 
@@ -466,17 +466,17 @@ input[type="color"]::-webkit-color-swatch {
 .empty-state-text {
   width: 100%;
   text-align: center;
-  color: var(--figma-color-text-tertiary);
-  font-size: var(--figma-font-size-xs);
+  color: var(--cg-color-text-tertiary);
+  font-size: var(--cg-font-size-xs);
   font-weight: 400;
-  font-family: var(--figma-font-family);
+  font-family: var(--cg-font-family);
   margin: 0;
   padding-top: 1.5rem;
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .empty-state-text.error {
-  color: var(--figma-color-text-danger);
+  color: var(--cg-color-text-danger);
   animation: scaleUp 0.4s ease;
 }
 
@@ -494,30 +494,30 @@ input[type="color"]::-webkit-color-swatch {
 
 /* Small button styling (icon buttons) */
 .small-button {
-  font-size: var(--figma-font-size-xs);
+  font-size: var(--cg-font-size-xs);
   margin: 2% 2%;
-  padding: var(--figma-space-xs) var(--figma-space-sm);
+  padding: var(--cg-space-xs) var(--cg-space-sm);
   width: 44%;
   display: inline;
-  border: 1px solid var(--figma-color-bg-brand);
-  background-color: var(--figma-color-bg);
-  border-radius: var(--figma-radius-md);
-  color: var(--figma-color-bg-brand);
+  border: 1px solid var(--cg-color-bg-brand);
+  background-color: var(--cg-color-bg);
+  border-radius: var(--cg-radius-md);
+  color: var(--cg-color-bg-brand);
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: var(--figma-font-family);
+  font-family: var(--cg-font-family);
 }
 
 .small-button:hover {
-  background-color: var(--figma-color-bg-brand-hover);
-  border: 1px solid var(--figma-color-bg-brand-hover);
+  background-color: var(--cg-color-bg-brand-hover);
+  border: 1px solid var(--cg-color-bg-brand-hover);
   color: #fff;
   transition-duration: 0.2s;
 }
 
 .small-button:active {
-  background-color: var(--figma-color-bg-brand-pressed);
-  border: 1px solid var(--figma-color-bg-brand-pressed);
+  background-color: var(--cg-color-bg-brand-pressed);
+  border: 1px solid var(--cg-color-bg-brand-pressed);
   color: #fff;
   transition-duration: 0.2s;
 }
@@ -526,7 +526,7 @@ input[type="color"]::-webkit-color-swatch {
   width: auto;
   min-width: 1.5rem;
   height: 1.5rem;
-  padding: 0 var(--figma-space-sm);
+  padding: 0 var(--cg-space-sm);
   aspect-ratio: 1;
   display: inline-flex;
   align-items: center;
@@ -543,31 +543,31 @@ input[type="color"]::-webkit-color-swatch {
 
 /* Large button styling */
 .large-button {
-  font-size: var(--figma-font-size-sm);
+  font-size: var(--cg-font-size-sm);
   margin: 0;
-  padding: var(--figma-space-sm) var(--figma-space-sm);
+  padding: var(--cg-space-sm) var(--cg-space-sm);
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid var(--figma-color-bg-brand);
-  background-color: var(--figma-color-bg-brand);
-  border-radius: var(--figma-radius-md);
+  border: 1px solid var(--cg-color-bg-brand);
+  background-color: var(--cg-color-bg-brand);
+  border-radius: var(--cg-radius-md);
   color: #fff;
   cursor: pointer;
-  box-shadow: var(--figma-shadow-small);
+  box-shadow: var(--cg-shadow-small);
   transition: all 0.2s ease;
-  font-family: var(--figma-font-family);
+  font-family: var(--cg-font-family);
 }
 
 .large-button:hover {
-  background-color: var(--figma-color-bg-brand-hover);
-  border: 1px solid var(--figma-color-bg-brand-hover);
+  background-color: var(--cg-color-bg-brand-hover);
+  border: 1px solid var(--cg-color-bg-brand-hover);
   color: #fff;
   transition-duration: 0.2s;
 }
 
 .large-button:active {
-  background-color: var(--figma-color-bg-brand-pressed);
-  border: 1px solid var(--figma-color-bg-brand-pressed);
+  background-color: var(--cg-color-bg-brand-pressed);
+  border: 1px solid var(--cg-color-bg-brand-pressed);
   color: #fff;
   transition-duration: 0.2s;
 }
@@ -603,16 +603,16 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--figma-space-sm) var(--figma-space-md);
-  background-color: var(--figma-color-bg);
-  border: 1px solid var(--figma-color-border);
-  border-radius: var(--figma-radius-lg);
+  padding: var(--cg-space-sm) var(--cg-space-md);
+  background-color: var(--cg-color-bg);
+  border: 1px solid var(--cg-color-border);
+  border-radius: var(--cg-radius-lg);
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: var(--figma-font-family);
-  font-size: var(--figma-font-size-sm);
+  font-family: var(--cg-font-family);
+  font-size: var(--cg-font-size-sm);
   font-weight: 600;
-  color: var(--figma-color-text-secondary);
+  color: var(--cg-color-text-secondary);
   user-select: none;
 }
 
@@ -623,7 +623,7 @@ input[type="color"]::-webkit-color-swatch {
 .dropdown-header-right {
   display: flex;
   align-items: center;
-  gap: var(--figma-space-sm);
+  gap: var(--cg-space-sm);
   flex: 0 0 auto;
   margin-left: auto;
 }
@@ -631,7 +631,7 @@ input[type="color"]::-webkit-color-swatch {
 .dropdown-header-icons {
   display: flex;
   align-items: center;
-  gap: var(--figma-space-xs);
+  gap: var(--cg-space-xs);
   flex-shrink: 0;
   justify-content: flex-end;
 }
@@ -648,16 +648,16 @@ input[type="color"]::-webkit-color-swatch {
 .dropdown-header-icon svg {
   width: 100%;
   height: 100%;
-  color: var(--figma-color-text-brand);
+  color: var(--cg-color-text-brand);
 }
 
 .dropdown-header:hover {
-  background-color: var(--figma-color-bg-secondary);
-  border-color: var(--figma-color-border-strong);
+  background-color: var(--cg-color-bg-secondary);
+  border-color: var(--cg-color-border-strong);
 }
 
 .dropdown-header.active {
-  border-color: var(--figma-color-border-focus);
+  border-color: var(--cg-color-border-focus);
 }
 
 .dropdown-chevron {
@@ -665,7 +665,7 @@ input[type="color"]::-webkit-color-swatch {
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease;
-  color: var(--figma-color-text-tertiary);
+  color: var(--cg-color-text-tertiary);
   flex-shrink: 0;
 }
 
@@ -684,14 +684,14 @@ input[type="color"]::-webkit-color-swatch {
   top: 100%;
   left: 0;
   right: 0;
-  margin-top: var(--figma-space-xs);
-  background-color: var(--figma-color-bg-secondary);
-  border: 1px solid var(--figma-color-border);
-  border-radius: var(--figma-radius-lg);
-  box-shadow: var(--figma-shadow-medium);
+  margin-top: var(--cg-space-xs);
+  background-color: var(--cg-color-bg-secondary);
+  border: 1px solid var(--cg-color-border);
+  border-radius: var(--cg-radius-lg);
+  box-shadow: var(--cg-shadow-medium);
   z-index: 1000;
   display: none;
-  padding: var(--figma-space-sm);
+  padding: var(--cg-space-sm);
   max-height: 300px;
   overflow-y: auto;
 }
@@ -703,30 +703,30 @@ input[type="color"]::-webkit-color-swatch {
 .dropdown-options {
   display: flex;
   flex-direction: column;
-  gap: var(--figma-space-xs);
+  gap: var(--cg-space-xs);
 }
 
 .dropdown-option {
   display: flex;
   align-items: center;
-  padding: var(--figma-space-xs) var(--figma-space-sm);
-  border-radius: var(--figma-radius-md);
+  padding: var(--cg-space-xs) var(--cg-space-sm);
+  border-radius: var(--cg-radius-md);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .dropdown-option:hover {
-  background-color: var(--figma-color-bg-secondary);
+  background-color: var(--cg-color-bg-secondary);
 }
 
 .dropdown-option .checkbox {
-  margin-right: var(--figma-space-sm);
+  margin-right: var(--cg-space-sm);
 }
 
 .dropdown-option-icon {
   width: 16px;
   height: 16px;
-  margin-right: var(--figma-space-sm);
+  margin-right: var(--cg-space-sm);
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -736,14 +736,14 @@ input[type="color"]::-webkit-color-swatch {
 .dropdown-option-icon svg {
   width: 100%;
   height: 100%;
-  fill: var(--figma-color-text-tertiary);
-  stroke: var(--figma-color-text-tertiary);
+  fill: var(--cg-color-text-tertiary);
+  stroke: var(--cg-color-text-tertiary);
 }
 
 .dropdown-option .checkbox-label {
   margin: 0;
-  font-size: var(--figma-font-size-md);
-  color: var(--figma-color-text-tertiary);
+  font-size: var(--cg-font-size-md);
+  color: var(--cg-color-text-tertiary);
   cursor: pointer;
 }
 
@@ -753,15 +753,15 @@ input[type="color"]::-webkit-color-swatch {
 
 .bottomContainer,
 .bottom-wrapper {
-  background: var(--figma-color-bg-secondary);
+  background: var(--cg-color-bg-secondary);
   bottom: 0;
   position: fixed;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--figma-space-sm);
-  border-top: 1px solid var(--figma-color-border);
+  padding: var(--cg-space-sm);
+  border-top: 1px solid var(--cg-color-border);
   left: 0;
 }
 
@@ -779,7 +779,7 @@ input[type="color"]::-webkit-color-swatch {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 var(--figma-space-sm);
+  padding: 0 var(--cg-space-sm);
   width: auto;
 }
 
@@ -787,14 +787,14 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  padding: 0 var(--figma-space-lg);
+  padding: 0 var(--cg-space-lg);
 }
 
 .credit,
 .credit-text {
-  font-family: var(--figma-font-family);
-  font-size: var(--figma-font-size-sm);
-  color: var(--figma-color-text-tertiary);
+  font-family: var(--cg-font-family);
+  font-size: var(--cg-font-size-sm);
+  color: var(--cg-color-text-tertiary);
   margin: 0;
   text-align: right;
   padding-right: 16px;
@@ -802,24 +802,24 @@ input[type="color"]::-webkit-color-swatch {
 
 /* Theme toggle styling */
 .theme-toggle {
-  padding: var(--figma-space-xs) var(--figma-space-sm);
-  font-size: var(--figma-font-size-xs);
-  border: 1px solid var(--figma-color-border);
-  border-radius: var(--figma-radius-md);
-  background-color: var(--figma-color-bg);
-  color: var(--figma-color-text);
+  padding: var(--cg-space-xs) var(--cg-space-sm);
+  font-size: var(--cg-font-size-xs);
+  border: 1px solid var(--cg-color-border);
+  border-radius: var(--cg-radius-md);
+  background-color: var(--cg-color-bg);
+  color: var(--cg-color-text);
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 20px;
-  font-family: var(--figma-font-family);
+  font-family: var(--cg-font-family);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .theme-toggle:hover {
-  background-color: var(--figma-color-bg-secondary);
-  border-color: var(--figma-color-border-strong);
+  background-color: var(--cg-color-bg-secondary);
+  border-color: var(--cg-color-border-strong);
 }
 
 .theme-toggle:active {
