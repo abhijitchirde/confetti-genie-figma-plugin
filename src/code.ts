@@ -2,11 +2,8 @@ import type { GenerateData, UiToPluginMessage } from "./types";
 
 figma.showUI(__html__, { width: 270, height: 540 });
 
-//counting input shapes by user
-var shapeCounter = 0;
-
-// create a colors array for drawing
-const randomColors = [
+// Palette used by "Generate with random colors"
+const RANDOM_COLORS: RGB[] = [
   { r: 0.01, g: 0.64, b: 0.96 },
   { r: 0.605, g: 0.96, b: 0.99 },
   { r: 0.789, g: 0.99, b: 0.746 },
@@ -23,316 +20,240 @@ const randomColors = [
   { r: 0.73, g: 0.242, b: 0.011 },
 ];
 
-//Crate array containing opacity values. Having distinct values will create less variation
-const opacity = [0.35, 0.45, 0.6, 0.65, 0.75, 0.85, 0.9, 1];
+// A few distinct opacity steps give depth without too much variation
+const OPACITY_STEPS = [0.35, 0.45, 0.6, 0.65, 0.75, 0.85, 0.9, 1];
 
-//Calling the function to run plugin
-runPlugin();
+const NEW_FRAME_SIZE = 500;
 
-// Helper function to check if a node can bear children
-function canBearChildren(node: SceneNode): node is SceneNode & ChildrenMixin {
-  return "appendChild" in node;
+type ContainerNode = SceneNode & ChildrenMixin;
+type ConfettiNode = RectangleNode | EllipseNode | PolygonNode | StarNode;
+
+interface ShapeSpec {
+  isEnabled: (data: GenerateData) => boolean;
+  create: () => ConfettiNode;
+  /** Width and height, given the target's longer and shorter side (already scaled by size). */
+  size: (longSide: number, shortSide: number) => [number, number];
+  rotate: boolean;
 }
 
-// Helper function to get all target nodes for confetti generation
-function getTargetNodes(): (SceneNode & ChildrenMixin)[] {
-  const selection = figma.currentPage.selection;
-  const targetNodes: (SceneNode & ChildrenMixin)[] = [];
-
-  // If there are selected nodes, find all that can bear children
-  if (selection.length > 0) {
-    for (const node of selection) {
-      if (canBearChildren(node)) {
-        targetNodes.push(node);
-      }
-    }
-  }
-
-  // If nothing is selected or no selected node can bear children, create a frame
-  if (targetNodes.length === 0) {
-    const frame = figma.createFrame();
-    frame.resize(500, 500);
-    frame.x = 0;
-    frame.y = 0;
-    frame.name = "Confetti Frame";
-    figma.currentPage.appendChild(frame);
-    targetNodes.push(frame);
-  }
-
-  return targetNodes;
-}
-
-//defining the plugin run function
-function runPlugin() {
-  //On a message from UI, we do the action as per message content
-  figma.ui.onmessage = (msg: UiToPluginMessage) => {
-    // THEME DETECTION SUPPORT
-    if (msg.type === "get-theme") {
-      figma.ui.postMessage({
-        type: "theme-changed",
-        theme: figma.editorType === "figma" ? "light" : "dark",
-      });
-      return;
-    }
-
-
-    shapeCounter = 0;
-    if (msg.data.RecValue === true) {
-      shapeCounter++;
-    }
-    if (msg.data.EllValue === true) {
-      shapeCounter++;
-    }
-    if (msg.data.PolyValue === true) {
-      shapeCounter++;
-    }
-    if (msg.data.StarValue === true) {
-      shapeCounter++;
-    }
-
-    if (msg.type === "generate-random") {
-      if (shapeCounter === 0) {
-        figma.notify("Please select shapes to generate confetti", {
-          timeout: 1200,
-        });
-        return;
-      }
-
-      // Check if selection is empty before getting target nodes
-      const hadSelection = figma.currentPage.selection.length > 0;
-      const targetNodes = getTargetNodes();
-      const msgData = msg.data;
-      // Add confetti to all target nodes
-      for (const targetNode of targetNodes) {
-        randomConfetti(targetNode, msgData, randomColors, shapeCounter);
-      }
-
-      // If no selection existed, scroll and zoom to the newly created frame(s)
-      if (!hadSelection && targetNodes.length > 0) {
-        figma.viewport.scrollAndZoomIntoView(targetNodes);
-      }
-    }
-
-    if (msg.type === "generate-selection") {
-      if (shapeCounter === 0) {
-        figma.notify("Please select shapes to generate confetti", {
-          timeout: 1200,
-        });
-        return;
-      }
-
-      // Check if selection is empty before getting target nodes
-      const hadSelection = figma.currentPage.selection.length > 0;
-      const targetNodes = getTargetNodes();
-      const msgData = msg.data;
-      const colorArray = msg.data.inputColors;
-      // Add confetti to all target nodes
-      for (const targetNode of targetNodes) {
-        selectionColorsConfetti(targetNode, msgData, colorArray, shapeCounter);
-      }
-
-      // If no selection existed, scroll and zoom to the newly created frame(s)
-      if (!hadSelection && targetNodes.length > 0) {
-        figma.viewport.scrollAndZoomIntoView(targetNodes);
-      }
-    }
-  };
-}
-
-function selectionColorsConfetti(
-  inputNode: SceneNode & ChildrenMixin,
-  msgData: GenerateData,
-  colors: string[],
-  noOfShapes: number
-) {
-  const rbgColorArray: RGB[] = [];
-
-  for (let color of colors) {
-    let rbg = hexToRgbDivBy255(color); //convert hex color to rgb in 0-1 range as used in paints object
-    if (rbg) rbgColorArray.push(rbg);
-  }
-  generateConfetti(inputNode, msgData, rbgColorArray, noOfShapes);
-}
-
-function randomConfetti(
-  inputNode: SceneNode & ChildrenMixin,
-  msgData: GenerateData,
-  colors: RGB[],
-  noOfShapes: number
-) {
-  generateConfetti(inputNode, msgData, colors, noOfShapes);
-}
-
-//Confetti generation function
-function generateConfetti(
-  currentNode: SceneNode & ChildrenMixin,
-  msgData: GenerateData,
-  colors: RGB[],
-  noOfShapes: number
-) {
-  const density = msgData.sliderInput; //density is the value from the slider input
-  const sizeFactor = msgData.sizeFactor; //size is the value from the size selection
-
-  const width = currentNode.width;
-  const height = currentNode.height;
-
-  let largeSide, smallSide;
-
-  if (width > height) {
-    largeSide = width * sizeFactor;
-    smallSide = height * sizeFactor;
-  } else {
-    largeSide = height * sizeFactor;
-    smallSide = width * sizeFactor;
-  }
-
-  let effectiveDensity = density / noOfShapes;
-
-  if (msgData.RecValue === true) {
-    //add rectangles
-    for (let i = 0; i < effectiveDensity; i++) {
-      //create a rectangle
-      const rect = figma.createRectangle();
-
-      //Assign a random width and height to rectangle
-      const w = numBetween(largeSide * 0.007, largeSide * 0.04);
-      const h = numBetween(smallSide * 0.01, smallSide * 0.02);
-      rect.resize(w, h);
-
-      //randomly position rectangle within the frame
-      rect.x = numBetween(0, width);
-      rect.y = numBetween(0, height);
-
-      //set a random color
-      rect.fills = [
-        {
-          type: "SOLID",
-          color: setColor(colors),
-          opacity: setOpacity(),
-        },
-      ];
-
-      rect.rotation = numBetween(-180, 180);
-      currentNode.appendChild(rect);
-    }
-  }
-
-  if (msgData.EllValue === true) {
-    //add ellipses
-    for (let i = 0; i < effectiveDensity; i++) {
-      //create ellipse
-      const ell = figma.createEllipse();
-
-      //Assign a random width to ellipse
-      const w = numBetween(largeSide * 0.005, largeSide * 0.015);
-      const h = w; //keeping width and heights same to have circles
-      ell.resize(w, h);
-
-      //randomly position within the frame
-      ell.x = numBetween(0, width);
-      ell.y = numBetween(0, height);
-
-      //set a random color
-      ell.fills = [
-        {
-          type: "SOLID",
-          color: setColor(colors),
-          opacity: setOpacity(),
-        },
-      ];
-
-      currentNode.appendChild(ell);
-    }
-  }
-
-  if (msgData.PolyValue === true) {
-    //add polygons
-    for (let i = 0; i < effectiveDensity; i++) {
-      //create a star
-      const poly = figma.createPolygon();
-
-      poly.pointCount = numBetween(3, 6);
-
-      //Assign a random width and height
-      const w = numBetween(largeSide * 0.01, largeSide * 0.02);
-      const h = w; //keeping width and heights same
-      poly.resize(w, h);
-
-      //randomly position within the frame
-      poly.x = numBetween(0, width);
-      poly.y = numBetween(0, height);
-
-      //set a random color
-      poly.fills = [
-        {
-          type: "SOLID",
-          color: setColor(colors),
-          opacity: setOpacity(),
-        },
-      ];
-
-      poly.rotation = numBetween(-180, 180);
-
-      currentNode.appendChild(poly);
-    }
-  }
-
-  if (msgData.StarValue === true) {
-    //add stars
-    for (let i = 0; i < effectiveDensity; i++) {
-      //create a star
+const SHAPES: ShapeSpec[] = [
+  {
+    isEnabled: (data) => data.RecValue,
+    create: () => figma.createRectangle(),
+    size: (long, short) => [
+      randFloat(long * 0.007, long * 0.04),
+      randFloat(short * 0.01, short * 0.02),
+    ],
+    rotate: true,
+  },
+  {
+    isEnabled: (data) => data.EllValue,
+    create: () => figma.createEllipse(),
+    size: (long) => square(randFloat(long * 0.005, long * 0.015)),
+    rotate: false,
+  },
+  {
+    isEnabled: (data) => data.PolyValue,
+    create: () => {
+      const polygon = figma.createPolygon();
+      polygon.pointCount = randInt(3, 6);
+      return polygon;
+    },
+    size: (long) => square(randFloat(long * 0.01, long * 0.02)),
+    rotate: true,
+  },
+  {
+    isEnabled: (data) => data.StarValue,
+    create: () => {
       const star = figma.createStar();
+      star.pointCount = randInt(4, 6);
+      return star;
+    },
+    size: (long) => square(randFloat(long * 0.01, long * 0.02)),
+    rotate: true,
+  },
+];
 
-      star.pointCount = numBetween(4, 6);
+figma.ui.onmessage = (msg: UiToPluginMessage) => {
+  if (msg.type === "get-theme") {
+    figma.ui.postMessage({
+      type: "theme-changed",
+      theme: figma.editorType === "figma" ? "light" : "dark",
+    });
+    return;
+  }
 
-      //Assign a random width and height
-      const w = numBetween(largeSide * 0.01, largeSide * 0.02);
-      const h = w; //keeping width and heights same
-      star.resize(w, h);
+  try {
+    if (msg.type === "generate-random") {
+      generate(msg.data, RANDOM_COLORS);
+    } else if (msg.type === "generate-selection") {
+      const colors = msg.data.inputColors
+        .map(hexToRgb)
+        .filter((c): c is RGB => c !== null);
+      generate(msg.data, colors);
+    }
+  } catch (error) {
+    console.error(error);
+    const reason = error instanceof Error ? error.message : String(error);
+    figma.notify(`Couldn't add confetti: ${reason}`, { error: true });
+  }
+};
 
-      //randomly position within the frame
-      star.x = numBetween(0, width);
-      star.y = numBetween(0, height);
+function generate(data: GenerateData, colors: RGB[]) {
+  const shapes = SHAPES.filter((shape) => shape.isEnabled(data));
+  if (shapes.length === 0) {
+    figma.notify("Please select shapes to generate confetti", {
+      timeout: 1200,
+    });
+    return;
+  }
+  if (colors.length === 0) {
+    figma.notify("Please add at least one color", { timeout: 1200 });
+    return;
+  }
 
-      //set a random color
-      star.fills = [
+  const selection = figma.currentPage.selection;
+  const targets = selection.filter(canHoldConfetti);
+  const skipped = selection.length - targets.length;
+
+  // Nothing usable selected: make a new frame in view and fill that instead
+  let createdFrame: FrameNode | null = null;
+  if (targets.length === 0) {
+    createdFrame = createConfettiFrame();
+    targets.push(createdFrame);
+  }
+
+  for (const target of targets) {
+    addConfetti(target, data, shapes, colors);
+  }
+
+  if (createdFrame) {
+    figma.viewport.scrollAndZoomIntoView([createdFrame]);
+  }
+
+  if (createdFrame && selection.length > 0) {
+    figma.notify(
+      "The selected layers can't hold confetti, so it was added to a new frame"
+    );
+  } else if (skipped > 0) {
+    figma.notify(
+      `Skipped ${skipped} selected ${
+        skipped === 1 ? "layer" : "layers"
+      } that can't hold confetti`
+    );
+  }
+}
+
+/**
+ * True for nodes that confetti can be appended to. Instances (and anything
+ * inside them) and component sets reject new children, and adding shapes to a
+ * boolean group would change its result.
+ */
+function canHoldConfetti(node: SceneNode): node is ContainerNode {
+  if (!("appendChild" in node)) return false;
+  if (
+    node.type === "INSTANCE" ||
+    node.type === "COMPONENT_SET" ||
+    node.type === "BOOLEAN_OPERATION"
+  ) {
+    return false;
+  }
+  for (let parent = node.parent; parent; parent = parent.parent) {
+    if (parent.type === "INSTANCE") return false;
+  }
+  return true;
+}
+
+function createConfettiFrame(): FrameNode {
+  const frame = figma.createFrame();
+  frame.name = "Confetti Frame";
+  frame.resize(NEW_FRAME_SIZE, NEW_FRAME_SIZE);
+  const center = figma.viewport.center;
+  frame.x = Math.round(center.x - NEW_FRAME_SIZE / 2);
+  frame.y = Math.round(center.y - NEW_FRAME_SIZE / 2);
+  return frame;
+}
+
+function addConfetti(
+  target: ContainerNode,
+  data: GenerateData,
+  shapes: ShapeSpec[],
+  colors: RGB[]
+) {
+  const { width, height } = target;
+  const longSide = Math.max(width, height) * data.sizeFactor;
+  const shortSide = Math.min(width, height) * data.sizeFactor;
+  const countPerShape = Math.ceil(data.sliderInput / shapes.length);
+
+  // Children of a group are positioned in the group's parent's coordinates,
+  // so offset by the group's position. Frames and sections have their own.
+  const origin =
+    target.type === "GROUP" ? { x: target.x, y: target.y } : { x: 0, y: 0 };
+
+  // In auto layout frames, children must opt out of the layout flow,
+  // otherwise Figma stacks them and ignores x/y.
+  const usesAutoLayout =
+    "layoutMode" in target && target.layoutMode !== "NONE";
+
+  for (const shape of shapes) {
+    for (let i = 0; i < countPerShape; i++) {
+      const node = shape.create();
+      const [w, h] = shape.size(longSide, shortSide);
+      node.resize(clampSize(w), clampSize(h));
+      node.fills = [
         {
           type: "SOLID",
-          color: setColor(colors),
-          opacity: setOpacity(),
+          color: pick(colors),
+          opacity: pick(OPACITY_STEPS),
         },
       ];
+      if (shape.rotate) {
+        node.rotation = randFloat(-180, 180);
+      }
 
-      star.rotation = numBetween(-180, 180);
-      currentNode.appendChild(star);
+      target.appendChild(node);
+      if (usesAutoLayout) {
+        node.layoutPositioning = "ABSOLUTE";
+      }
+      node.x = origin.x + randInt(0, width);
+      node.y = origin.y + randInt(0, height);
     }
   }
 }
 
-//define function for getting a number between a random range
-function numBetween(low: number, high: number) {
-  return Math.floor(Math.random() * (high - low + 1)) + low;
+/** Random integer in [min, max], inclusive. */
+function randInt(min: number, max: number): number {
+  const lo = Math.ceil(min);
+  const hi = Math.floor(max);
+  return lo + Math.floor(Math.random() * (hi - lo + 1));
 }
 
-//define a function to select a random color
-function setColor(collection: RGB[]) {
-  //getting from colors array make random bright colored shapes.
-  return collection[Math.floor(Math.random() * collection.length)];
+/** Random float in [min, max). */
+function randFloat(min: number, max: number): number {
+  return min + Math.random() * (max - min);
 }
 
-//define a function to select a random color
-function setOpacity() {
-  //Few specified opacity steps in this array
-  return opacity[Math.floor(Math.random() * opacity.length)];
+function square(side: number): [number, number] {
+  return [side, side];
 }
 
-function hexToRgbDivBy255(hex: string): RGB | null {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
+/** Rounds to one decimal place and keeps the size Figma's resize() accepts. */
+function clampSize(value: number): number {
+  return Math.max(0.1, Math.round(value * 10) / 10);
+}
+
+function pick<T>(items: T[]): T {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+/** Converts "#RRGGBB" to Figma's 0–1 RGB, or null if the string is invalid. */
+function hexToRgb(hex: string): RGB | null {
+  const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return match
     ? {
-        r: parseInt(result[1], 16) / 255,
-        g: parseInt(result[2], 16) / 255,
-        b: parseInt(result[3], 16) / 255,
+        r: parseInt(match[1], 16) / 255,
+        g: parseInt(match[2], 16) / 255,
+        b: parseInt(match[3], 16) / 255,
       }
     : null;
 }
