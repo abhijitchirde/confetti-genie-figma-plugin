@@ -6,7 +6,7 @@ interface FormSectionProps {
 }
 
 export function FormSection({ children, className = "" }: FormSectionProps) {
-  const baseClass = "density-container";
+  const baseClass = "form-section";
   const combinedClass = className ? `${baseClass} ${className}` : baseClass;
 
   return <div className={combinedClass}>{children}</div>;

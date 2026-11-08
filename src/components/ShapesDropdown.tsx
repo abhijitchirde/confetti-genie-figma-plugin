@@ -7,12 +7,74 @@ interface ShapesDropdownProps {
   onShapeChange: (shapeName: keyof ShapesState, checked: boolean) => void;
 }
 
+const iconProps = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "1.5",
+};
+
+const SHAPE_OPTIONS: {
+  key: keyof ShapesState;
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+}[] = [
+  {
+    key: "rectangles",
+    id: "RecChk",
+    label: "Rectangles",
+    icon: (
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="4" width="12" height="8" {...iconProps} />
+      </svg>
+    ),
+  },
+  {
+    key: "ellipses",
+    id: "EllChk",
+    label: "Ellipses",
+    icon: (
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="8" cy="8" rx="6" ry="4" {...iconProps} />
+      </svg>
+    ),
+  },
+  {
+    key: "polygons",
+    id: "PolyChk",
+    label: "Polygons",
+    icon: (
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M 8 3 L 12 5.5 L 12 10.5 L 8 13 L 4 10.5 L 4 5.5 Z"
+          {...iconProps}
+        />
+      </svg>
+    ),
+  },
+  {
+    key: "stars",
+    id: "StarChk",
+    label: "Stars",
+    icon: (
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M 8 2 L 9.5 6 L 14 6.5 L 10.5 9.5 L 11.5 14 L 8 11.5 L 4.5 14 L 5.5 9.5 L 2 6.5 L 6.5 6 Z"
+          {...iconProps}
+        />
+      </svg>
+    ),
+  },
+];
+
 export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -22,77 +84,11 @@ export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isOpen]);
 
-  // Shape icons (SVG elements)
-  const getRectangleIcon = () => (
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <rect
-        x="2"
-        y="4"
-        width="12"
-        height="8"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-
-  const getEllipseIcon = () => (
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <ellipse
-        cx="8"
-        cy="8"
-        rx="6"
-        ry="4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-
-  const getPolygonIcon = () => (
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M 8 3 L 12 5.5 L 12 10.5 L 8 13 L 4 10.5 L 4 5.5 Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-
-  const getStarIcon = () => (
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M 8 2 L 9.5 6 L 14 6.5 L 10.5 9.5 L 11.5 14 L 8 11.5 L 4.5 14 L 5.5 9.5 L 2 6.5 L 6.5 6 Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
-
-  // Get selected shape icons for header
-  const getSelectedIcons = () => {
-    const icons = [];
-    if (shapes.rectangles) icons.push(getRectangleIcon());
-    if (shapes.ellipses) icons.push(getEllipseIcon());
-    if (shapes.polygons) icons.push(getPolygonIcon());
-    if (shapes.stars) icons.push(getStarIcon());
-    return icons;
-  };
-
-  const selectedIcons = getSelectedIcons();
+  const selectedOptions = SHAPE_OPTIONS.filter((option) => shapes[option.key]);
 
   return (
     <div className="dropdown-container" ref={dropdownRef}>
@@ -109,9 +105,9 @@ export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
         </div>
         <div className="dropdown-header-right">
           <div className="dropdown-header-icons" id="selectedIconsContainer">
-            {selectedIcons.map((icon, index) => (
-              <div key={index} className="dropdown-header-icon">
-                {icon}
+            {selectedOptions.map((option) => (
+              <div key={option.key} className="dropdown-header-icon">
+                {option.icon}
               </div>
             ))}
           </div>
@@ -140,34 +136,16 @@ export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dropdown-options">
-          <ShapeOption
-            id="RecChk"
-            label="Rectangles"
-            icon={getRectangleIcon()}
-            checked={shapes.rectangles}
-            onChange={(checked) => onShapeChange("rectangles", checked)}
-          />
-          <ShapeOption
-            id="EllChk"
-            label="Ellipses"
-            icon={getEllipseIcon()}
-            checked={shapes.ellipses}
-            onChange={(checked) => onShapeChange("ellipses", checked)}
-          />
-          <ShapeOption
-            id="PolyChk"
-            label="Polygons"
-            icon={getPolygonIcon()}
-            checked={shapes.polygons}
-            onChange={(checked) => onShapeChange("polygons", checked)}
-          />
-          <ShapeOption
-            id="StarChk"
-            label="Stars"
-            icon={getStarIcon()}
-            checked={shapes.stars}
-            onChange={(checked) => onShapeChange("stars", checked)}
-          />
+          {SHAPE_OPTIONS.map((option) => (
+            <ShapeOption
+              key={option.key}
+              id={option.id}
+              label={option.label}
+              icon={option.icon}
+              checked={shapes[option.key]}
+              onChange={(checked) => onShapeChange(option.key, checked)}
+            />
+          ))}
         </div>
       </div>
     </div>

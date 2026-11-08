@@ -6,46 +6,42 @@ interface DensityControlProps {
   onChange: (value: number) => void;
 }
 
+const MIN_DENSITY = 30;
+const MAX_DENSITY = 300;
+
+// Label and label colour for each density band, by its upper bound
+const DENSITY_LEVELS = [
+  { max: 84, label: "minimal", color: "var(--cg-color-text-tertiary)" },
+  { max: 138, label: "festive", color: "var(--cg-color-text-secondary)" },
+  { max: 192, label: "party", color: "var(--cg-color-text)" },
+  { max: 246, label: "bash", color: "var(--cg-color-text)" },
+  { max: MAX_DENSITY, label: "blast", color: "var(--cg-color-text)" },
+];
+
 export function DensityControl({ value, onChange }: DensityControlProps) {
-  // Function to get label text based on density value
-  const getDensityLabel = (density: number): string => {
-    if (density >= 30 && density <= 84) return "minimal";
-    if (density > 84 && density <= 138) return "festive";
-    if (density > 138 && density <= 192) return "party";
-    if (density > 192 && density <= 246) return "bash";
-    if (density > 246 && density <= 300) return "blast";
-    return "party";
-  };
-
-  // Function to get color CSS variable based on density value
-  const getDensityColor = (density: number): string => {
-    if (density >= 30 && density <= 84)
-      return "var(--cg-color-text-tertiary)";
-    if (density > 84 && density <= 138)
-      return "var(--cg-color-text-secondary)";
-    if (density > 138 && density <= 192) return "var(--cg-color-text)";
-    if (density > 192 && density <= 246) return "var(--cg-color-text)";
-    if (density > 246 && density <= 300) return "var(--cg-color-text)";
-    return "var(--cg-color-text)";
-  };
-
-  const label = getDensityLabel(value);
-  const color = getDensityColor(value);
+  const level =
+    DENSITY_LEVELS.find((l) => value <= l.max) ??
+    DENSITY_LEVELS[DENSITY_LEVELS.length - 1];
 
   return (
     <FormSection>
       <p className="confetti-type-label">DENSITY</p>
-      <p className="slider-label" id="slider-label-density" style={{ color }}>
-        {label}
+      <p
+        className="slider-label"
+        id="slider-label-density"
+        style={{ color: level.color }}
+      >
+        {level.label}
       </p>
       <input
         type="range"
         id="slider-density"
         className="slider-input"
-        min="30"
-        max="300"
+        min={MIN_DENSITY}
+        max={MAX_DENSITY}
         value={value}
         onChange={(e) => onChange(parseInt(e.target.value, 10))}
+        aria-label="Density"
       />
     </FormSection>
   );

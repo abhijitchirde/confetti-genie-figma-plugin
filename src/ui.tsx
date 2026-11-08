@@ -11,7 +11,21 @@ import { ActionButtons } from "./components/ActionButtons";
 import BottomSection from "./components/BottomSection";
 import { useColorManager } from "./hooks/useColorManager";
 import { useFigmaMessage } from "./hooks/useFigmaMessage";
-import type { Size, ShapesState } from "./types";
+import type { GenerateData, Size, ShapesState } from "./types";
+
+// How much bigger each size preset makes the confetti
+const SIZE_FACTORS: Record<Size, number> = {
+  small: 0.5,
+  medium: 1.4,
+  large: 4.0,
+};
+
+// Smaller confetti needs more pieces to look as full; larger needs fewer
+function adjustDensity(baseDensity: number, sizeFactor: number): number {
+  if (sizeFactor < 1) return baseDensity * 2;
+  if (sizeFactor > 3) return baseDensity * 0.7;
+  return baseDensity;
+}
 
 function App() {
   // Density state (30-300, default 115)
@@ -52,70 +66,33 @@ function App() {
     setShapes({ ...shapes, [shapeName]: checked });
   };
 
-  // Get size factor based on selected size
-  const getSizeFactor = (selectedSize: Size): number => {
-    switch (selectedSize) {
-      case "small":
-        return 0.5;
-      case "medium":
-        return 1.4;
-      case "large":
-        return 4.0;
-    }
+  // Settings shared by both generate buttons
+  const getGenerateData = (): GenerateData => {
+    const sizeFactor = SIZE_FACTORS[size];
+    return {
+      sliderInput: adjustDensity(density, sizeFactor),
+      sizeFactor,
+      RecValue: shapes.rectangles,
+      EllValue: shapes.ellipses,
+      PolyValue: shapes.polygons,
+      StarValue: shapes.stars,
+    };
   };
 
-  // Adjust density based on size factor
-  const adjustDensity = (baseDensity: number, sizeFactor: number): number => {
-    if (sizeFactor < 1) {
-      return baseDensity * 2;
-    } else if (sizeFactor > 3) {
-      return baseDensity * 0.7;
-    }
-    return baseDensity;
-  };
-
-  // Handle generate with selected colors
   const handleGenerateWithColors = () => {
-    // Validate colors array
     if (colors.length === 0) {
       setColorError(true);
       setTimeout(() => setColorError(false), 400);
       return;
     }
-
-    const sizeFactor = getSizeFactor(size);
-    const adjustedDensity = adjustDensity(density, sizeFactor);
-
     sendMessage({
       type: "generate-selection",
-      data: {
-        sliderInput: adjustedDensity,
-        inputColors: colors,
-        RecValue: shapes.rectangles,
-        EllValue: shapes.ellipses,
-        PolyValue: shapes.polygons,
-        StarValue: shapes.stars,
-        sizeFactor,
-      },
+      data: { ...getGenerateData(), inputColors: colors },
     });
   };
 
-  // Handle generate with random colors
   const handleGenerateRandom = () => {
-    const sizeFactor = getSizeFactor(size);
-    const adjustedDensity = adjustDensity(density, sizeFactor);
-
-    sendMessage({
-      type: "generate-random",
-      data: {
-        sliderInput: adjustedDensity,
-        RecValue: shapes.rectangles,
-        EllValue: shapes.ellipses,
-        PolyValue: shapes.polygons,
-        StarValue: shapes.stars,
-        sizeFactor,
-      },
-    });
+    sendMessage({ type: "generate-random", data: getGenerateData() });
   };
 
   return (

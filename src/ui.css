@@ -158,7 +158,7 @@ a:hover {
    SECTION 4: LAYOUT CONTAINERS
    ============================================ */
 
-.density-container {
+.form-section {
   background-color: var(--cg-color-bg);
   padding: 0.5rem 0.5rem;
   margin: 0.5rem;
