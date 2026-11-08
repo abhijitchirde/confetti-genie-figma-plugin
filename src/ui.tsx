@@ -11,19 +11,7 @@ import { ActionButtons } from "./components/ActionButtons";
 import BottomSection from "./components/BottomSection";
 import { useColorManager } from "./hooks/useColorManager";
 import { useFigmaMessage } from "./hooks/useFigmaMessage";
-
-declare function require(path: string): any;
-
-// Size type
-type Size = "small" | "medium" | "large";
-
-// Shapes state type
-interface ShapesState {
-  rectangles: boolean;
-  ellipses: boolean;
-  polygons: boolean;
-  stars: boolean;
-}
+import type { Size, ShapesState } from "./types";
 
 function App() {
   // Density state (30-300, default 115)
@@ -98,14 +86,17 @@ function App() {
     const sizeFactor = getSizeFactor(size);
     const adjustedDensity = adjustDensity(density, sizeFactor);
 
-    sendMessage("generate-selection", {
-      sliderInput: adjustedDensity,
-      inputColors: colors,
-      RecValue: shapes.rectangles,
-      EllValue: shapes.ellipses,
-      PolyValue: shapes.polygons,
-      StarValue: shapes.stars,
-      sizeFactor,
+    sendMessage({
+      type: "generate-selection",
+      data: {
+        sliderInput: adjustedDensity,
+        inputColors: colors,
+        RecValue: shapes.rectangles,
+        EllValue: shapes.ellipses,
+        PolyValue: shapes.polygons,
+        StarValue: shapes.stars,
+        sizeFactor,
+      },
     });
   };
 
@@ -114,13 +105,16 @@ function App() {
     const sizeFactor = getSizeFactor(size);
     const adjustedDensity = adjustDensity(density, sizeFactor);
 
-    sendMessage("generate-random", {
-      sliderInput: adjustedDensity,
-      RecValue: shapes.rectangles,
-      EllValue: shapes.ellipses,
-      PolyValue: shapes.polygons,
-      StarValue: shapes.stars,
-      sizeFactor,
+    sendMessage({
+      type: "generate-random",
+      data: {
+        sliderInput: adjustedDensity,
+        RecValue: shapes.rectangles,
+        EllValue: shapes.ellipses,
+        PolyValue: shapes.polygons,
+        StarValue: shapes.stars,
+        sizeFactor,
+      },
     });
   };
 

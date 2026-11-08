@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ShapeOption } from "./ShapeOption";
-
-interface ShapesState {
-  rectangles: boolean;
-  ellipses: boolean;
-  polygons: boolean;
-  stars: boolean;
-}
+import type { ShapesState } from "../types";
 
 interface ShapesDropdownProps {
   shapes: ShapesState;

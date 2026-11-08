@@ -1,25 +1,10 @@
-import { useEffect } from "react";
+import type { UiToPluginMessage } from "../types";
 
-interface UseFigmaMessageReturn {
-  sendMessage: (type: string, data?: any) => void;
+/** Sends a typed message from the UI iframe to the plugin code. */
+export function postToPlugin(message: UiToPluginMessage) {
+  parent.postMessage({ pluginMessage: message }, "*");
 }
 
-export function useFigmaMessage(): UseFigmaMessageReturn {
-  const sendMessage = (type: string, data?: any) => {
-    if (typeof parent !== "undefined" && parent.postMessage) {
-      parent.postMessage(
-        {
-          pluginMessage: {
-            type,
-            data,
-          },
-        },
-        "*"
-      );
-    }
-  };
-
-  return {
-    sendMessage,
-  };
+export function useFigmaMessage() {
+  return { sendMessage: postToPlugin };
 }

@@ -1,9 +1,10 @@
 import React from "react";
 import { FormSection, ChoiceChip } from "./ui";
+import type { Size } from "../types";
 
 interface SizeControlProps {
-  value: "small" | "medium" | "large";
-  onChange: (value: "small" | "medium" | "large") => void;
+  value: Size;
+  onChange: (value: Size) => void;
 }
 
 export function SizeControl({ value, onChange }: SizeControlProps) {

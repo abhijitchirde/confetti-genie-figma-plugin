@@ -1,3 +1,5 @@
+import type { GenerateData, UiToPluginMessage } from "./types";
+
 figma.showUI(__html__, { width: 270, height: 540 });
 
 //counting input shapes by user
@@ -63,7 +65,7 @@ function getTargetNodes(): (SceneNode & ChildrenMixin)[] {
 //defining the plugin run function
 function runPlugin() {
   //On a message from UI, we do the action as per message content
-  figma.ui.onmessage = (msg) => {
+  figma.ui.onmessage = (msg: UiToPluginMessage) => {
     // THEME DETECTION SUPPORT
     if (msg.type === "get-theme") {
       figma.ui.postMessage({
@@ -73,9 +75,6 @@ function runPlugin() {
       return;
     }
 
-    if (!msg.data) {
-      return;
-    }
 
     shapeCounter = 0;
     if (msg.data.RecValue === true) {
@@ -142,24 +141,24 @@ function runPlugin() {
 
 function selectionColorsConfetti(
   inputNode: SceneNode & ChildrenMixin,
-  msgData,
-  colors,
-  noOfShapes
+  msgData: GenerateData,
+  colors: string[],
+  noOfShapes: number
 ) {
-  const rbgColorArray = [];
+  const rbgColorArray: RGB[] = [];
 
   for (let color of colors) {
     let rbg = hexToRgbDivBy255(color); //convert hex color to rgb in 0-1 range as used in paints object
-    rbgColorArray.push(rbg);
+    if (rbg) rbgColorArray.push(rbg);
   }
   generateConfetti(inputNode, msgData, rbgColorArray, noOfShapes);
 }
 
 function randomConfetti(
   inputNode: SceneNode & ChildrenMixin,
-  msgData,
-  colors,
-  noOfShapes
+  msgData: GenerateData,
+  colors: RGB[],
+  noOfShapes: number
 ) {
   generateConfetti(inputNode, msgData, colors, noOfShapes);
 }
@@ -167,9 +166,9 @@ function randomConfetti(
 //Confetti generation function
 function generateConfetti(
   currentNode: SceneNode & ChildrenMixin,
-  msgData,
-  colors,
-  noOfShapes
+  msgData: GenerateData,
+  colors: RGB[],
+  noOfShapes: number
 ) {
   const density = msgData.sliderInput; //density is the value from the slider input
   const sizeFactor = msgData.sizeFactor; //size is the value from the size selection
@@ -311,12 +310,12 @@ function generateConfetti(
 }
 
 //define function for getting a number between a random range
-function numBetween(low, high) {
+function numBetween(low: number, high: number) {
   return Math.floor(Math.random() * (high - low + 1)) + low;
 }
 
 //define a function to select a random color
-function setColor(collection) {
+function setColor(collection: RGB[]) {
   //getting from colors array make random bright colored shapes.
   return collection[Math.floor(Math.random() * collection.length)];
 }
@@ -327,7 +326,7 @@ function setOpacity() {
   return opacity[Math.floor(Math.random() * opacity.length)];
 }
 
-function hexToRgbDivBy255(hex) {
+function hexToRgbDivBy255(hex: string): RGB | null {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
