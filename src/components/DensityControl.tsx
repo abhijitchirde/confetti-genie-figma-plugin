@@ -1,25 +1,28 @@
 import React from "react";
 import { FormSection } from "./ui";
-import { MAX_DENSITY, MIN_DENSITY } from "../settings";
+import {
+  densityLevelOf,
+  MAX_DENSITY,
+  MIN_DENSITY,
+  type DensityLevel,
+} from "../settings";
 
 interface DensityControlProps {
   value: number;
   onChange: (value: number) => void;
 }
 
-// Label and label colour for each density band, by its upper bound
-const DENSITY_LEVELS = [
-  { max: 84, label: "minimal", color: "var(--cg-color-text-tertiary)" },
-  { max: 138, label: "festive", color: "var(--cg-color-text-secondary)" },
-  { max: 192, label: "party", color: "var(--cg-color-text)" },
-  { max: 246, label: "bash", color: "var(--cg-color-text)" },
-  { max: MAX_DENSITY, label: "blast", color: "var(--cg-color-text)" },
-];
+// Label colour for each density level
+const LEVEL_COLORS: Record<DensityLevel, string> = {
+  minimal: "var(--cg-color-text-tertiary)",
+  festive: "var(--cg-color-text-secondary)",
+  party: "var(--cg-color-text)",
+  bash: "var(--cg-color-text)",
+  blast: "var(--cg-color-text)",
+};
 
 export function DensityControl({ value, onChange }: DensityControlProps) {
-  const level =
-    DENSITY_LEVELS.find((l) => value <= l.max) ??
-    DENSITY_LEVELS[DENSITY_LEVELS.length - 1];
+  const level = densityLevelOf(value);
 
   return (
     <FormSection>
@@ -27,9 +30,9 @@ export function DensityControl({ value, onChange }: DensityControlProps) {
       <p
         className="slider-label"
         id="slider-label-density"
-        style={{ color: level.color }}
+        style={{ color: LEVEL_COLORS[level] }}
       >
-        {level.label}
+        {level}
       </p>
       <input
         type="range"

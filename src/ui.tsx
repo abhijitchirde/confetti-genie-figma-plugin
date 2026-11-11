@@ -11,22 +11,8 @@ import { ActionButtons } from "./components/ActionButtons";
 import BottomSection from "./components/BottomSection";
 import { useColorManager } from "./hooks/useColorManager";
 import { postToPlugin, usePluginMessage } from "./hooks/usePluginMessages";
-import { DEFAULT_SETTINGS } from "./settings";
+import { DEFAULT_SETTINGS, toGenerateData } from "./settings";
 import type { Size, ShapesState } from "./types";
-
-// How much bigger each size preset makes the confetti
-const SIZE_FACTORS: Record<Size, number> = {
-  small: 0.5,
-  medium: 1.4,
-  large: 4.0,
-};
-
-// Smaller confetti needs more pieces to look as full; larger needs fewer
-function adjustDensity(baseDensity: number, sizeFactor: number): number {
-  if (sizeFactor < 1) return baseDensity * 2;
-  if (sizeFactor > 3) return baseDensity * 0.7;
-  return baseDensity;
-}
 
 function App() {
   const [density, setDensity] = useState(DEFAULT_SETTINGS.density);
@@ -87,15 +73,9 @@ function App() {
   };
 
   const sendGenerate = (colorsToUse?: string[]) => {
-    const sizeFactor = SIZE_FACTORS[size];
     postToPlugin({
       type: "generate",
-      data: {
-        count: adjustDensity(density, sizeFactor),
-        sizeFactor,
-        shapes,
-        colors: colorsToUse,
-      },
+      data: toGenerateData({ density, size, shapes }, colorsToUse),
     });
   };
 
