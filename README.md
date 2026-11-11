@@ -45,12 +45,24 @@ You can select one or more shape types, or use all of them together for maximum 
 
 - Select any frame or element on your canvas to add confetti directly inside it
 - If no target is selected, Confetti Genie automatically creates a new frame (500x500px) and generates confetti within it
-- Works with any element that can contain children (frames, groups, components, etc.)
+- Works with any element that can contain children (frames, groups, sections, components, auto layout frames, etc.). Instances and component sets are skipped
+- All confetti goes into a single "Confetti" layer inside each target, so it's easy to move, hide or delete. Generate again with that layer selected to add more
+- The Confetti layer stretches with its parent, so resizing a frame spreads the confetti to fit
 
 🌓 Theme Support
 
-- Automatic Theme Detection - The plugin automatically adapts to your Figma app's theme
-- Manual Theme Toggle - Switch between light and dark modes using the theme toggle button for your preferred viewing experience
+- Automatic Theme Detection - The plugin follows your Figma theme, including when you switch it
+- Theme Toggle - The footer button cycles between Auto (follows Figma), Light and Dark, and remembers your choice
+
+💾 Remembers Your Settings
+
+- Density, size, shapes and your color palette are saved and restored the next time you open the plugin
+
+⚡ Quick Actions
+
+- Generate without opening the plugin window: open Quick Actions (Ctrl/Cmd + /), type "Confetti Genie" and press Tab
+- Pick a Density (minimal, festive, party, bash or blast), then optionally a Size and Colors (random, or the colors you saved in the plugin). Anything you skip uses your last settings, with random colors
+- Regenerate Confetti - Select a Confetti layer and click "Regenerate confetti" in the properties panel to re-scatter it with the same settings
 
 ✨ Visual Details
 
@@ -80,7 +92,7 @@ In Figma Design
 In FigJam
 
 1. Run the Plugin - Launch Confetti Genie from the plugins menu
-2. Select a Frame or Sticky - Click on any frame or sticky note where you want confetti
+2. Select a Frame or Section - Click on any frame or section where you want confetti
 3. Configure Settings - Adjust shapes, density, size, and colors as desired
 4. Generate - Click your preferred generate button to add confetti to your selection
 

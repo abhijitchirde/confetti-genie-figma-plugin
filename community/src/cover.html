@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Confetti Genie cover</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="window.css" />
+    <style>
+      .canvas {
+        width: 1920px;
+        height: 960px;
+        background:
+          radial-gradient(
+            60% 80% at 80% 45%,
+            #f1ecff 0%,
+            rgba(241, 236, 255, 0) 65%
+          ),
+          radial-gradient(
+            45% 60% at 0% 100%,
+            #fff0ee 0%,
+            rgba(255, 240, 238, 0) 65%
+          ),
+          var(--paper);
+      }
+
+      .left {
+        position: absolute;
+        left: 130px;
+        top: 236px;
+        width: 780px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .brand .icon-wrap {
+        box-shadow: 0 18px 40px rgba(43, 26, 110, 0.28);
+      }
+      .wordmark {
+        font: 800 80px/1 var(--sans);
+        letter-spacing: -0.035em;
+      }
+      .tagline {
+        margin: 44px 0 0;
+        font: 400 62px/1.1 var(--serif);
+        color: var(--ink-2);
+        letter-spacing: -0.01em;
+      }
+      .tagline em {
+        font-style: italic;
+        color: var(--violet);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 10px;
+        margin-top: 44px;
+        width: 780px;
+      }
+      .chips span {
+        font: 600 22px/1 var(--sans);
+        padding: 12px 16px 11px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: var(--ink-2);
+      }
+      .chips i {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        margin-right: 10px;
+        vertical-align: 1px;
+      }
+      .footer {
+        position: absolute;
+        left: 130px;
+        bottom: 64px;
+        font: 600 22px/1 var(--sans);
+        color: var(--ink-3);
+        letter-spacing: 0.01em;
+      }
+
+      /* A Figma frame with the plugin's real confetti on top of an invite design */
+      .frame-name {
+        position: absolute;
+        font: 500 17px/1 var(--sans);
+        color: var(--ink-3);
+      }
+      .frame {
+        position: absolute;
+        overflow: hidden; /* frames clip their content in Figma */
+        background: linear-gradient(
+          160deg,
+          #fff7ed 0%,
+          #fdf2f8 55%,
+          #f5f3ff 100%
+        );
+        box-shadow:
+          0 24px 60px rgba(15, 23, 42, 0.1),
+          0 0 0 1px rgba(15, 23, 42, 0.06);
+      }
+      .invite {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .invite small {
+        font: 700 18px/1 var(--sans);
+        letter-spacing: 0.22em;
+        color: var(--ink-3);
+      }
+      .invite h2 {
+        margin: 22px 0 0;
+        font: 400 86px/1 var(--serif);
+        letter-spacing: -0.01em;
+      }
+      .invite h2 em {
+        font-style: italic;
+        color: var(--coral);
+      }
+      .invite p {
+        margin: 22px 0 0;
+        font: 600 20px/1 var(--sans);
+        color: var(--ink-2);
+      }
+      .confetti {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      .selection {
+        position: absolute;
+        border: 2px solid var(--figma-blue);
+      }
+      .selection b {
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        background: #fff;
+        border: 2px solid var(--figma-blue);
+      }
+      .size-badge {
+        position: absolute;
+        transform: translateX(-50%);
+        font: 600 15px/1 var(--sans);
+        color: #fff;
+        background: var(--figma-blue);
+        padding: 6px 8px;
+        border-radius: 4px;
+      }
+      .windows .pw {
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1920×960 Figma Community cover. Query: ?icon=1..4 (default 4, the chosen icon) -->
+    <div class="canvas" id="canvas">
+      <div class="left">
+        <div class="brand" id="brand">
+          <div class="wordmark">Confetti Genie</div>
+        </div>
+        <p class="tagline">
+          A shower of <em>confetti</em><br />on any frame, in one click.
+        </p>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="footer">
+        Works in Figma Design · FigJam · Figma Slides · Figma Buzz
+      </div>
+      <div id="art"></div>
+      <div class="windows" id="windows"></div>
+    </div>
+
+    <script src="icons.js"></script>
+    <script src="samples.js"></script>
+    <script src="confetti.js"></script>
+    <script src="window.js"></script>
+    <script>
+      const icon = Number(
+        new URLSearchParams(location.search).get("icon") || 4,
+      );
+      const sample = SAMPLES.cover;
+
+      document
+        .getElementById("brand")
+        .prepend(renderIcon(icon, 112, { rounded: true }));
+
+      // Feature chips, each with a confetti-colored marker
+      const chips = document.getElementById("chips");
+      [
+        ["4 confetti shapes", "#FF5F6D"],
+        ["Your colors or random", "#FFC145"],
+        ["Density & size", "#765FFE"],
+        ["One tidy layer", "#03A3F5"],
+        ["Quick actions", "#4ADE80"],
+        ["Regenerate", "#FF5F6D"],
+      ].forEach(([text, color]) => {
+        const chip = document.createElement("span");
+        chip.innerHTML = `<i style="background:${color}"></i>${text}`;
+        chips.appendChild(chip);
+      });
+
+      // The selected frame, filled by the plugin's real generate() (see samples.js)
+      const F = { x: 1240, y: 196, w: sample.width, h: sample.height };
+      const art = document.getElementById("art");
+      art.innerHTML = `
+        <div class="frame-name" style="left:${F.x}px; top:${F.y - 28}px">Party invite</div>
+        <div class="frame" style="left:${F.x}px; top:${F.y}px; width:${F.w}px; height:${F.h}px">
+          <div class="invite">
+            <small>YOU'RE INVITED</small>
+            <h2>Maya turns <em>30</em></h2>
+            <p>Saturday · 7 pm · Rooftop</p>
+          </div>
+          <div class="confetti">${confettiSvg(sample.pieces, F.w, F.h)}</div>
+        </div>
+        <div class="selection" style="left:${F.x - 1}px; top:${F.y - 1}px; width:${F.w + 2}px; height:${F.h + 2}px">
+          <b style="left:-7px; top:-7px"></b><b style="right:-7px; top:-7px"></b>
+          <b style="left:-7px; bottom:-7px"></b><b style="right:-7px; bottom:-7px"></b>
+        </div>
+        <div class="size-badge" style="left:${F.x + F.w / 2}px; top:${F.y + F.h + 14}px">${F.w} × ${F.h}</div>`;
+
+      // The real plugin window, showing the settings that made this confetti
+      const win = pluginWindow({
+        theme: "light",
+        icon,
+        scale: 1.2,
+        settings: sample.settings,
+      });
+      Object.assign(win.style, { left: "900px", top: "128px" });
+      document.getElementById("windows").appendChild(win);
+    </script>
+  </body>
+</html>

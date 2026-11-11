@@ -6,16 +6,16 @@ interface ColorPillProps {
   onRemove: (index: number) => void;
 }
 
-export function ColorPill({ color, index, onRemove }: ColorPillProps) {
-  // Helper function to determine if color is light or dark
-  const isLightColor = (hex: string): boolean => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-    return brightness > 128;
-  };
+/** True if "#RRGGBB" is light enough to need dark text on top of it. */
+function isLightColor(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 128;
+}
 
+export function ColorPill({ color, index, onRemove }: ColorPillProps) {
   const textColor = isLightColor(color) ? "#000000" : "#FFFFFF";
 
   return (
@@ -30,7 +30,7 @@ export function ColorPill({ color, index, onRemove }: ColorPillProps) {
           e.stopPropagation();
           onRemove(index);
         }}
-        aria-label="Remove color"
+        aria-label={`Remove color ${color}`}
         type="button"
       >
         ×

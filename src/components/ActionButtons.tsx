@@ -4,6 +4,7 @@ import { Button } from "./ui";
 interface ActionButtonsProps {
   onGenerateWithColors: () => void;
   onGenerateRandom: () => void;
+  /** Disables both buttons, e.g. when no shapes are selected */
   disabled?: boolean;
 }
 

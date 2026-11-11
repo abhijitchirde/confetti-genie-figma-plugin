@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as ReactDOM from "react-dom/client";
 import "./ui.css";
 import { Header } from "./components/Header";
@@ -10,35 +10,14 @@ import { ColorControl } from "./components/ColorControl";
 import { ActionButtons } from "./components/ActionButtons";
 import BottomSection from "./components/BottomSection";
 import { useColorManager } from "./hooks/useColorManager";
-import { useFigmaMessage } from "./hooks/useFigmaMessage";
-
-declare function require(path: string): any;
-
-// Size type
-type Size = "small" | "medium" | "large";
-
-// Shapes state type
-interface ShapesState {
-  rectangles: boolean;
-  ellipses: boolean;
-  polygons: boolean;
-  stars: boolean;
-}
+import { postToPlugin, usePluginMessage } from "./hooks/usePluginMessages";
+import { DEFAULT_SETTINGS, toGenerateData } from "./settings";
+import type { Size, ShapesState } from "./types";
 
 function App() {
-  // Density state (30-300, default 115)
-  const [density, setDensity] = useState<number>(115);
-
-  // Size state (default: medium)
-  const [size, setSize] = useState<Size>("medium");
-
-  // Shapes state (all true by default)
-  const [shapes, setShapes] = useState<ShapesState>({
-    rectangles: true,
-    ellipses: true,
-    polygons: true,
-    stars: true,
-  });
+  const [density, setDensity] = useState(DEFAULT_SETTINGS.density);
+  const [size, setSize] = useState<Size>(DEFAULT_SETTINGS.size);
+  const [shapes, setShapes] = useState<ShapesState>(DEFAULT_SETTINGS.shapes);
 
   // Color state (using custom hook)
   const {
@@ -48,81 +27,68 @@ function App() {
     addColor,
     removeColor,
     resetColors,
+    setColors,
   } = useColorManager("#FF7272");
 
   // Color error state
   const [colorError, setColorError] = useState(false);
 
-  // Figma message hook
-  const { sendMessage } = useFigmaMessage();
+  // Restore the last session's settings, then save changes as they happen.
+  // Saving waits until loading has finished so defaults don't overwrite them.
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  usePluginMessage((message) => {
+    if (message.type !== "settings") return;
+    if (message.settings) {
+      setDensity(message.settings.density);
+      setSize(message.settings.size);
+      setShapes(message.settings.shapes);
+      setColors(message.settings.colors);
+    }
+    setSettingsLoaded(true);
+  });
+
+  useEffect(() => {
+    postToPlugin({ type: "load-settings" });
+  }, []);
+
+  useEffect(() => {
+    if (!settingsLoaded) return;
+    // Debounced, so dragging the density slider doesn't write on every step
+    const timer = setTimeout(() => {
+      postToPlugin({
+        type: "save-settings",
+        settings: { density, size, shapes, colors },
+      });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [settingsLoaded, density, size, shapes, colors]);
 
   // Handle shape change
   const handleShapeChange = (
     shapeName: keyof ShapesState,
-    checked: boolean
+    checked: boolean,
   ) => {
     setShapes({ ...shapes, [shapeName]: checked });
   };
 
-  // Get size factor based on selected size
-  const getSizeFactor = (selectedSize: Size): number => {
-    switch (selectedSize) {
-      case "small":
-        return 0.5;
-      case "medium":
-        return 1.4;
-      case "large":
-        return 4.0;
-    }
+  const sendGenerate = (colorsToUse?: string[]) => {
+    postToPlugin({
+      type: "generate",
+      data: toGenerateData({ density, size, shapes }, colorsToUse),
+    });
   };
 
-  // Adjust density based on size factor
-  const adjustDensity = (baseDensity: number, sizeFactor: number): number => {
-    if (sizeFactor < 1) {
-      return baseDensity * 2;
-    } else if (sizeFactor > 3) {
-      return baseDensity * 0.7;
-    }
-    return baseDensity;
-  };
-
-  // Handle generate with selected colors
   const handleGenerateWithColors = () => {
-    // Validate colors array
     if (colors.length === 0) {
       setColorError(true);
       setTimeout(() => setColorError(false), 400);
       return;
     }
-
-    const sizeFactor = getSizeFactor(size);
-    const adjustedDensity = adjustDensity(density, sizeFactor);
-
-    sendMessage("generate-selection", {
-      sliderInput: adjustedDensity,
-      inputColors: colors,
-      RecValue: shapes.rectangles,
-      EllValue: shapes.ellipses,
-      PolyValue: shapes.polygons,
-      StarValue: shapes.stars,
-      sizeFactor,
-    });
+    sendGenerate(colors);
   };
 
-  // Handle generate with random colors
-  const handleGenerateRandom = () => {
-    const sizeFactor = getSizeFactor(size);
-    const adjustedDensity = adjustDensity(density, sizeFactor);
-
-    sendMessage("generate-random", {
-      sliderInput: adjustedDensity,
-      RecValue: shapes.rectangles,
-      EllValue: shapes.ellipses,
-      PolyValue: shapes.polygons,
-      StarValue: shapes.stars,
-      sizeFactor,
-    });
-  };
+  const handleGenerateRandom = () => sendGenerate();
 
   return (
     <main>
@@ -147,6 +113,7 @@ function App() {
       <ActionButtons
         onGenerateWithColors={handleGenerateWithColors}
         onGenerateRandom={handleGenerateRandom}
+        disabled={!Object.values(shapes).some(Boolean)}
       />
 
       <BottomSection />

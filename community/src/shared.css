@@ -1,0 +1,52 @@
+/* Shared tokens and fonts for the Confetti Genie community assets (cover, icons). */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=block");
+
+:root {
+  --ink: #0f172a;
+  --ink-2: #334155;
+  --ink-3: #64748b;
+  --paper: #fbfaf7;
+  --line: #e7e5e0;
+  --violet: #5b2be0;
+  --violet-deep: #2b1a6e;
+  --coral: #ff5f6d;
+  --gold: #ffc145;
+  --figma-blue: #0d99ff;
+  --sans: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --serif: "Instrument Serif", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* A fixed-size canvas at the top-left; the render script screenshots exactly this area. */
+.canvas {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+/* Icons: an SVG filling a square; .rounded clips it the way Figma shows plugin icons. */
+.icon-wrap {
+  position: relative;
+  overflow: hidden;
+  flex: none;
+}
+.icon-wrap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.icon-wrap.rounded {
+  border-radius: 22%;
+}

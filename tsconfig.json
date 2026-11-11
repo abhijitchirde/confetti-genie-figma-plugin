@@ -2,10 +2,13 @@
   "compilerOptions": {
     "target": "es6",
     "jsx": "react",
+    "strict": true,
+    "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./node_modules/@figma"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "module": "esnext",
+    "moduleResolution": "bundler"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts"]
 }
