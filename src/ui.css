@@ -786,13 +786,12 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--cg-space-sm);
+  box-sizing: border-box;
+  padding: 6px 0;
   border-top: 1px solid var(--cg-color-border);
   left: 0;
 }
 
-.leftFooter,
-.rightFooter,
 .theme-toggle-container,
 .credit-container {
   flex: initial;
@@ -816,27 +815,27 @@ input[type="color"]::-webkit-color-swatch {
   padding: 0 var(--cg-space-lg);
 }
 
-.credit,
 .credit-text {
   font-family: var(--cg-font-family);
-  font-size: var(--cg-font-size-sm);
+  font-size: var(--cg-font-size-xs);
   color: var(--cg-color-text-tertiary);
   margin: 0;
-  text-align: right;
-  padding-right: 16px;
+  padding: 0;
 }
 
 /* Theme toggle styling */
+/* Same size and look as the footer buttons in Desi Ipsum */
 .theme-toggle {
-  padding: var(--cg-space-xs) var(--cg-space-sm);
-  font-size: var(--cg-font-size-xs);
+  width: 25px;
+  height: 25px;
+  padding: var(--cg-space-xs);
+  font-size: 0.7rem;
   border: 1px solid var(--cg-color-border);
   border-radius: var(--cg-radius-md);
   background-color: var(--cg-color-bg);
   color: var(--cg-color-text);
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 20px;
   font-family: var(--cg-font-family);
   display: flex;
   align-items: center;
