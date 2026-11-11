@@ -565,6 +565,12 @@ input[type="color"]::-webkit-color-swatch {
   transition-duration: 0.2s;
 }
 
+/* No pointer events, so hover and press colors don't apply */
+.large-button:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .large-button:active {
   background-color: var(--cg-color-bg-brand-pressed);
   border: 1px solid var(--cg-color-bg-brand-pressed);
@@ -643,6 +649,12 @@ input[type="color"]::-webkit-color-swatch {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.dropdown-header-empty {
+  font-size: var(--cg-font-size-xs);
+  font-weight: 500;
+  color: var(--cg-color-text-danger);
 }
 
 .dropdown-header-icon svg {

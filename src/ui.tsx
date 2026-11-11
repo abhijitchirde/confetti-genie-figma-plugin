@@ -133,6 +133,7 @@ function App() {
       <ActionButtons
         onGenerateWithColors={handleGenerateWithColors}
         onGenerateRandom={handleGenerateRandom}
+        disabled={!Object.values(shapes).some(Boolean)}
       />
 
       <BottomSection />

@@ -105,11 +105,15 @@ export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
         </div>
         <div className="dropdown-header-right">
           <div className="dropdown-header-icons" id="selectedIconsContainer">
-            {selectedOptions.map((option) => (
-              <div key={option.key} className="dropdown-header-icon">
-                {option.icon}
-              </div>
-            ))}
+            {selectedOptions.length === 0 ? (
+              <span className="dropdown-header-empty">None selected</span>
+            ) : (
+              selectedOptions.map((option) => (
+                <div key={option.key} className="dropdown-header-icon">
+                  {option.icon}
+                </div>
+              ))
+            )}
           </div>
           <span className="dropdown-chevron">
             <svg
