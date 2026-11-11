@@ -11,7 +11,7 @@ import { ActionButtons } from "./components/ActionButtons";
 import BottomSection from "./components/BottomSection";
 import { useColorManager } from "./hooks/useColorManager";
 import { useFigmaMessage } from "./hooks/useFigmaMessage";
-import type { GenerateData, Size, ShapesState } from "./types";
+import type { Size, ShapesState } from "./types";
 
 // How much bigger each size preset makes the confetti
 const SIZE_FACTORS: Record<Size, number> = {
@@ -61,22 +61,22 @@ function App() {
   // Handle shape change
   const handleShapeChange = (
     shapeName: keyof ShapesState,
-    checked: boolean
+    checked: boolean,
   ) => {
     setShapes({ ...shapes, [shapeName]: checked });
   };
 
-  // Settings shared by both generate buttons
-  const getGenerateData = (): GenerateData => {
+  const sendGenerate = (colorsToUse?: string[]) => {
     const sizeFactor = SIZE_FACTORS[size];
-    return {
-      sliderInput: adjustDensity(density, sizeFactor),
-      sizeFactor,
-      RecValue: shapes.rectangles,
-      EllValue: shapes.ellipses,
-      PolyValue: shapes.polygons,
-      StarValue: shapes.stars,
-    };
+    sendMessage({
+      type: "generate",
+      data: {
+        count: adjustDensity(density, sizeFactor),
+        sizeFactor,
+        shapes,
+        colors: colorsToUse,
+      },
+    });
   };
 
   const handleGenerateWithColors = () => {
@@ -85,15 +85,10 @@ function App() {
       setTimeout(() => setColorError(false), 400);
       return;
     }
-    sendMessage({
-      type: "generate-selection",
-      data: { ...getGenerateData(), inputColors: colors },
-    });
+    sendGenerate(colors);
   };
 
-  const handleGenerateRandom = () => {
-    sendMessage({ type: "generate-random", data: getGenerateData() });
-  };
+  const handleGenerateRandom = () => sendGenerate();
 
   return (
     <main>

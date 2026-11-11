@@ -10,18 +10,14 @@ export interface ShapesState {
 }
 
 export interface GenerateData {
-  sliderInput: number;
+  /** Pieces to add to each target, already adjusted for the size preset */
+  count: number;
+  /** Scales piece size relative to the target's dimensions */
   sizeFactor: number;
-  RecValue: boolean;
-  EllValue: boolean;
-  PolyValue: boolean;
-  StarValue: boolean;
+  shapes: ShapesState;
+  /** "#RRGGBB" colors to use; omit to use the built-in random palette */
+  colors?: string[];
 }
 
 /** Messages sent from the UI iframe to the plugin code. */
-export type UiToPluginMessage =
-  | { type: "generate-random"; data: GenerateData }
-  | {
-      type: "generate-selection";
-      data: GenerateData & { inputColors: string[] };
-    };
+export type UiToPluginMessage = { type: "generate"; data: GenerateData };
