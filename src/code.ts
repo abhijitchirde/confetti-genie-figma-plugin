@@ -7,10 +7,9 @@ figma.ui.onmessage = (msg: UiToPluginMessage) => {
   if (msg.type === "generate") {
     try {
       const outcome = generate(msg.data);
-      const message = describeOutcome(outcome);
-      if (message) {
-        figma.notify(message, outcome.ok ? undefined : { timeout: 1200 });
-      }
+      figma.notify(describeOutcome(outcome), {
+        timeout: outcome.ok ? 2000 : 1200,
+      });
     } catch (error) {
       console.error(error);
       const reason = error instanceof Error ? error.message : String(error);

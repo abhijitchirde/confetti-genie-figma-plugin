@@ -215,16 +215,23 @@ export function generate(data: GenerateData): GenerateOutcome {
   }
 }
 
-/** The notification to show for an outcome, or null for none. */
-export function describeOutcome(outcome: GenerateOutcome): string | null {
+/** The notification to show for an outcome. */
+export function describeOutcome(outcome: GenerateOutcome): string {
   if (!outcome.ok) return outcome.message;
-  if (outcome.newFrame && outcome.skipped > 0) {
-    return "The selected layers can't hold confetti, so it was added to a new frame";
+
+  const pieces = plural(outcome.pieces, "confetti piece");
+  if (outcome.newFrame) {
+    return outcome.skipped > 0
+      ? `The selected layers can't hold confetti, so ${pieces} were added to a new frame`
+      : `Added ${pieces} to a new frame`;
   }
+
+  let message = `Added ${pieces}`;
+  if (outcome.targets > 1) message += ` to ${outcome.targets} layers`;
   if (outcome.skipped > 0) {
-    return `Skipped ${plural(outcome.skipped, "selected layer")} that can't hold confetti`;
+    message += ` · skipped ${plural(outcome.skipped, "layer")} that can't hold confetti`;
   }
-  return null;
+  return message;
 }
 
 /**

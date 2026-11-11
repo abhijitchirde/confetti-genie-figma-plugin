@@ -107,6 +107,22 @@ describe("generate into a frame", () => {
     expect(types).toHaveLength(26);
   });
 
+  it("reports how many pieces were added", () => {
+    const targets = [frame(), frame()];
+    state.selection = targets;
+    expect(describeOutcome(generate(data()))).toBe(
+      "Added 80 confetti pieces to 2 layers",
+    );
+
+    state.selection = [targets[0]];
+    expect(describeOutcome(generate(data()))).toBe("Added 40 confetti pieces");
+
+    state.selection = [];
+    expect(describeOutcome(generate(data()))).toBe(
+      "Added 40 confetti pieces to a new frame",
+    );
+  });
+
   it("selects the new Confetti layer", () => {
     const target = frame();
     state.selection = [target];
@@ -177,7 +193,9 @@ describe("selections that can't hold confetti", () => {
     expect(outcome).toMatchObject({ targets: 1, skipped: 4, newFrame: false });
     expect(confettiLayerOf(target).children).toHaveLength(40);
     expect(instance.children).toEqual([insideInstance]);
-    expect(describeOutcome(outcome)).toMatch(/Skipped 4 selected layers/);
+    expect(describeOutcome(outcome)).toBe(
+      "Added 40 confetti pieces · skipped 4 layers that can't hold confetti",
+    );
   });
 
   it("creates a new frame in view when nothing usable is selected", () => {
@@ -199,7 +217,9 @@ describe("selections that can't hold confetti", () => {
     expect(newFrame.children.every((c) => c.type !== "FRAME")).toBe(true);
     expect(state.scrolledTo).toEqual([[newFrame]]);
     expect(outcome).toMatchObject({ newFrame: true, skipped: 1 });
-    expect(describeOutcome(outcome)).toMatch(/added to a new frame/);
+    expect(describeOutcome(outcome)).toBe(
+      "The selected layers can't hold confetti, so 40 confetti pieces were added to a new frame",
+    );
   });
 
   it("adds to the created frame when generating again", () => {
