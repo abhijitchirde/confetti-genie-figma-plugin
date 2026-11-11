@@ -7,10 +7,12 @@ interface UseColorManagerReturn {
   addColor: () => void;
   removeColor: (index: number) => void;
   resetColors: () => void;
+  /** Replaces the whole list, e.g. when restoring saved settings */
+  setColors: (colors: string[]) => void;
 }
 
 export function useColorManager(
-  initialColor: string = "#FF7272"
+  initialColor: string = "#FF7272",
 ): UseColorManagerReturn {
   const [colors, setColors] = useState<string[]>([]);
   const [currentColor, setCurrentColor] = useState<string>(initialColor);
@@ -36,5 +38,6 @@ export function useColorManager(
     addColor,
     removeColor,
     resetColors,
+    setColors,
   };
 }

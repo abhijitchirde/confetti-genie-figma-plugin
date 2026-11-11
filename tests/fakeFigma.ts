@@ -101,6 +101,19 @@ export function createFakeFigma() {
     page,
     selection: [] as FakeNode[],
     scrolledTo: [] as FakeNode[][],
+    notifications: [] as { message: string; options?: NotificationOptions }[],
+    /** Messages the plugin posted to the UI */
+    uiMessages: [] as unknown[],
+    storage: new Map<string, unknown>(),
+    /** Make clientStorage calls fail, as they can in Figma */
+    storageFails: false,
+  };
+
+  const ui = {
+    onmessage: undefined as ((message: unknown) => unknown) | undefined,
+    postMessage(message: unknown) {
+      state.uiMessages.push(message);
+    },
   };
 
   const create =
@@ -111,6 +124,22 @@ export function createFakeFigma() {
     };
 
   const figma = {
+    showUI() {},
+    ui,
+    notify(message: string, options?: NotificationOptions) {
+      state.notifications.push({ message, options });
+    },
+    clientStorage: {
+      async getAsync(key: string) {
+        if (state.storageFails) throw new Error("storage unavailable");
+        // Figma stores values as copies, not references
+        return structuredClone(state.storage.get(key));
+      },
+      async setAsync(key: string, value: unknown) {
+        if (state.storageFails) throw new Error("storage unavailable");
+        state.storage.set(key, structuredClone(value));
+      },
+    },
     currentPage: {
       get selection() {
         return state.selection;
@@ -142,13 +171,18 @@ export function createFakeFigma() {
     createStar: create("STAR"),
   };
 
-  return { figma, state };
+  /** Sends a message from the "UI" to the plugin and waits for it to be handled. */
+  const sendToPlugin = async (message: unknown) => {
+    await ui.onmessage?.(message);
+  };
+
+  return { figma, state: Object.assign(state, { sendToPlugin }) };
 }
 
 /** Installs a fresh fake as the global `figma` and returns its state. */
 export function installFakeFigma() {
   const fake = createFakeFigma();
-  (globalThis as unknown as { figma: unknown }).figma = fake.figma;
+  Object.assign(globalThis, { figma: fake.figma, __html__: "" });
   return fake.state;
 }
 

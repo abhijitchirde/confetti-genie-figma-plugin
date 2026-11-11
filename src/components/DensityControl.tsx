@@ -1,13 +1,11 @@
 import React from "react";
 import { FormSection } from "./ui";
+import { MAX_DENSITY, MIN_DENSITY } from "../settings";
 
 interface DensityControlProps {
   value: number;
   onChange: (value: number) => void;
 }
-
-const MIN_DENSITY = 30;
-const MAX_DENSITY = 300;
 
 // Label and label colour for each density band, by its upper bound
 const DENSITY_LEVELS = [

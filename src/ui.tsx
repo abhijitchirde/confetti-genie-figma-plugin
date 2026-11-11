@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as ReactDOM from "react-dom/client";
 import "./ui.css";
 import { Header } from "./components/Header";
@@ -10,7 +10,8 @@ import { ColorControl } from "./components/ColorControl";
 import { ActionButtons } from "./components/ActionButtons";
 import BottomSection from "./components/BottomSection";
 import { useColorManager } from "./hooks/useColorManager";
-import { useFigmaMessage } from "./hooks/useFigmaMessage";
+import { postToPlugin, usePluginMessage } from "./hooks/usePluginMessages";
+import { DEFAULT_SETTINGS } from "./settings";
 import type { Size, ShapesState } from "./types";
 
 // How much bigger each size preset makes the confetti
@@ -28,19 +29,9 @@ function adjustDensity(baseDensity: number, sizeFactor: number): number {
 }
 
 function App() {
-  // Density state (30-300, default 115)
-  const [density, setDensity] = useState<number>(115);
-
-  // Size state (default: medium)
-  const [size, setSize] = useState<Size>("medium");
-
-  // Shapes state (all true by default)
-  const [shapes, setShapes] = useState<ShapesState>({
-    rectangles: true,
-    ellipses: true,
-    polygons: true,
-    stars: true,
-  });
+  const [density, setDensity] = useState(DEFAULT_SETTINGS.density);
+  const [size, setSize] = useState<Size>(DEFAULT_SETTINGS.size);
+  const [shapes, setShapes] = useState<ShapesState>(DEFAULT_SETTINGS.shapes);
 
   // Color state (using custom hook)
   const {
@@ -50,13 +41,42 @@ function App() {
     addColor,
     removeColor,
     resetColors,
+    setColors,
   } = useColorManager("#FF7272");
 
   // Color error state
   const [colorError, setColorError] = useState(false);
 
-  // Figma message hook
-  const { sendMessage } = useFigmaMessage();
+  // Restore the last session's settings, then save changes as they happen.
+  // Saving waits until loading has finished so defaults don't overwrite them.
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  usePluginMessage((message) => {
+    if (message.type !== "settings") return;
+    if (message.settings) {
+      setDensity(message.settings.density);
+      setSize(message.settings.size);
+      setShapes(message.settings.shapes);
+      setColors(message.settings.colors);
+    }
+    setSettingsLoaded(true);
+  });
+
+  useEffect(() => {
+    postToPlugin({ type: "load-settings" });
+  }, []);
+
+  useEffect(() => {
+    if (!settingsLoaded) return;
+    // Debounced, so dragging the density slider doesn't write on every step
+    const timer = setTimeout(() => {
+      postToPlugin({
+        type: "save-settings",
+        settings: { density, size, shapes, colors },
+      });
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [settingsLoaded, density, size, shapes, colors]);
 
   // Handle shape change
   const handleShapeChange = (
@@ -68,7 +88,7 @@ function App() {
 
   const sendGenerate = (colorsToUse?: string[]) => {
     const sizeFactor = SIZE_FACTORS[size];
-    sendMessage({
+    postToPlugin({
       type: "generate",
       data: {
         count: adjustDensity(density, sizeFactor),
