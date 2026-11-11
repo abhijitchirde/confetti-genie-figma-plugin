@@ -180,6 +180,12 @@ a:hover {
    SECTION 5: FORM CONTROLS - DENSITY
    ============================================ */
 
+/* Visible focus for keyboard users (mouse clicks don't trigger it) */
+:focus-visible {
+  outline: 2px solid var(--cg-color-border-focus);
+  outline-offset: 1px;
+}
+
 .slider-input {
   -webkit-appearance: none;
   appearance: none;
@@ -192,6 +198,11 @@ a:hover {
   opacity: 0.6;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
+}
+
+.slider-input:focus-visible {
+  outline: 2px solid var(--cg-color-border-focus);
+  outline-offset: 2px;
 }
 
 .slider-input::-webkit-slider-thumb {
@@ -606,6 +617,9 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .dropdown-header {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
   display: flex;
   align-items: center;
   justify-content: space-between;

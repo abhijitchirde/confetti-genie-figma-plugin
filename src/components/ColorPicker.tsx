@@ -21,6 +21,7 @@ export function ColorPicker({
         type="color"
         name="color"
         id="color"
+        aria-label="Color to add"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

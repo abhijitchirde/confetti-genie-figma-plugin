@@ -8,6 +8,11 @@ interface ChoiceChipProps {
   id?: string;
 }
 
+/**
+ * One option in a single-choice group. Render inside an element with
+ * role="radiogroup"; only the selected chip is in the Tab order, and the
+ * group handles arrow keys.
+ */
 export function ChoiceChip({
   label,
   selected,
@@ -15,19 +20,25 @@ export function ChoiceChip({
   className = "",
   id,
 }: ChoiceChipProps) {
-  const baseClass = "choice-chip";
-  const selectedClass = selected ? "selected" : "";
-  const combinedClass = [baseClass, selectedClass, className]
+  const combinedClass = ["choice-chip", selected ? "selected" : "", className]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <div id={id} className={combinedClass} onClick={onClick} role="button" tabIndex={0} onKeyDown={(e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onClick();
-      }
-    }}>
+    <div
+      id={id}
+      className={combinedClass}
+      role="radio"
+      aria-checked={selected}
+      tabIndex={selected ? 0 : -1}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+    >
       {label}
     </div>
   );

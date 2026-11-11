@@ -30,7 +30,7 @@ export function ColorPill({ color, index, onRemove }: ColorPillProps) {
           e.stopPropagation();
           onRemove(index);
         }}
-        aria-label="Remove color"
+        aria-label={`Remove color ${color}`}
         type="button"
       >
         ×

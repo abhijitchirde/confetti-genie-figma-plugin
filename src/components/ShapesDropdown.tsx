@@ -70,8 +70,9 @@ const SHAPE_OPTIONS: {
 export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLButtonElement>(null);
 
-  // Close dropdown when clicking outside
+  // Close when clicking outside, or on Escape (returning focus to the header)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -83,39 +84,58 @@ export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
         setIsOpen(false);
       }
     };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        headerRef.current?.focus();
+      }
+    };
 
     document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen]);
 
   const selectedOptions = SHAPE_OPTIONS.filter((option) => shapes[option.key]);
 
   return (
     <div className="dropdown-container" ref={dropdownRef}>
-      <div
+      <button
+        type="button"
+        ref={headerRef}
         className={`dropdown-header ${isOpen ? "active" : ""}`}
         id="confettiDropdownHeader"
+        aria-expanded={isOpen}
+        aria-controls="confettiDropdownPanel"
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
       >
-        <div className="dropdown-header-left">
+        <span className="dropdown-header-left">
           <span>SHAPES</span>
-        </div>
-        <div className="dropdown-header-right">
-          <div className="dropdown-header-icons" id="selectedIconsContainer">
+        </span>
+        <span className="dropdown-header-right">
+          {/* Icons are decorative; "None selected" is read out */}
+          <span
+            className="dropdown-header-icons"
+            id="selectedIconsContainer"
+            aria-hidden={selectedOptions.length > 0}
+          >
             {selectedOptions.length === 0 ? (
               <span className="dropdown-header-empty">None selected</span>
             ) : (
               selectedOptions.map((option) => (
-                <div key={option.key} className="dropdown-header-icon">
+                <span key={option.key} className="dropdown-header-icon">
                   {option.icon}
-                </div>
+                </span>
               ))
             )}
-          </div>
-          <span className="dropdown-chevron">
+          </span>
+          <span className="dropdown-chevron" aria-hidden="true">
             <svg
               viewBox="0 0 16 16"
               xmlns="http://www.w3.org/2000/svg"
@@ -132,8 +152,8 @@ export function ShapesDropdown({ shapes, onShapeChange }: ShapesDropdownProps) {
               />
             </svg>
           </span>
-        </div>
-      </div>
+        </span>
+      </button>
       <div
         className={`dropdown-panel ${isOpen ? "open" : ""}`}
         id="confettiDropdownPanel"

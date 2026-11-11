@@ -26,7 +26,9 @@ export function ShapeOption({
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
       />
-      <span className="dropdown-option-icon">{icon}</span>
+      <span className="dropdown-option-icon" aria-hidden="true">
+        {icon}
+      </span>
       <label className="checkbox-label" htmlFor={id}>
         {label}
       </label>
