@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Confetti Genie slides</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="window.css" />
+    <link rel="stylesheet" href="slides.css" />
+    <style>
+      /* ---------- Slide 1: density & size ---------- */
+      .s1-row {
+        margin-top: 64px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* ---------- Slide 2: colors ---------- */
+      .s2-row {
+        margin-top: 64px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* ---------- Slide 3: one layer + regenerate ---------- */
+      .s3-row {
+        margin-top: 60px;
+        display: flex;
+        gap: 56px;
+        align-items: flex-start;
+      }
+      .layers {
+        width: 400px;
+        padding: 22px 0 14px;
+        font-family: var(--sans);
+      }
+      .layers .label {
+        padding: 0 24px 14px;
+      }
+      .layer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 24px;
+        font: 600 22px/1 var(--sans);
+        color: var(--ink-2);
+      }
+      .layer .tw {
+        width: 16px;
+        color: var(--ink-3);
+        font-size: 16px;
+      }
+      .layer .ico {
+        width: 22px;
+        text-align: center;
+        color: var(--ink-3);
+        font-weight: 700;
+      }
+      .layer.child {
+        padding-left: 52px;
+      }
+      .layer.on {
+        background: #e5f4ff;
+        color: var(--ink);
+      }
+      .layer.on .ico {
+        color: var(--figma-blue);
+      }
+      .layer .count {
+        margin-left: auto;
+        font: 500 17px/1 var(--sans);
+        color: var(--ink-3);
+      }
+      .launch {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 64px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        color: #fff;
+      }
+      .launch small {
+        font: 700 18px/1 var(--sans);
+        letter-spacing: 0.2em;
+        color: #a5b4fc;
+      }
+      .launch h2 {
+        margin: 18px 0 0;
+        font: 800 76px/1 var(--sans);
+        letter-spacing: -0.03em;
+      }
+      .launch p {
+        margin: 18px 0 0;
+        font: 500 24px/1.3 var(--sans);
+        color: #cbd5e1;
+      }
+      .props {
+        width: 440px;
+        padding: 26px 26px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .props .sect {
+        border-top: 1px solid var(--line);
+        padding-top: 20px;
+      }
+      .props .sect:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+      .props .val {
+        margin-top: 12px;
+        font: 600 21px/1.35 var(--sans);
+        color: var(--ink-2);
+      }
+      .relaunch {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 14px;
+        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+      .relaunch .txt b {
+        font: 700 22px/1.2 var(--sans);
+      }
+      .relaunch .txt small {
+        display: block;
+        font: 500 17px/1.3 var(--sans);
+        color: var(--ink-3);
+        margin-top: 4px;
+      }
+      .relaunch .go {
+        margin-left: auto;
+        font: 700 18px/1 var(--sans);
+        color: #fff;
+        background: var(--figma-blue);
+        padding: 11px 14px;
+        border-radius: 10px;
+        white-space: nowrap;
+      }
+
+      /* ---------- Slide 4: quick actions + themes ---------- */
+      .s4-row {
+        margin-top: 60px;
+        display: flex;
+        gap: 60px;
+        align-items: flex-start;
+      }
+      .s4-left {
+        flex: 1;
+      }
+      .palette {
+        background: #1f1f22;
+        color: #f4f4f5;
+        border-radius: 22px;
+        padding: 22px;
+        box-shadow: 0 30px 70px rgba(15, 23, 42, 0.25);
+        font-family: var(--sans);
+      }
+      .palette .input {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #2b2b30;
+        border-radius: 14px;
+        padding: 18px 20px;
+        font-size: 26px;
+        font-weight: 600;
+      }
+      .palette .pill {
+        background: #3a3a42;
+        padding: 7px 12px;
+        border-radius: 9px;
+        font-size: 22px;
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .palette .pill b {
+        color: #a1a1aa;
+        font-weight: 600;
+      }
+      .palette .caret {
+        width: 3px;
+        height: 30px;
+        background: #a78bfa;
+        border-radius: 2px;
+      }
+      .palette .hint {
+        color: #a1a1aa;
+        font-size: 20px;
+        margin: 20px 8px 10px;
+        font-weight: 600;
+      }
+      .palette .opt {
+        padding: 16px 18px;
+        border-radius: 12px;
+        font-size: 24px;
+        font-weight: 600;
+        color: #e4e4e7;
+      }
+      .palette .opt.on {
+        background: var(--violet);
+        color: #fff;
+      }
+      .windows {
+        display: flex;
+        gap: 28px;
+      }
+      .windows .cap {
+        margin-top: 14px;
+        text-align: center;
+        font: 700 20px/1 var(--sans);
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1920×1080 carousel slides. Query: ?slide=1..4&icon=1..4 -->
+    <div class="canvas slide" id="canvas"></div>
+
+    <script src="icons.js"></script>
+    <script src="samples.js"></script>
+    <script src="confetti.js"></script>
+    <script src="window.js"></script>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const slide = Number(params.get("slide") || 1);
+      const icon = Number(params.get("icon") || 4);
+      const canvas = document.getElementById("canvas");
+
+      function el(html) {
+        const t = document.createElement("template");
+        t.innerHTML = html.trim();
+        return t.content.firstElementChild;
+      }
+
+      // A frame on the Figma canvas with real confetti (from samples.js) on top of `content`
+      function figFrame(
+        sample,
+        { name, content = "", background = "#fff", selected = false },
+      ) {
+        const { width: w, height: h } = sample;
+        return el(`<div class="fig">
+            <div class="fig-name">${name}</div>
+            <div class="fig-frame" style="width:${w}px; height:${h}px; background:${background}">
+              ${content}
+              <div class="confetti">${confettiSvg(sample.pieces, w, h)}</div>
+            </div>
+            ${
+              selected
+                ? `<div class="fig-selection" style="top:26px">
+                    <b style="left:-7px; top:-7px"></b><b style="right:-7px; top:-7px"></b>
+                    <b style="left:-7px; bottom:-7px"></b><b style="right:-7px; bottom:-7px"></b>
+                    <span class="fig-badge">${w} × ${h}</span>
+                  </div>`
+                : ""
+            }
+          </div>`);
+      }
+
+      const swatches = (colors, size) =>
+        `<div class="swatches">${colors.map((c) => `<i style="background:${c}; width:${size}px; height:${size}px"></i>`).join("")}</div>`;
+
+      // Brand mark, top right of every slide
+      const mini = el(
+        `<div class="brand-mini"><span>Confetti Genie</span></div>`,
+      );
+      mini.prepend(renderIcon(icon, 52, { rounded: true }));
+      canvas.appendChild(mini);
+
+      const SLIDES = {
+        // ---------- 1. Density & size ----------
+        1() {
+          canvas.append(
+            el(`<div class="kicker">Density &amp; size</div>`),
+            el(
+              `<h1 class="title">A light sprinkle <em>to a full blast.</em></h1>`,
+            ),
+            el(
+              `<p class="sub">Pick a density from <b>minimal</b> to <b>blast</b> and <b>Small</b>, <b>Medium</b> or <b>Large</b> pieces. Rectangles, ellipses, polygons and stars, or any mix.</p>`,
+            ),
+          );
+          const row = el(`<div class="s1-row"></div>`);
+          [
+            ["minimalMedium", "Minimal · Medium"],
+            ["partyMedium", "Party · Medium"],
+            ["blastLarge", "Blast · Large"],
+          ].forEach(([key, title]) => {
+            const sample = SAMPLES[key];
+            const col = el(`<div></div>`);
+            col.appendChild(figFrame(sample, { name: "Frame" }));
+            col.appendChild(
+              el(
+                `<div class="caption">${title}<small>${sample.pieces.length} pieces</small></div>`,
+              ),
+            );
+            row.appendChild(col);
+          });
+          canvas.appendChild(row);
+        },
+
+        // ---------- 2. Colors ----------
+        2() {
+          canvas.append(
+            el(`<div class="kicker">Colors</div>`),
+            el(
+              `<h1 class="title">Your brand colors, <em>or a happy accident.</em></h1>`,
+            ),
+            el(
+              `<p class="sub">Add your own colors (add one twice to make it more common), or let Confetti Genie pick from its bright random palette.</p>`,
+            ),
+          );
+          const row = el(`<div class="s2-row"></div>`);
+          const brand = SAMPLES.brand;
+          const left = el(`<div></div>`);
+          left.appendChild(
+            figFrame(brand, { name: "Hero", background: "#f8fafc" }),
+          );
+          left.appendChild(
+            el(
+              `<div class="caption">Your colors<small>Rectangles and stars only</small></div>`,
+            ),
+          );
+          left.appendChild(el(swatches(brand.settings.colors, 34)));
+          const right = el(`<div></div>`);
+          right.appendChild(figFrame(SAMPLES.random, { name: "Hero" }));
+          right.appendChild(
+            el(
+              `<div class="caption">Random colors<small>All four shapes</small></div>`,
+            ),
+          );
+          right.appendChild(el(swatches(SAMPLES.randomPalette, 34)));
+          row.append(left, right);
+          canvas.appendChild(row);
+        },
+
+        // ---------- 3. One tidy layer + Regenerate ----------
+        3() {
+          const launch = SAMPLES.launch;
+          canvas.append(
+            el(`<div class="kicker">One tidy layer · Regenerate</div>`),
+            el(
+              `<h1 class="title">One layer to move, <em>hide or regenerate.</em></h1>`,
+            ),
+          );
+          const row = el(`<div class="s3-row">
+              <div class="card layers">
+                <div class="label">Layers</div>
+                <div class="layer"><span class="tw">▾</span><span class="ico">#</span>Launch banner</div>
+                <div class="layer child on"><span class="tw">▸</span><span class="ico">#</span>Confetti<span class="count">${launch.pieces.length} pieces</span></div>
+                <div class="layer child"><span class="tw"></span><span class="ico">T</span>Headline</div>
+                <div class="layer child"><span class="tw"></span><span class="ico">T</span>Date</div>
+                <div class="layer child"><span class="tw"></span><span class="ico">▭</span>Background</div>
+              </div>
+              <div id="s3-frame"></div>
+              <div class="card props">
+                <div class="sect">
+                  <div class="label">Constraints</div>
+                  <div class="val">Left &amp; right · Top &amp; bottom<br /><span style="color:var(--ink-3); font-weight:500">Stretches with its frame</span></div>
+                </div>
+                <div class="sect">
+                  <div class="label">Plugin</div>
+                  <div class="relaunch"></div>
+                </div>
+              </div>
+            </div>`);
+          row.querySelector("#s3-frame").appendChild(
+            figFrame(launch, {
+              name: "Launch banner",
+              selected: true,
+              content: `<div class="launch"><small>LAUNCH WEEK</small><h2>We're live!</h2><p>Thank you for being part of it</p></div>`,
+            }),
+          );
+          const relaunch = row.querySelector(".relaunch");
+          relaunch.appendChild(renderIcon(icon, 44, { rounded: true }));
+          relaunch.appendChild(
+            el(
+              `<div class="txt"><b>Regenerate confetti</b><small>Same settings, new layout</small></div>`,
+            ),
+          );
+          relaunch.appendChild(el(`<span class="go">↻ Run</span>`));
+          canvas.appendChild(row);
+          canvas.appendChild(
+            el(
+              `<p class="sub" style="margin-top:70px">Every run adds a single <b>Confetti</b> layer that stretches with its frame, even in auto layout.</p>`,
+            ),
+          );
+        },
+
+        // ---------- 4. Quick actions + light & dark ----------
+        4() {
+          canvas.append(
+            el(`<div class="kicker">Quick actions · Light &amp; dark</div>`),
+            el(
+              `<h1 class="title">Confetti <em>without opening the plugin.</em></h1>`,
+            ),
+          );
+          const row = el(`<div class="s4-row">
+              <div class="s4-left">
+                <div class="palette">
+                  <div class="input">Confetti Genie <span class="pill"><b>Density</b> Party</span><span class="pill"><b>Size</b> Medium</span><span class="caret"></span></div>
+                  <div class="hint">Colors</div>
+                  <div class="opt on">Random colors</div>
+                  <div class="opt">My colors (5)</div>
+                </div>
+                <p class="sub" style="margin-top:40px">Open quick actions (<b>Ctrl/⌘ + /</b>), type <b>Confetti Genie</b> and press <b>Tab</b>. Pick a density; size and colors are optional (your last size, and random colors).</p>
+                <p class="sub" style="margin-top:18px">Works in Figma Design, FigJam, Figma Slides and Figma Buzz.</p>
+              </div>
+              <div class="windows" id="windows"></div>
+            </div>`);
+          const windows = row.querySelector("#windows");
+          [
+            ["light", "Light"],
+            ["dark", "Dark"],
+          ].forEach(([theme, label]) => {
+            const col = el(`<div></div>`);
+            col.appendChild(
+              pluginWindow({
+                theme,
+                icon,
+                scale: 1,
+                settings: SAMPLES.cover.settings,
+              }),
+            );
+            col.appendChild(el(`<div class="cap">${label}</div>`));
+            windows.appendChild(col);
+          });
+          canvas.appendChild(row);
+        },
+      };
+
+      (SLIDES[slide] || SLIDES[1])();
+    </script>
+  </body>
+</html>
