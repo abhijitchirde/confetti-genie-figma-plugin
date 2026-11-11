@@ -1,17 +1,44 @@
 import type { PluginToUiMessage, UiToPluginMessage } from "./types";
-import { describeOutcome, generate } from "./plugin/generate";
+import { describeOutcome, generate, regenerate } from "./plugin/generate";
+import { handleParameterInput, runWithParameters } from "./plugin/quickActions";
+import { loadStored, SETTINGS_KEY, store, THEME_KEY } from "./plugin/storage";
 import { isThemePreference, parseSavedSettings } from "./settings";
 
-// figma.clientStorage keys, saved per user on their device
-const SETTINGS_KEY = "settings";
-const THEME_KEY = "themePreference";
+// Quick Actions: suggestions while the user types parameters
+figma.parameters.on("input", handleParameterInput);
 
-figma.showUI(__html__, { width: 270, height: 540, themeColors: true });
+// Every launch: from the plugins menu (no parameters), from Quick Actions
+// with parameters, or from the "Regenerate confetti" button on a layer
+figma.on("run", async ({ command, parameters }: RunEvent) => {
+  try {
+    if (command === "regenerate") {
+      figma.closePlugin(regenerate());
+    } else if (parameters) {
+      figma.closePlugin(await runWithParameters(parameters));
+    } else {
+      openUI();
+    }
+  } catch (error) {
+    figma.closePlugin(errorMessage(error));
+  }
+});
 
-figma.ui.onmessage = async (msg: UiToPluginMessage) => {
+function openUI() {
+  figma.showUI(__html__, { width: 270, height: 540, themeColors: true });
+  figma.ui.onmessage = handleUiMessage;
+}
+
+async function handleUiMessage(msg: UiToPluginMessage) {
   switch (msg.type) {
     case "generate":
-      runGenerate(msg);
+      try {
+        const outcome = generate(msg.data);
+        figma.notify(describeOutcome(outcome), {
+          timeout: outcome.ok ? 2000 : 1200,
+        });
+      } catch (error) {
+        figma.notify(errorMessage(error), { error: true });
+      }
       break;
 
     case "load-settings": {
@@ -36,40 +63,14 @@ figma.ui.onmessage = async (msg: UiToPluginMessage) => {
       if (isThemePreference(msg.theme)) await store(THEME_KEY, msg.theme);
       break;
   }
-};
-
-function runGenerate(msg: Extract<UiToPluginMessage, { type: "generate" }>) {
-  try {
-    const outcome = generate(msg.data);
-    figma.notify(describeOutcome(outcome), {
-      timeout: outcome.ok ? 2000 : 1200,
-    });
-  } catch (error) {
-    console.error(error);
-    const reason = error instanceof Error ? error.message : String(error);
-    figma.notify(`Couldn't add confetti: ${reason}`, { error: true });
-  }
 }
 
 function post(message: PluginToUiMessage) {
   figma.ui.postMessage(message);
 }
 
-// Storage failures only lose remembered preferences, so they're not shown
-// to the user
-async function loadStored(key: string): Promise<unknown> {
-  try {
-    return await figma.clientStorage.getAsync(key);
-  } catch (error) {
-    console.warn(`Couldn't load ${key}`, error);
-    return undefined;
-  }
-}
-
-async function store(key: string, value: unknown): Promise<void> {
-  try {
-    await figma.clientStorage.setAsync(key, value);
-  } catch (error) {
-    console.warn(`Couldn't save ${key}`, error);
-  }
+function errorMessage(error: unknown): string {
+  console.error(error);
+  const reason = error instanceof Error ? error.message : String(error);
+  return `Couldn't add confetti: ${reason}`;
 }

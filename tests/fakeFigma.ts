@@ -24,6 +24,10 @@ export interface FakeNode {
   appendChild?(child: FakeNode): void;
   setPluginData(key: string, value: string): void;
   getPluginData(key: string): string;
+  /** Relaunch buttons shown when this node is selected */
+  relaunchData?: Record<string, string>;
+  setRelaunchData(data: Record<string, string>): void;
+  remove(): void;
 }
 
 const CONTAINER_TYPES = [
@@ -64,6 +68,15 @@ export function makeNode(
     },
     getPluginData(key) {
       return pluginData[key] ?? "";
+    },
+    setRelaunchData(data) {
+      this.relaunchData = data;
+    },
+    remove() {
+      if (this.parent) {
+        this.parent.children.splice(this.parent.children.indexOf(this), 1);
+        this.parent = null;
+      }
     },
     ...props,
   };
@@ -107,7 +120,13 @@ export function createFakeFigma() {
     storage: new Map<string, unknown>(),
     /** Make clientStorage calls fail, as they can in Figma */
     storageFails: false,
+    uiShown: false,
+    /** Message passed to figma.closePlugin, once the plugin has closed */
+    closedWith: undefined as string | undefined,
   };
+
+  type Handler = (event: any) => unknown;
+  const handlers: { run?: Handler; input?: Handler } = {};
 
   const ui = {
     onmessage: undefined as ((message: unknown) => unknown) | undefined,
@@ -124,8 +143,21 @@ export function createFakeFigma() {
     };
 
   const figma = {
-    showUI() {},
+    showUI() {
+      state.uiShown = true;
+    },
     ui,
+    on(event: string, handler: Handler) {
+      if (event === "run") handlers.run = handler;
+    },
+    parameters: {
+      on(event: string, handler: Handler) {
+        if (event === "input") handlers.input = handler;
+      },
+    },
+    closePlugin(message?: string) {
+      state.closedWith = message ?? "";
+    },
     notify(message: string, options?: NotificationOptions) {
       state.notifications.push({ message, options });
     },
@@ -176,7 +208,31 @@ export function createFakeFigma() {
     await ui.onmessage?.(message);
   };
 
-  return { figma, state: Object.assign(state, { sendToPlugin }) };
+  /** Launches the plugin, as Figma does after loading code.ts. */
+  const run = async (event: { command?: string; parameters?: object } = {}) => {
+    await handlers.run?.({ command: "", ...event });
+  };
+
+  /** Types `query` into a Quick Actions parameter and returns the suggestions. */
+  const suggest = async (key: string, query = "") => {
+    let suggestions: unknown[] = [];
+    await handlers.input?.({
+      key,
+      query,
+      parameters: {},
+      result: {
+        setSuggestions(list: unknown[]) {
+          suggestions = list;
+        },
+      },
+    });
+    return suggestions;
+  };
+
+  return {
+    figma,
+    state: Object.assign(state, { sendToPlugin, run, suggest }),
+  };
 }
 
 /** Installs a fresh fake as the global `figma` and returns its state. */

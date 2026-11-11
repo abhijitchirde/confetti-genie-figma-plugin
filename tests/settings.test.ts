@@ -61,7 +61,8 @@ describe("plugin message handlers", () => {
   beforeEach(async () => {
     state = installFakeFigma();
     vi.resetModules();
-    await import("../src/code"); // registers figma.ui.onmessage
+    await import("../src/code");
+    await state.run(); // opens the UI and registers figma.ui.onmessage
   });
 
   it("saves settings and restores them in a later session", async () => {

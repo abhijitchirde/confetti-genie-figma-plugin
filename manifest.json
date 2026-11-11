@@ -8,5 +8,32 @@
   "enableProposedApi": false,
   "editorType": ["figma", "figjam", "buzz", "slides"],
   "networkAccess": { "allowedDomains": ["none"] },
-  "documentAccess": "dynamic-page"
+  "documentAccess": "dynamic-page",
+  "parameters": [
+    {
+      "name": "Density",
+      "key": "density",
+      "description": "Minimal, festive, party, bash or blast"
+    },
+    {
+      "name": "Size",
+      "key": "size",
+      "description": "Small, medium or large (default: last used)",
+      "optional": true
+    },
+    {
+      "name": "Colors",
+      "key": "colors",
+      "description": "Random or your saved colors (default: random)",
+      "optional": true
+    }
+  ],
+  "parameterOnly": false,
+  "relaunchButtons": [
+    {
+      "command": "regenerate",
+      "name": "Regenerate confetti",
+      "multipleSelection": true
+    }
+  ]
 }

@@ -58,6 +58,12 @@ You can select one or more shape types, or use all of them together for maximum 
 
 - Density, size, shapes and your color palette are saved and restored the next time you open the plugin
 
+⚡ Quick Actions
+
+- Generate without opening the plugin window: open Quick Actions (Ctrl/Cmd + /), type "Confetti Genie" and press Tab
+- Pick a Density (minimal, festive, party, bash or blast), then optionally a Size and Colors (random, or the colors you saved in the plugin). Anything you skip uses your last settings, with random colors
+- Regenerate Confetti - Select a Confetti layer and click "Regenerate confetti" in the properties panel to re-scatter it with the same settings
+
 ✨ Visual Details
 
 - Varying Opacity - Each confetti piece has randomized opacity (35%-100%) to create natural depth and visual interest
